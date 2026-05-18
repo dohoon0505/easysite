@@ -406,7 +406,7 @@ function StyleSheet({ item, onClose, onBook }) {
         <div className="sheet-handle" />
         <div className="sheet-head">
           <div className="sheet-head-text">
-            <h4>{item.category || "작품"}</h4>
+            {!isWork && <h4>{item.category}</h4>}
             <div className="sheet-head-name">{item.name}</div>
           </div>
           <button className="sheet-close" onClick={onClose} aria-label="닫기"><I.Close size={18} /></button>
