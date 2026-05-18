@@ -153,7 +153,7 @@ function BottomNav({ route, go }) {
   const tabs = [
     { id: "home",     label: "홈",       icon: I.Home },
     { id: "styles",   label: "디자인",   icon: I.Cake },
-    { id: "styling",  label: "스타일링", icon: I.Sparkle },
+    { id: "styling",  label: "예약요청", icon: I.Clipboard },
     { id: "faq",     label: "질문/답변", icon: I.Help },
   ];
   return (
