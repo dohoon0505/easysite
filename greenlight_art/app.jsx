@@ -365,16 +365,21 @@ function CoursesScreen({ activeCat, setActiveCat, openWork }) {
       </section>
 
       {gallery.length > 0 ? (
-        <ul className="course-gallery-list">
-          {gallery.map((work) => (
+        <ul className="course-list">
+          {gallery.map((work, i) => (
             <li key={work.id}>
-              <button className="course-gallery-item" onClick={() => openWork({ ...work, category: cat.name })}>
-                <div className="course-gallery-thumb">
-                  <img src={work.img} alt={work.name} loading="lazy" />
+              <button className="course-row" data-hue={cat.hue} onClick={() => openWork({ ...work, category: cat.name })}>
+                <div className="course-thumb">
+                  {work.img ? (
+                    <img src={work.img} alt={work.name} loading="lazy" />
+                  ) : (
+                    <span className="course-thumb-fallback">{String(i + 1).padStart(2, "0")}</span>
+                  )}
                 </div>
-                <div className="course-gallery-info">
-                  <div className="course-gallery-name">{work.name}</div>
-                  <div className="course-gallery-desc">{work.desc}</div>
+                <div className="course-text">
+                  <div className="course-name">{work.name}</div>
+                  <div className="course-desc">{work.desc}</div>
+                  <div className="course-cta">자세히 보기 <I.Arrow size={14} /></div>
                 </div>
               </button>
             </li>
