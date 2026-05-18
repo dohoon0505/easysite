@@ -1,5 +1,5 @@
 /* eslint-disable */
-// 별케이크 — 디자이너 라인업
+// 벨케이크 — 디자이너 라인업
 
 const DESIGNERS = [
   {
