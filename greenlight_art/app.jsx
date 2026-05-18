@@ -151,7 +151,8 @@ function FeaturedSlider({ title, meta, list, openWork }) {
               </div>
               <div className="feat-info">
                 <div className="feat-headline">{s.name}</div>
-                <div className="feat-price">{s.age}</div>
+                {s.duration && <div className="feat-duration"><I.Clock size={12} strokeWidth={2.5} /> {s.duration}</div>}
+                {s.review && <div className="feat-review">"{s.review}"</div>}
               </div>
             </button>
           ))}
