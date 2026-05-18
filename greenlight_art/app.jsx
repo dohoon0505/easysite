@@ -435,6 +435,14 @@ function StyleSheet({ item, onClose, onBook }) {
               <div style={{ marginTop: 8, color: "var(--ph-mute)", fontSize: 14 }}>{item.age}</div>
             )}
             <p className="sheet-desc">{item.desc}</p>
+            {item.develop && item.develop.length > 0 && (
+              <div className="sheet-develop">
+                <span className="sheet-develop-label">발달 영역</span>
+                <div className="sheet-develop-tags">
+                  {item.develop.map((d) => <span key={d} className="sheet-develop-tag">{d}</span>)}
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className="sheet-foot">

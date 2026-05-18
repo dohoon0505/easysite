@@ -1736,6 +1736,35 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   color: var(--ph-mute);
   letter-spacing: -0.01em;
 }
+.sheet-develop {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sheet-develop-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ph-mute);
+}
+.sheet-develop-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sheet-develop-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--ph-radius-full);
+  background: var(--ph-brand-soft);
+  color: var(--ph-brand);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
 .sheet-foot {
   padding: 12px 20px 24px;
   border-top: 1px solid var(--ph-line);
