@@ -2,11 +2,11 @@
 // 풀빛그림아이 미술학원 — 교육과정 카탈로그
 
 const COURSE_CATEGORIES = [
-  { id: "kinder", name: "유아 미술",       blurb: "아이의 손끝에 색을 더하는 시간",   sub: "KINDER", icon: "kinder" },
-  { id: "elem",   name: "초등 미술",       blurb: "표현이 풍성해지는 황금기",         sub: "ELEM",   icon: "elem" },
-  { id: "exam",   name: "중·고 입시",      blurb: "재능을 진로로 잇는 본격 수업",      sub: "EXAM",   icon: "exam" },
-  { id: "hobby",  name: "취미·성인",       blurb: "어른의 그림 한 장",                sub: "HOBBY",  icon: "hobby" },
-  { id: "ipad",   name: "아이패드 드로잉", blurb: "디지털로 만나는 새로운 표현",       sub: "IPAD",   icon: "ipad" },
+  { id: "kinder", name: "유아 미술",       blurb: "아이의 손끝에 색을 더하는 시간",   sub: "유아 미술",       icon: "kinder" },
+  { id: "elem",   name: "초등 미술",       blurb: "표현이 풍성해지는 황금기",         sub: "초등 미술",       icon: "elem" },
+  { id: "exam",   name: "중·고 입시",      blurb: "재능을 진로로 잇는 본격 수업",      sub: "중·고 입시",      icon: "exam" },
+  { id: "hobby",  name: "취미·성인",       blurb: "어른의 그림 한 장",                sub: "취미·성인",       icon: "hobby" },
+  { id: "ipad",   name: "아이패드 드로잉", blurb: "디지털로 만나는 새로운 표현",       sub: "아이패드 드로잉", icon: "ipad" },
 ];
 
 const COURSES = {
