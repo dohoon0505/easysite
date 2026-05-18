@@ -25,12 +25,12 @@ function isOpenNow() {
   if (day === 0) return false;
   const mins = now.getHours() * 60 + now.getMinutes();
   const ranges = {
-    1: [12 * 60 + 30, 19 * 60],         // 월
-    2: [12 * 60 + 30, 19 * 60],         // 화
-    3: [12 * 60 + 30, 19 * 60 + 30],    // 수
-    4: [12 * 60 + 30, 19 * 60],         // 목
-    5: [13 * 60,      19 * 60],         // 금
-    6: [10 * 60,      14 * 60],         // 토
+    1: [13 * 60, 19 * 60],   // 월
+    2: [13 * 60, 19 * 60],   // 화
+    3: [13 * 60, 19 * 60],   // 수
+    4: [13 * 60, 19 * 60],   // 목
+    5: [13 * 60, 19 * 60],   // 금
+    6: [13 * 60, 19 * 60],   // 토
   };
   const [open, close] = ranges[day] || [0, 0];
   return mins >= open && mins < close;
@@ -193,13 +193,13 @@ function HomeScreen({ go, openWork }) {
             <span className="intro-list-icon"><I.Calendar size={18} /></span>
             <span className="intro-list-text">
               <span className="hours-grid">
-                <span><b>월</b> 12:30 - 19:00</span>
-                <span><b>화</b> 12:30 - 19:00</span>
-                <span><b>수</b> 12:30 - 19:30</span>
-                <span><b>목</b> 12:30 - 19:00</span>
+                <span><b>월</b> 13:00 - 19:00</span>
+                <span><b>화</b> 13:00 - 19:00</span>
+                <span><b>수</b> 13:00 - 19:00</span>
+                <span><b>목</b> 13:00 - 19:00</span>
                 <span><b>금</b> 13:00 - 19:00</span>
-                <span><b>토</b> 10:00 - 14:00</span>
-                <span className="hours-off"><b>일</b> 휴원</span>
+                <span><b>토</b> 13:00 - 19:00</span>
+                <span className="hours-off"><b>일</b> 휴무</span>
               </span>
               <span className="intro-open-status" data-open={isOpenNow()}>
                 {isOpenNow() ? "현재 영업 중" : "현재 영업 종료"}
