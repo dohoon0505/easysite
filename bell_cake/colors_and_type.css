@@ -77,16 +77,16 @@
      6 groups: Orange · Cream · Ivory · Coral · Ink · Status */
 
   /* Orange · Brand · 10 steps (★ 500 = PRIMARY) */
-  --p-orange-50:  #FFF4E9;
-  --p-orange-100: #FFE9D6;
-  --p-orange-200: #FFCFA8;
-  --p-orange-300: #FFB073;
-  --p-orange-400: #F89A4F;
-  --p-orange-500: #F58634;
-  --p-orange-600: #E26A18;
-  --p-orange-700: #B8520E;
-  --p-orange-800: #8C3D08;
-  --p-orange-900: #5C2705;
+  --p-orange-50:  #FFF4ED;
+  --p-orange-100: #FFE6D5;
+  --p-orange-200: #FECCAA;
+  --p-orange-300: #FDB082;
+  --p-orange-400: #FB8A4C;
+  --p-orange-500: #F26522;
+  --p-orange-600: #D94B0E;
+  --p-orange-700: #B5340A;
+  --p-orange-800: #8C2809;
+  --p-orange-900: #5E1C08;
 
   /* Cream · Base Background (★ 100 = BG Default) */
   --p-cream-50:  #FFFDF9;
@@ -276,7 +276,7 @@
   --sm-interactive-brand-default: var(--p-orange-400);
   --sm-interactive-brand-hover:   var(--p-orange-300);
   --sm-interactive-brand-active:  var(--p-orange-200);
-  --sm-interactive-brand-subtle:  rgba(245, 134, 52, 0.14);
+  --sm-interactive-brand-subtle:  rgba(251, 138, 76, 0.14);
 
   --sm-status-success: #4ADE80;
   --sm-status-warning: #FBBF24;
