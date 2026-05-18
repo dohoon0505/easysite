@@ -21,6 +21,7 @@ const I = {
   Insta:   (p) => <Icon {...p}><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none" /></Icon>,
   Help:    (p) => <Icon {...p}><circle cx="12" cy="12" r="9" /><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2.5-2.5 4" /><path d="M12 17h.01" /></Icon>,
   Chat:    (p) => <Icon {...p}><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4z" /></Icon>,
+  Send:    (p) => <Icon {...p} fill="currentColor" strokeWidth={0}><path d="M20.34,9.32l-14-7a3,3,0,0,0-4.08,3.9l2.4,5.37h0a1.06,1.06,0,0,1,0,.82l-2.4,5.37A3,3,0,0,0,5,22a3.14,3.14,0,0,0,1.35-.32l14-7a3,3,0,0,0,0-5.36Zm-.89,3.57-14,7a1,1,0,0,1-1.35-1.3l2.39-5.37A2,2,0,0,0,6.57,13h6.89a1,1,0,0,0,0-2H6.57a2,2,0,0,0-.08-.22L4.1,5.41a1,1,0,0,1,1.35-1.3l14,7a1,1,0,0,1,0,1.78Z" /></Icon>,
   Arrow:   (p) => <Icon {...p}><path d="M9 6l6 6-6 6" /></Icon>,
   Back:    (p) => <Icon {...p}><path d="M15 6l-6 6 6 6" /></Icon>,
   Close:   (p) => <Icon {...p}><path d="M6 6l12 12M18 6l-12 12" /></Icon>,
