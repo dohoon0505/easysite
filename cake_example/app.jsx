@@ -233,7 +233,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
 
       <section className="section home-faq-section">
         <div className="section-head">
-          <h3>미용실 방문 전 자주하는 질문</h3>
+          <h3>케이크 주문 전 자주하는 질문</h3>
         </div>
         <ul className="home-faq-list">
           {FAQ_ITEMS.slice(0, 6).map((it, i) => (
@@ -966,7 +966,7 @@ function FaqScreen() {
       <div className="faq-hero">
         <span className="step-pill"><I.Help size={12} strokeWidth={2.2} /> 자주 묻는 질문</span>
         <h2>궁금한 점을<br />빠르게 찾아드려요</h2>
-        <p>예약·시술·디자이너·결제 관련 답변을 모았어요. 더 궁금한 점은 전화 또는 문자로 문의주세요.</p>
+        <p>주문·디자인·수령·결제 관련 답변을 모았어요. 더 궁금한 점은 전화 또는 문자로 문의주세요.</p>
         <div className="faq-search">
           <I.Search size={18} strokeWidth={2} />
           <input type="text" placeholder="질문 검색하기" value={query} onChange={(e) => setQuery(e.target.value)} />
