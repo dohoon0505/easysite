@@ -14,9 +14,9 @@
   --ph-bg-2:       #FFF4E5;
   --ph-surface:    #FFFDF9;
   --ph-sunken:     #FFF4E5;
-  --ph-brand:      #F58634;
-  --ph-brand-hover:#E26A18;
-  --ph-brand-soft: #FFF4E9;
+  --ph-brand:      #F26522;
+  --ph-brand-hover:#D94B0E;
+  --ph-brand-soft: #FFF4ED;
   --ph-on-brand:   #FFFDF9;
   --ph-accent:     #FF8B7A;
   --ph-success:    #38A169;
@@ -46,9 +46,9 @@
   --ph-bg-2:       #4A3529;
   --ph-surface:    #4A3529;
   --ph-sunken:     #2F2019;
-  --ph-brand:      #F89A4F;
-  --ph-brand-hover:#FFB073;
-  --ph-brand-soft: rgba(245,134,52,0.14);
+  --ph-brand:      #FB8A4C;
+  --ph-brand-hover:#FDB082;
+  --ph-brand-soft: rgba(251,138,76,0.14);
   --ph-on-brand:   #3B2A21;
   --ph-shadow-sm:  0 1px 2px rgba(0,0,0,0.6);
   --ph-shadow-md:  0 2px 12px rgba(0,0,0,0.7);
