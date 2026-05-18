@@ -152,7 +152,7 @@ function showShareToast(text) {
 function BottomNav({ route, go }) {
   const tabs = [
     { id: "home",     label: "홈",       icon: I.Home },
-    { id: "styles",   label: "스타일",   icon: I.Grid },
+    { id: "styles",   label: "디자인",   icon: I.Cake },
     { id: "styling",  label: "스타일링", icon: I.Sparkle },
     { id: "faq",     label: "질문/답변", icon: I.Help },
   ];
