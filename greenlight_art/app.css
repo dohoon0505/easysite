@@ -234,8 +234,8 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 .intro-name {
   font-size: 29px;
-  font-weight: 900;
-  letter-spacing: 0.04em;
+  font-weight: 800;
+  letter-spacing: -0.015em;
   margin: 6px 0 18px;
   color: var(--ph-ink);
   line-height: 1.1;
