@@ -230,7 +230,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .intro-name {
   font-size: 32px;
   font-weight: 900;
-  letter-spacing: 0.04em;
+
   margin: 6px 0 18px;
   color: var(--ph-ink);
   line-height: 1.1;
@@ -572,7 +572,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   top: 10px; left: 10px;
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.14em;
+
   color: rgba(255,255,255,0.6);
   z-index: 1;
 }
@@ -649,7 +649,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   font-size: 11px;
   font-weight: 800;
   color: rgba(255,255,255,0.55);
-  letter-spacing: 0.18em;
+
 }
 .designer-name-lg {
   font-size: 22px;
@@ -778,7 +778,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   top: 12px; left: 12px;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+
   padding: 5px 10px;
   border-radius: var(--ph-radius-xs);
   background: #FFFDF9;
@@ -793,7 +793,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .feat-cat {
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 0.12em;
+
   color: var(--ph-mute);
   text-transform: uppercase;
 }
@@ -903,7 +903,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 .info-row svg { color: var(--ph-ink); margin-top: 2px; }
 .info-label {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+  font-size: 11px; font-weight: 700;
   color: var(--ph-mute); text-transform: uppercase;
 }
 .info-value {
@@ -1057,7 +1057,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   font-size: 11px;
   font-weight: 800;
   color: var(--ph-mute);
-  letter-spacing: 0.18em;
+
   margin-bottom: 6px;
 }
 .styles-head h2 {
@@ -1141,7 +1141,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   top: 10px; right: 10px;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+
   padding: 4px 8px;
   border-radius: var(--ph-radius-xs);
   background: #FFFDF9;
@@ -1224,7 +1224,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   margin: 0;
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 0.14em;
+
   color: var(--ph-mute);
   text-transform: uppercase;
 }
@@ -1284,7 +1284,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .styling-step {
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 0.14em;
+
   color: var(--ph-mute);
   font-variant-numeric: tabular-nums;
 }
@@ -1508,7 +1508,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .opt-mark {
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+
   color: var(--ph-mute);
   margin-left: 4px;
 }
@@ -1526,7 +1526,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   font-size: 11px;
   color: var(--ph-mute);
   font-weight: 800;
-  letter-spacing: 0.12em;
+
 }
 .notice h6 {
   margin: 0 0 14px;
@@ -1622,7 +1622,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   font-size: 11px;
   font-weight: 700;
   color: var(--ph-mute);
-  letter-spacing: 0.04em;
+
 }
 .cal-dow-lbl.sun { color: var(--ph-danger); }
 .cal-dow-lbl.off { color: var(--ph-danger); }
@@ -1859,7 +1859,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .faq-q-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .faq-cat {
   font-size: 10px; font-weight: 800;
-  letter-spacing: 0.12em;
+
   color: var(--ph-mute);
   text-transform: uppercase;
 }

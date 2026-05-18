@@ -192,7 +192,7 @@
   --track-heading-lg: -0.020em;
   --track-heading-md: -0.015em;
   --track-heading-sm: -0.010em;
-  --track-overline:    0.080em;
+  --track-overline:    0;
 
   /* ─────────── SIZING (4px grid) ─────────── */
   --size-50:   2px;
