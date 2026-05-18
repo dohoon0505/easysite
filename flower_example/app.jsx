@@ -50,10 +50,12 @@ function LiveDelivery() {
       </span>
       <span className="live-text">
         <span className="live-label">{isOpen ? "당일배송 가능" : "당일배송 마감"}</span>
-        <span className="live-sep" aria-hidden="true">·</span>
-        <span className="live-meta">
-          {isOpen ? `마감 ${fmtDuration(closingIn)} 전` : `09:00~18:30`}
-        </span>
+        {!isOpen && (
+          <>
+            <span className="live-sep" aria-hidden="true">·</span>
+            <span className="live-meta">09:00~18:30</span>
+          </>
+        )}
       </span>
     </div>
   );
@@ -65,7 +67,7 @@ function AppBar({ title, onBack, scrolled, action }) {
       {onBack && (
         <button className="iconbtn" onClick={onBack} aria-label="뒤로 가기"><I.Back /></button>
       )}
-      <div className="pagetitle">{title || "전국꽃배달서비스"}</div>
+      <div className="pagetitle">{title || "전국꽃배달"}</div>
       <div className="grow" />
       <LiveDelivery />
       {action || (
