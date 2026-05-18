@@ -1033,7 +1033,7 @@ function formatDateKR(s) {
 // ─── App root ────────────────────────────────────────────────
 function App() {
   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-    "brand": "#F26522",
+    "brand": "#EAB308",
     "dark": false
   }/*EDITMODE-END*/;
   const [t, setTweak] = (window.useTweaks ? window.useTweaks(TWEAK_DEFAULTS) : [TWEAK_DEFAULTS, () => {}]);
