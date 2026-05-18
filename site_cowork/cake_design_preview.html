@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>레터링케이크샵 · 디자인 미리보기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ── 브랜드 코어 ── */
+  --c-primary:        #F58634;   /* 메인 주황 */
+  --c-primary-deep:   #E26A18;   /* hover/active */
+  --c-primary-soft:   #FFE9D6;   /* tinted bg */
+  --c-primary-tint:   #FFF4E9;   /* very subtle */
+
+  /* ── 보조 ── */
+  --c-cream:    #FFF9F2;
+  --c-ivory:    #F5EBD9;
+  --c-coral:    #FF8B7A;
+  --c-coral-soft:#FFE0DC;
+
+  /* ── 텍스트/라인 ── */
+  --c-ink:      #3B2A21;
+  --c-ink-2:    #5C4538;
+  --c-mute:     #9A8576;
+  --c-line:     #F0E5D5;
+
+  /* ── 상태 ── */
+  --c-success:  #38A169;
+  --c-warn:     #E0A500;
+  --c-error:    #E53E3E;
+
+  /* ── 폰트 ── */
+  --font-base: "Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --font-display: "Jua","Pretendard",sans-serif;
+  --font-hand: "Gaegu","Gowun Dodum",cursive;
+
+  --r-sm:10px; --r-md:16px; --r-lg:24px; --r-xl:32px; --r-pill:9999px;
+  --sh-1: 0 2px 8px rgba(245,134,52,.08);
+  --sh-2: 0 8px 24px rgba(245,134,52,.12), 0 2px 6px rgba(0,0,0,.04);
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:linear-gradient(180deg,#FFF6EC 0%, #FFEBD6 100%);font-family:var(--font-base);color:var(--c-ink);}
+img{max-width:100%;display:block;}
+.wrap{max-width:1180px;margin:0 auto;padding:48px 24px 96px;}
+
+/* ── 상단 헤더 ── */
+.doc-head{display:flex;flex-direction:column;gap:6px;margin-bottom:36px;}
+.doc-eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--c-primary);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;}
+.doc-eyebrow::before{content:"";width:24px;height:2px;background:var(--c-primary);border-radius:2px;}
+.doc-title{font-family:var(--font-display);font-size:40px;letter-spacing:-.02em;margin:4px 0 2px;color:var(--c-ink);}
+.doc-sub{color:var(--c-ink-2);font-size:15px;}
+
+/* ── 섹션 공통 ── */
+.section{margin-top:56px;}
+.section-title{display:flex;align-items:baseline;gap:12px;margin-bottom:18px;}
+.section-title h2{font-family:var(--font-display);font-size:24px;margin:0;color:var(--c-ink);letter-spacing:-.01em;}
+.section-title .tag{font-family:var(--font-hand);font-size:18px;color:var(--c-primary);}
+
+/* ── 1. 컬러팔레트 ── */
+.palette{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+@media(max-width:760px){.palette{grid-template-columns:repeat(2,1fr);}}
+.swatch{background:#fff;border-radius:var(--r-md);overflow:hidden;box-shadow:var(--sh-1);border:1px solid var(--c-line);}
+.swatch-chip{height:96px;}
+.swatch-meta{padding:12px 14px 14px;}
+.swatch-meta .name{font-weight:700;font-size:14px;color:var(--c-ink);}
+.swatch-meta .hex{font-size:12px;color:var(--c-mute);font-family:monospace;margin-top:2px;}
+.swatch-meta .use{font-size:11px;color:var(--c-ink-2);margin-top:4px;line-height:1.4;}
+
+/* ── 2. 타이포 ── */
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media(max-width:900px){.type-grid{grid-template-columns:1fr;}}
+.type-card{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:20px;box-shadow:var(--sh-1);}
+.type-card .label{font-size:12px;color:var(--c-primary);font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+.type-card .name{font-size:13px;color:var(--c-mute);margin:2px 0 14px;}
+.type-card .sample{color:var(--c-ink);}
+.t-display{font-family:var(--font-display);font-size:32px;line-height:1.15;}
+.t-hand{font-family:var(--font-hand);font-size:30px;line-height:1.2;color:var(--c-primary-deep);}
+.t-body{font-family:var(--font-base);font-size:16px;line-height:1.65;}
+
+/* ── 3. 모바일 미리보기 프레임 ── */
+.previews{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+@media(max-width:1080px){.previews{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.previews{grid-template-columns:1fr;}}
+.phone{background:#fff;border-radius:32px;border:1px solid var(--c-line);box-shadow:var(--sh-2);overflow:hidden;position:relative;}
+.phone-head{padding:14px 18px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--c-line);background:#FFFDF9;}
+.phone-head .brand{font-family:var(--font-display);color:var(--c-primary);font-size:18px;letter-spacing:.02em;display:flex;align-items:center;gap:6px;}
+.phone-head .brand-mark{width:22px;height:22px;border-radius:50%;background:var(--c-primary);display:inline-grid;place-items:center;color:#fff;font-size:13px;}
+.phone-head .ico{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:var(--c-primary-soft);color:var(--c-primary-deep);font-size:13px;}
+.phone-body{padding:0 0 12px;min-height:520px;background:#FFFDF9;}
+.phone-foot{position:absolute;left:10px;right:10px;bottom:10px;background:#fff;border-radius:var(--r-pill);box-shadow:0 8px 24px rgba(245,134,52,.18);display:grid;grid-template-columns:repeat(4,1fr);padding:6px;}
+.phone-foot button{background:none;border:0;padding:8px 0;font-size:11px;color:var(--c-mute);font-weight:600;border-radius:var(--r-pill);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.phone-foot button.on{background:var(--c-primary);color:#fff;}
+.phone-foot .ic{font-size:14px;}
+.phone-label{font-family:var(--font-hand);text-align:center;color:var(--c-primary-deep);padding:10px 0 0;font-size:18px;}
+
+/* HOME preview */
+.hero-cake{
+  margin:14px 14px 0;
+  height:160px;
+  border-radius:var(--r-lg);
+  background:
+    radial-gradient(circle at 20% 30%, #FFF1B8 0 18%, transparent 19%),
+    radial-gradient(circle at 80% 70%, #FFD3C5 0 22%, transparent 23%),
+    linear-gradient(135deg,var(--c-coral-soft),var(--c-primary-soft));
+  display:flex;flex-direction:column;justify-content:flex-end;padding:14px;color:var(--c-ink);position:relative;overflow:hidden;
+}
+.hero-cake::after{content:"🎂";position:absolute;right:14px;top:12px;font-size:38px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.08));}
+.hero-cake .h{font-family:var(--font-display);font-size:22px;line-height:1.2;}
+.hero-cake .s{font-family:var(--font-hand);font-size:16px;color:var(--c-primary-deep);margin-top:2px;}
+.intro{padding:18px 14px 4px;}
+.intro .name{font-family:var(--font-display);font-size:20px;color:var(--c-ink);}
+.intro .meta{font-size:11px;color:var(--c-mute);letter-spacing:.04em;}
+.intro .desc{font-size:13px;color:var(--c-ink-2);line-height:1.55;margin-top:8px;}
+.info-banner{margin:14px;padding:12px 14px;background:var(--c-primary-tint);border:1px dashed var(--c-primary);border-radius:var(--r-md);color:var(--c-primary-deep);font-size:12px;font-weight:600;display:flex;gap:8px;align-items:center;}
+.info-banner .ico{font-size:16px;}
+.feat-strip{padding:8px 14px;display:flex;gap:10px;overflow:hidden;}
+.feat-card{flex:0 0 110px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:8px;box-shadow:var(--sh-1);}
+.feat-thumb{height:80px;border-radius:var(--r-sm);background:linear-gradient(135deg,#FFEACB,#FFD2B9);position:relative;overflow:hidden;}
+.feat-thumb::after{content:"🍰";position:absolute;inset:0;display:grid;place-items:center;font-size:30px;}
+.feat-card .nm{font-size:12px;font-weight:700;margin-top:6px;color:var(--c-ink);}
+.feat-card .pr{font-size:11px;color:var(--c-primary);font-weight:700;}
+
+/* DESIGN preview */
+.tabbar{display:flex;gap:6px;padding:12px 14px;overflow:hidden;}
+.tabbar .tab{padding:6px 12px;border-radius:var(--r-pill);background:#fff;border:1px solid var(--c-line);font-size:11px;font-weight:700;color:var(--c-ink-2);}
+.tabbar .tab.on{background:var(--c-primary);color:#fff;border-color:var(--c-primary);}
+.cake-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px;}
+.cake-card{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--sh-1);}
+.cake-img{aspect-ratio:1/1;background:linear-gradient(135deg,#FFE4C2,#FFCFC3);position:relative;}
+.cake-img::after{content:"🎂";position:absolute;inset:0;display:grid;place-items:center;font-size:42px;}
+.cake-img .badge{position:absolute;top:6px;left:6px;background:var(--c-coral);color:#fff;font-size:9px;padding:3px 8px;border-radius:var(--r-pill);font-weight:800;letter-spacing:.04em;}
+.cake-body{padding:8px 10px 10px;}
+.cake-body .nm{font-size:12px;font-weight:700;color:var(--c-ink);}
+.cake-body .pr{font-size:11px;color:var(--c-primary);font-weight:800;margin-top:2px;}
+
+/* BOOK preview */
+.step-pill{display:inline-flex;align-items:center;gap:6px;background:var(--c-primary-soft);color:var(--c-primary-deep);padding:6px 12px;border-radius:var(--r-pill);font-size:11px;font-weight:700;margin:14px 14px 0;}
+.book-h{padding:6px 14px 0;font-family:var(--font-display);font-size:22px;line-height:1.25;}
+.book-sub{padding:4px 14px 12px;color:var(--c-ink-2);font-size:12px;}
+.field{padding:8px 14px;}
+.field h4{margin:0 0 8px;font-size:13px;color:var(--c-ink);}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{padding:7px 12px;border-radius:var(--r-pill);background:#fff;border:1px solid var(--c-line);font-size:11px;color:var(--c-ink-2);font-weight:600;}
+.chip.on{background:var(--c-primary);color:#fff;border-color:var(--c-primary);box-shadow:0 4px 10px rgba(245,134,52,.3);}
+.cal{margin:10px 14px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:10px;}
+.cal-row{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:10px;}
+.cal-row.head{color:var(--c-mute);font-weight:700;}
+.cal-day{padding:6px 0;border-radius:8px;color:var(--c-ink-2);}
+.cal-day.on{background:var(--c-primary);color:#fff;font-weight:800;}
+.cal-day.muted{color:var(--c-mute);}
+.cta-bar{position:absolute;left:14px;right:14px;bottom:64px;background:var(--c-primary);color:#fff;text-align:center;padding:12px;border-radius:var(--r-pill);font-weight:800;font-size:13px;box-shadow:0 8px 22px rgba(245,134,52,.4);}
+
+/* FAQ preview */
+.faq-tab{display:flex;gap:6px;padding:12px 14px;}
+.faq-tab .t{padding:6px 12px;font-size:11px;border-radius:var(--r-pill);background:#fff;border:1px solid var(--c-line);color:var(--c-mute);font-weight:700;}
+.faq-tab .t.on{background:var(--c-primary-soft);color:var(--c-primary-deep);border-color:var(--c-primary);}
+.faq-list{padding:0 14px;display:flex;flex-direction:column;gap:8px;}
+.faq-q{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:12px;display:flex;justify-content:space-between;align-items:center;}
+.faq-q .q{font-size:12px;font-weight:700;color:var(--c-ink);}
+.faq-q .c{color:var(--c-primary);font-size:13px;}
+.faq-q.open{background:var(--c-primary-tint);border-color:var(--c-primary);}
+.faq-a{font-size:11px;color:var(--c-ink-2);line-height:1.55;padding:4px 6px 8px;}
+
+/* ── 4. 컴포넌트 키트 ── */
+.kit{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+@media(max-width:900px){.kit{grid-template-columns:1fr;}}
+.kit-card{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:22px;box-shadow:var(--sh-1);}
+.kit-card h4{margin:0 0 14px;font-family:var(--font-display);font-size:17px;color:var(--c-ink);}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:11px 18px;border-radius:var(--r-pill);font-weight:800;font-size:13px;border:0;cursor:pointer;font-family:inherit;}
+.btn-primary{background:var(--c-primary);color:#fff;box-shadow:0 6px 16px rgba(245,134,52,.28);}
+.btn-primary:hover{background:var(--c-primary-deep);}
+.btn-secondary{background:var(--c-primary-soft);color:var(--c-primary-deep);}
+.btn-ghost{background:#fff;color:var(--c-ink);border:1px solid var(--c-line);}
+.btn-coral{background:var(--c-coral);color:#fff;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+.tag{display:inline-flex;align-items:center;padding:4px 10px;font-size:11px;border-radius:var(--r-pill);font-weight:700;}
+.tag.best{background:var(--c-coral);color:#fff;}
+.tag.new{background:var(--c-primary);color:#fff;}
+.tag.season{background:var(--c-ivory);color:var(--c-ink);}
+.tag.sale{background:#fff;color:var(--c-error);border:1px solid var(--c-error);}
+.input{width:100%;padding:12px 14px;border-radius:var(--r-md);border:1.5px solid var(--c-line);background:#fff;font-size:13px;color:var(--c-ink);font-family:inherit;}
+.input:focus{outline:none;border-color:var(--c-primary);box-shadow:0 0 0 3px var(--c-primary-soft);}
+.card-demo{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;}
+.card-demo .head{height:80px;background:linear-gradient(135deg,var(--c-primary-soft),var(--c-coral-soft));position:relative;}
+.card-demo .head::after{content:"🍰";position:absolute;inset:0;display:grid;place-items:center;font-size:34px;}
+.card-demo .body{padding:12px 14px;}
+.card-demo .nm{font-weight:800;color:var(--c-ink);font-size:14px;}
+.card-demo .pr{color:var(--c-primary);font-weight:800;margin-top:4px;font-size:13px;}
+
+/* ── 5. 사이트맵 ── */
+.sitemap{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+@media(max-width:900px){.sitemap{grid-template-columns:repeat(2,1fr);}}
+.smap-card{background:#fff;border-radius:var(--r-md);padding:18px;border:1px solid var(--c-line);box-shadow:var(--sh-1);}
+.smap-card .h{font-family:var(--font-display);color:var(--c-primary-deep);font-size:18px;margin-bottom:8px;}
+.smap-card ul{padding-left:0;margin:0;list-style:none;}
+.smap-card li{padding:6px 0;font-size:13px;color:var(--c-ink-2);border-bottom:1px dashed var(--c-line);}
+.smap-card li:last-child{border-bottom:0;}
+.smap-card li::before{content:"🧁 ";margin-right:4px;font-size:11px;}
+
+/* ── 6. 무드 비교 ── */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:760px){.compare{grid-template-columns:1fr;}}
+.compare .col{padding:22px;border-radius:var(--r-md);}
+.compare .before{background:#1B1B1B;color:#F2F2F2;}
+.compare .after{background:linear-gradient(135deg,var(--c-primary-tint),var(--c-cream));color:var(--c-ink);border:1px solid var(--c-primary-soft);}
+.compare h3{margin:0 0 6px;font-size:16px;letter-spacing:.04em;}
+.compare .before h3{font-weight:900;color:#C9A961;}
+.compare .after h3{font-family:var(--font-display);color:var(--c-primary-deep);}
+.compare ul{padding-left:18px;margin:10px 0 0;font-size:13px;line-height:1.7;}
+
+/* ── 푸터 ── */
+.foot{margin-top:64px;text-align:center;color:var(--c-mute);font-size:12px;}
+.foot strong{color:var(--c-primary-deep);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc-head">
+  <span class="doc-eyebrow">DESIGN BRIEF · VISUAL PREVIEW</span>
+  <h1 class="doc-title">레터링케이크샵 · 디자인 미리보기</h1>
+  <p class="doc-sub">기존 PARKHAD(다크/남성/시크)에서 → 주황 브랜드의 귀엽고 러블리한 레터링 케이크샵으로 리브랜딩</p>
+</header>
+
+<!-- 1. 무드 비교 -->
+<section class="section">
+  <div class="section-title"><h2>1. 무드 변화</h2><span class="tag">Before → After</span></div>
+  <div class="compare">
+    <div class="col before">
+      <h3>BEFORE · PARKHAD</h3>
+      <div style="opacity:.7;font-size:13px;letter-spacing:.04em;">남성 헤어샵</div>
+      <ul>
+        <li>다크 모드 기본 + 모노 그레이 팔레트</li>
+        <li>골드(#C9A961) 단일 액센트, 절제된 사용</li>
+        <li>Pretendard 900 / 헤비 트래킹</li>
+        <li>각진 카드, 시크하고 묵직한 톤</li>
+        <li>"간지나고 단단한" 남성적 인상</li>
+      </ul>
+    </div>
+    <div class="col after">
+      <h3>AFTER · 레터링케이크샵</h3>
+      <div style="font-family:var(--font-hand);color:var(--c-primary);font-size:16px;">달콤하고 사랑스러운 케이크샵</div>
+      <ul>
+        <li>라이트 모드 기본 + 주황 + 크림/아이보리/코랄</li>
+        <li>주황 #F58634을 메인으로 풍성하게 활용</li>
+        <li>Pretendard + Jua + Gaegu(손글씨) 믹스</li>
+        <li>둥근 모서리(16-24px), 부드러운 그림자</li>
+        <li>"귀엽고 러블리한" 베이커리 무드</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 2. 컬러팔레트 -->
+<section class="section">
+  <div class="section-title"><h2>2. 컬러 팔레트</h2><span class="tag">brand orange + cream</span></div>
+  <div class="palette">
+    <div class="swatch"><div class="swatch-chip" style="background:#F58634"></div><div class="swatch-meta"><div class="name">Primary Orange</div><div class="hex">#F58634</div><div class="use">메인 CTA · 강조 · 브랜드 로고</div></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#E26A18"></div><div class="swatch-meta"><div class="name">Orange Deep</div><div class="hex">#E26A18</div><div class="use">hover / active / 강조 텍스트</div></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#FFE9D6"></div><div class="swatch-meta"><div class="name">Orange Soft</div><div class="hex">#FFE9D6</div><div class="use">tinted 배경 · 칩 hover</div></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#FFF4E9"></div><div class="swatch-meta"><div class="name">Orange Tint</div><div class="hex">#FFF4E9</div><div class="use">섹션 배경 · 배너</div></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#FFF9F2"></div><div class="swatch-meta"><div class="name">Cream</div><div class="hex">#FFF9F2</div><div class="use">메인 배경(라이트)</div></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#F5EBD9"></div><div class="swatch-meta"><div class="name">Ivory</div><div class="hex">#F5EBD9</div><div class="use">카드 배경 변형 · 구분 라인</div></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#FF8B7A"></div><div class="swatch-meta"><div class="name">Coral</div><div class="hex">#FF8B7A</div><div class="use">BEST / 신상 태그 · 포인트</div></div></div>
+    <div class="swatch"><div class="swatch-chip" style="background:#3B2A21"></div><div class="swatch-meta"><div class="name">Ink (text)</div><div class="hex">#3B2A21</div><div class="use">본문 텍스트(브라운 톤)</div></div></div>
+  </div>
+</section>
+
+<!-- 3. 타이포그래피 -->
+<section class="section">
+  <div class="section-title"><h2>3. 타이포그래피</h2><span class="tag">3-tier system</span></div>
+  <div class="type-grid">
+    <div class="type-card">
+      <div class="label">DISPLAY</div>
+      <div class="name">Jua · 둥글둥글한 한글 디스플레이</div>
+      <div class="sample t-display">달콤한 하루를<br/>케이크에 담아</div>
+    </div>
+    <div class="type-card">
+      <div class="label">HANDWRITING</div>
+      <div class="name">Gaegu · 손글씨 포인트</div>
+      <div class="sample t-hand">"오늘도 사랑해 ♡"</div>
+    </div>
+    <div class="type-card">
+      <div class="label">BODY</div>
+      <div class="name">Pretendard · 본문/UI</div>
+      <div class="sample t-body">생일·기념일·서프라이즈를 위한 레터링 케이크. 원하는 문구와 색상을 직접 선택해 주세요.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. 화면 미리보기 (4페이지) -->
+<section class="section">
+  <div class="section-title"><h2>4. 페이지별 화면 시안</h2><span class="tag">홈 · 디자인 · 예약 · Q&A</span></div>
+  <div class="previews">
+    <!-- HOME -->
+    <div>
+      <div class="phone">
+        <div class="phone-head"><div class="brand"><span class="brand-mark">🎂</span>오렌지케이크</div><div class="ico">📞</div></div>
+        <div class="phone-body">
+          <div class="hero-cake"><div class="h">달콤한 하루를<br/>케이크에 담아</div><div class="s">~ 오렌지케이크 ~</div></div>
+          <div class="intro">
+            <div class="meta">서울특별시 | 마포구</div>
+            <div class="name">오렌지케이크</div>
+            <div class="desc">하나뿐인 문구, 하나뿐인 케이크. 그 사람만을 위한 레터링 케이크를 정성껏 굽습니다.</div>
+          </div>
+          <div class="info-banner"><span class="ico">🧁</span>인스타 DM 또는 사이트에서 예약하세요!</div>
+          <div class="feat-strip">
+            <div class="feat-card"><div class="feat-thumb"></div><div class="nm">생일 레터링</div><div class="pr">35,000원~</div></div>
+            <div class="feat-card"><div class="feat-thumb"></div><div class="nm">기념일 케이크</div><div class="pr">42,000원~</div></div>
+            <div class="feat-card"><div class="feat-thumb"></div><div class="nm">미니 도시락</div><div class="pr">18,000원~</div></div>
+          </div>
+        </div>
+        <div class="phone-foot">
+          <button class="on"><span class="ic">🏠</span>홈</button>
+          <button><span class="ic">🎨</span>디자인</button>
+          <button><span class="ic">📅</span>예약</button>
+          <button><span class="ic">💬</span>Q&A</button>
+        </div>
+      </div>
+      <div class="phone-label">홈 (Home)</div>
+    </div>
+
+    <!-- DESIGN -->
+    <div>
+      <div class="phone">
+        <div class="phone-head"><div class="brand"><span class="brand-mark">🎂</span>오렌지케이크</div><div class="ico">🔍</div></div>
+        <div class="phone-body">
+          <div class="tabbar">
+            <div class="tab on">전체</div><div class="tab">생일</div><div class="tab">기념일</div><div class="tab">웨딩</div><div class="tab">미니</div>
+          </div>
+          <div class="cake-grid">
+            <div class="cake-card"><div class="cake-img"><span class="badge">BEST</span></div><div class="cake-body"><div class="nm">컬러풀 생일</div><div class="pr">35,000원</div></div></div>
+            <div class="cake-card"><div class="cake-img"></div><div class="cake-body"><div class="nm">하트 레터링</div><div class="pr">42,000원</div></div></div>
+            <div class="cake-card"><div class="cake-img"><span class="badge" style="background:var(--c-primary)">NEW</span></div><div class="cake-body"><div class="nm">미니 도시락</div><div class="pr">18,000원</div></div></div>
+            <div class="cake-card"><div class="cake-img"></div><div class="cake-body"><div class="nm">플라워 케이크</div><div class="pr">55,000원</div></div></div>
+            <div class="cake-card"><div class="cake-img"></div><div class="cake-body"><div class="nm">곰돌이 케이크</div><div class="pr">48,000원</div></div></div>
+            <div class="cake-card"><div class="cake-img"></div><div class="cake-body"><div class="nm">웨딩 미니</div><div class="pr">52,000원</div></div></div>
+          </div>
+        </div>
+        <div class="phone-foot">
+          <button><span class="ic">🏠</span>홈</button>
+          <button class="on"><span class="ic">🎨</span>디자인</button>
+          <button><span class="ic">📅</span>예약</button>
+          <button><span class="ic">💬</span>Q&A</button>
+        </div>
+      </div>
+      <div class="phone-label">디자인 갤러리</div>
+    </div>
+
+    <!-- BOOK -->
+    <div>
+      <div class="phone">
+        <div class="phone-head"><div class="brand"><span class="brand-mark">🎂</span>오렌지케이크</div><div class="ico">📞</div></div>
+        <div class="phone-body">
+          <div class="step-pill">📝 STEP 2 of 4</div>
+          <div class="book-h">언제 받으실<br/>예정인가요?</div>
+          <div class="book-sub">최소 3일 전 예약을 권해드려요</div>
+          <div class="cal">
+            <div class="cal-row head"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div>
+            <div class="cal-row" style="margin-top:4px;">
+              <div class="cal-day muted">29</div><div class="cal-day muted">30</div>
+              <div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div><div class="cal-day">4</div><div class="cal-day">5</div>
+            </div>
+            <div class="cal-row">
+              <div class="cal-day">6</div><div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day on">9</div><div class="cal-day">10</div><div class="cal-day">11</div><div class="cal-day">12</div>
+            </div>
+            <div class="cal-row">
+              <div class="cal-day">13</div><div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day">16</div><div class="cal-day">17</div><div class="cal-day">18</div><div class="cal-day">19</div>
+            </div>
+          </div>
+          <div class="field">
+            <h4>희망 시간대</h4>
+            <div class="chip-row"><div class="chip">11:00</div><div class="chip on">14:00</div><div class="chip">16:00</div><div class="chip">18:00</div></div>
+          </div>
+        </div>
+        <div class="cta-bar">다음 단계 →</div>
+        <div class="phone-foot">
+          <button><span class="ic">🏠</span>홈</button>
+          <button><span class="ic">🎨</span>디자인</button>
+          <button class="on"><span class="ic">📅</span>예약</button>
+          <button><span class="ic">💬</span>Q&A</button>
+        </div>
+      </div>
+      <div class="phone-label">예약 신청 (4-Step)</div>
+    </div>
+
+    <!-- FAQ -->
+    <div>
+      <div class="phone">
+        <div class="phone-head"><div class="brand"><span class="brand-mark">🎂</span>오렌지케이크</div><div class="ico">💬</div></div>
+        <div class="phone-body">
+          <div class="faq-tab"><div class="t on">예약</div><div class="t">픽업</div><div class="t">맛/크기</div><div class="t">결제</div></div>
+          <div class="faq-list">
+            <div class="faq-q open"><span class="q">예약은 며칠 전에 해야 하나요?</span><span class="c">▼</span></div>
+            <div class="faq-a">레터링 케이크는 정성껏 굽기 때문에 최소 3일 전 예약을 권해드려요. 주말은 1주 전 마감!</div>
+            <div class="faq-q"><span class="q">디자인 시안을 보낼 수 있나요?</span><span class="c">▶</span></div>
+            <div class="faq-q"><span class="q">픽업 시간은 어떻게 되나요?</span><span class="c">▶</span></div>
+            <div class="faq-q"><span class="q">당일 예약도 가능한가요?</span><span class="c">▶</span></div>
+          </div>
+        </div>
+        <div class="phone-foot">
+          <button><span class="ic">🏠</span>홈</button>
+          <button><span class="ic">🎨</span>디자인</button>
+          <button><span class="ic">📅</span>예약</button>
+          <button class="on"><span class="ic">💬</span>Q&A</button>
+        </div>
+      </div>
+      <div class="phone-label">Q&A (자주묻는 질문)</div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. 컴포넌트 키트 -->
+<section class="section">
+  <div class="section-title"><h2>5. 컴포넌트 키트</h2><span class="tag">버튼/태그/입력/카드</span></div>
+  <div class="kit">
+    <div class="kit-card">
+      <h4>버튼 (Buttons)</h4>
+      <div class="btn-row" style="margin-bottom:10px;">
+        <button class="btn btn-primary">예약하기 🎂</button>
+        <button class="btn btn-secondary">상세보기</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-coral">BEST 💖</button>
+        <button class="btn btn-ghost">취소</button>
+      </div>
+      <div style="font-size:12px;color:var(--c-mute);margin-top:12px;line-height:1.5;">
+        모서리는 모두 <b>pill(9999px)</b>. 메인은 <b>orange + soft shadow</b>로 떠 있는 느낌.
+      </div>
+    </div>
+    <div class="kit-card">
+      <h4>태그 (Tags)</h4>
+      <div class="btn-row" style="margin-bottom:10px;">
+        <span class="tag best">BEST 💖</span>
+        <span class="tag new">NEW</span>
+        <span class="tag season">시즌한정</span>
+        <span class="tag sale">SALE</span>
+      </div>
+      <div style="font-size:12px;color:var(--c-mute);margin-top:8px;line-height:1.5;">
+        BEST는 코랄, NEW는 메인 주황. 시즌한정은 아이보리에 잉크 컬러.
+      </div>
+    </div>
+    <div class="kit-card">
+      <h4>입력 필드 (Input)</h4>
+      <input class="input" placeholder="원하는 문구를 적어주세요 (예: 사랑해 우리딸 ♡)" />
+      <div style="margin-top:8px;"><input class="input" placeholder="연락처" /></div>
+      <div style="font-size:12px;color:var(--c-mute);margin-top:10px;line-height:1.5;">
+        포커스 시 <b>주황 외곽선 + soft glow</b>. 둥근 모서리(16px).
+      </div>
+    </div>
+    <div class="kit-card">
+      <h4>케이크 카드 (Catalog)</h4>
+      <div class="card-demo"><div class="head"></div><div class="body"><div class="nm">컬러풀 생일 케이크</div><div class="pr">35,000원~</div></div></div>
+      <div style="font-size:12px;color:var(--c-mute);margin-top:10px;line-height:1.5;">
+        썸네일 위 BEST/NEW 배지. 카드 hover 시 살짝 떠오름(translateY -2px).
+      </div>
+    </div>
+    <div class="kit-card">
+      <h4>예약 진행 표시 (Stepper)</h4>
+      <div class="btn-row">
+        <span class="tag" style="background:var(--c-primary);color:#fff;">1. 디자인</span>
+        <span class="tag" style="background:var(--c-primary-soft);color:var(--c-primary-deep);">2. 날짜</span>
+        <span class="tag" style="background:#fff;border:1px dashed var(--c-line);color:var(--c-mute);">3. 문구</span>
+        <span class="tag" style="background:#fff;border:1px dashed var(--c-line);color:var(--c-mute);">4. 확인</span>
+      </div>
+      <div style="font-size:12px;color:var(--c-mute);margin-top:12px;line-height:1.5;">
+        현재 단계는 풀컬러, 완료 단계는 soft, 미진입은 dashed.
+      </div>
+    </div>
+    <div class="kit-card">
+      <h4>안내 배너 (Info)</h4>
+      <div class="info-banner" style="margin:0;"><span class="ico">🧁</span>최소 3일 전 예약을 권해드려요</div>
+      <div style="font-size:12px;color:var(--c-mute);margin-top:10px;line-height:1.5;">
+        파스텔 주황 배경 + 점선 테두리. 이모지/아이콘 1개 동반.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. 사이트맵 -->
+<section class="section">
+  <div class="section-title"><h2>6. 사이트맵 & 섹션 구성</h2><span class="tag">4 pages</span></div>
+  <div class="sitemap">
+    <div class="smap-card">
+      <div class="h">🏠 홈 (Home)</div>
+      <ul>
+        <li>히어로 비주얼 + 슬로건</li>
+        <li>매장 소개 + 위치/영업시간</li>
+        <li>예약 안내 배너</li>
+        <li>인기/시즌/베스트 슬라이더</li>
+        <li>Q&A 미리보기(6개)</li>
+        <li>인스타 / 카카오톡 CTA</li>
+      </ul>
+    </div>
+    <div class="smap-card">
+      <div class="h">🎨 디자인 (Gallery)</div>
+      <ul>
+        <li>카테고리 탭 (생일/기념일/웨딩/미니)</li>
+        <li>2-column 케이크 카드 그리드</li>
+        <li>BEST · NEW · 시즌한정 배지</li>
+        <li>상세 바텀시트(가격·사이즈·옵션)</li>
+        <li>"이 디자인으로 예약" CTA</li>
+      </ul>
+    </div>
+    <div class="smap-card">
+      <div class="h">📅 예약 (Booking)</div>
+      <ul>
+        <li>STEP 1 · 디자인 선택</li>
+        <li>STEP 2 · 픽업 날짜·시간</li>
+        <li>STEP 3 · 문구·색상·옵션</li>
+        <li>STEP 4 · 연락처·확인</li>
+        <li>완료 모달(카톡 안내 동반)</li>
+      </ul>
+    </div>
+    <div class="smap-card">
+      <div class="h">💬 Q&A</div>
+      <ul>
+        <li>카테고리 탭(예약/픽업/맛·크기/결제)</li>
+        <li>아코디언 펼침/접힘</li>
+        <li>검색 기능(선택)</li>
+        <li>"문의하기" 카카오톡 CTA</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <p>이 미리보기는 <strong>레터링케이크샵 디자인 요청서</strong>의 시각 가이드입니다.</p>
+  <p>색상·폰트·컴포넌트 규격은 동봉된 Word 문서를 참고해주세요.</p>
+</footer>
+
+</div>
+</body>
+</html>

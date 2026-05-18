@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>레터링케이크샵 · 홈 화면 시안 4종</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{
+  --c-primary:#F58634; --c-primary-deep:#E26A18; --c-primary-soft:#FFE9D6; --c-primary-tint:#FFF4E9;
+  --c-cream:#FFF9F2; --c-ivory:#F5EBD9; --c-coral:#FF8B7A; --c-coral-soft:#FFE0DC;
+  --c-ink:#3B2A21; --c-ink-2:#5C4538; --c-mute:#9A8576; --c-line:#F0E5D5;
+  --font-base:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --font-display:"Jua",sans-serif;
+  --font-hand:"Gaegu",cursive;
+  --r-sm:10px; --r-md:16px; --r-lg:24px; --r-xl:32px; --r-pill:9999px;
+  --sh-1:0 2px 8px rgba(245,134,52,.08);
+  --sh-2:0 10px 28px rgba(245,134,52,.15), 0 2px 6px rgba(0,0,0,.04);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:linear-gradient(180deg,#FFF6EC 0%, #FFEBD6 100%);font-family:var(--font-base);color:var(--c-ink);}
+img{max-width:100%;display:block;}
+.wrap{max-width:1280px;margin:0 auto;padding:48px 24px 120px;}
+
+/* ── 헤더 ── */
+.doc-head{margin-bottom:36px;}
+.doc-eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--c-primary);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;}
+.doc-eyebrow::before{content:"";width:24px;height:2px;background:var(--c-primary);border-radius:2px;}
+.doc-title{font-family:var(--font-display);font-size:40px;letter-spacing:-.02em;margin:4px 0 2px;color:var(--c-ink);}
+.doc-sub{color:var(--c-ink-2);font-size:15px;}
+
+/* ── 네비/요약 ── */
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0 40px;}
+@media(max-width:1080px){.summary{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.summary{grid-template-columns:1fr;}}
+.sum-card{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:18px;box-shadow:var(--sh-1);}
+.sum-card .badge{display:inline-block;font-family:var(--font-display);background:var(--c-primary);color:#fff;padding:4px 12px;border-radius:var(--r-pill);font-size:14px;}
+.sum-card h3{font-family:var(--font-display);font-size:20px;margin:8px 0 4px;color:var(--c-ink);}
+.sum-card .tag{font-family:var(--font-hand);color:var(--c-primary-deep);font-size:17px;}
+.sum-card p{font-size:13px;color:var(--c-ink-2);line-height:1.55;margin:8px 0 0;}
+.sum-card .pros{font-size:12px;color:var(--c-primary-deep);margin-top:8px;font-weight:700;}
+
+/* ── 시안 그리드 (4안 비교) ── */
+.variants{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+@media(max-width:1180px){.variants{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:620px){.variants{grid-template-columns:1fr;}}
+.var-card{display:flex;flex-direction:column;}
+.var-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;}
+.var-no{font-family:var(--font-display);background:var(--c-primary);color:#fff;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:14px;flex-shrink:0;}
+.var-name{font-family:var(--font-display);font-size:20px;color:var(--c-ink);}
+.var-desc{font-size:12px;color:var(--c-mute);margin:-4px 0 14px;font-family:var(--font-hand);font-size:15px;color:var(--c-primary-deep);}
+
+/* ── 모바일 폰 프레임 ── */
+.phone{background:#fff;border-radius:32px;border:1px solid var(--c-line);box-shadow:var(--sh-2);overflow:hidden;position:relative;height:780px;}
+.phone-head{padding:12px 16px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--c-line);background:#FFFDF9;}
+.phone-head .brand{font-family:var(--font-display);color:var(--c-primary);font-size:16px;letter-spacing:.02em;display:flex;align-items:center;gap:6px;}
+.phone-head .brand-mark{width:20px;height:20px;border-radius:50%;background:var(--c-primary);display:inline-grid;place-items:center;color:#fff;font-size:12px;}
+.phone-head .ico{width:28px;height:28px;display:grid;place-items:center;border-radius:8px;background:var(--c-primary-soft);color:var(--c-primary-deep);font-size:12px;}
+.phone-body{background:#FFFDF9;overflow-y:auto;height:calc(780px - 50px - 60px);scrollbar-width:thin;}
+.phone-body::-webkit-scrollbar{width:4px;}
+.phone-body::-webkit-scrollbar-thumb{background:var(--c-primary-soft);border-radius:2px;}
+.phone-foot{position:absolute;left:10px;right:10px;bottom:10px;background:#fff;border-radius:var(--r-pill);box-shadow:0 6px 18px rgba(245,134,52,.18);display:grid;grid-template-columns:repeat(4,1fr);padding:4px;border:1px solid var(--c-line);}
+.phone-foot button{background:none;border:0;padding:7px 0;font-size:10px;color:var(--c-mute);font-weight:700;border-radius:var(--r-pill);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;}
+.phone-foot button.on{background:var(--c-primary);color:#fff;}
+.phone-foot .ic{font-size:13px;}
+
+/* ── 공통 컴포넌트 ── */
+.hero-cake{margin:12px;height:140px;border-radius:var(--r-lg);background:radial-gradient(circle at 20% 30%,#FFF1B8 0 18%,transparent 19%),radial-gradient(circle at 80% 70%,#FFD3C5 0 22%,transparent 23%),linear-gradient(135deg,var(--c-coral-soft),var(--c-primary-soft));display:flex;flex-direction:column;justify-content:flex-end;padding:14px;position:relative;overflow:hidden;}
+.hero-cake::after{content:"🎂";position:absolute;right:14px;top:10px;font-size:38px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.08));}
+.hero-cake .h{font-family:var(--font-display);font-size:18px;line-height:1.25;color:var(--c-ink);}
+.hero-cake .s{font-family:var(--font-hand);font-size:14px;color:var(--c-primary-deep);margin-top:2px;}
+
+.intro{padding:14px 14px 4px;}
+.intro .meta{font-size:10px;color:var(--c-mute);letter-spacing:.04em;}
+.intro .name{font-family:var(--font-display);font-size:18px;color:var(--c-ink);}
+.intro .desc{font-size:11px;color:var(--c-ink-2);line-height:1.55;margin-top:6px;}
+
+.intro-list{margin:10px 14px 0;display:flex;flex-direction:column;gap:6px;}
+.intro-list li{display:flex;gap:8px;align-items:center;font-size:11px;color:var(--c-ink);}
+.intro-list .ico{width:24px;height:24px;border-radius:6px;background:var(--c-primary-tint);color:var(--c-primary-deep);display:grid;place-items:center;font-size:11px;flex-shrink:0;}
+.intro-list .open{color:#16A34A;font-weight:700;margin-left:4px;}
+
+.banner{margin:12px;padding:10px 12px;background:var(--c-primary-tint);border:1px dashed var(--c-primary);border-radius:var(--r-md);color:var(--c-primary-deep);font-size:11px;font-weight:700;display:flex;gap:6px;align-items:center;}
+.banner .ico{font-size:14px;}
+
+.sec-head{padding:18px 14px 8px;display:flex;align-items:baseline;justify-content:space-between;}
+.sec-head h3{font-family:var(--font-display);font-size:15px;margin:0;color:var(--c-ink);}
+.sec-head .more{font-size:10px;color:var(--c-mute);font-weight:700;}
+
+.slide-row{display:flex;gap:8px;padding:0 14px 4px;overflow:hidden;}
+.feat{flex:0 0 100px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:6px;box-shadow:var(--sh-1);}
+.feat-img{height:70px;border-radius:var(--r-sm);background:linear-gradient(135deg,#FFEACB,#FFD2B9);position:relative;overflow:hidden;}
+.feat-img::after{content:"🍰";position:absolute;inset:0;display:grid;place-items:center;font-size:28px;}
+.feat-img.v2::after{content:"🎂";}
+.feat-img.v3::after{content:"🧁";}
+.feat-img.v4::after{content:"🍰";}
+.feat-img.v5::after{content:"🎂";}
+.feat .nm{font-size:11px;font-weight:700;margin-top:4px;color:var(--c-ink);}
+.feat .pr{font-size:10px;color:var(--c-primary);font-weight:700;}
+.feat .badge{position:absolute;top:4px;left:4px;background:var(--c-coral);color:#fff;font-size:8px;padding:2px 6px;border-radius:var(--r-pill);font-weight:800;letter-spacing:.04em;}
+.feat .badge.new{background:var(--c-primary);}
+
+/* category grid */
+.cat-grid{padding:0 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.cat-card{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:12px 10px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;}
+.cat-card .ic{width:34px;height:34px;border-radius:10px;background:var(--c-primary-soft);color:var(--c-primary-deep);display:grid;place-items:center;font-size:18px;}
+.cat-card .nm{font-size:12px;font-weight:800;color:var(--c-ink);}
+.cat-card .ds{font-size:10px;color:var(--c-mute);}
+
+/* big gallery grid */
+.gal-grid{padding:0 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.gal-card{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;}
+.gal-img{aspect-ratio:1/1;background:linear-gradient(135deg,#FFE4C2,#FFCFC3);position:relative;}
+.gal-img::after{content:"🎂";position:absolute;inset:0;display:grid;place-items:center;font-size:38px;}
+.gal-img.v2::after{content:"🧁";}
+.gal-img.v3::after{content:"🍰";}
+.gal-img.v4::after{content:"🎂";}
+.gal-img .badge{position:absolute;top:5px;left:5px;background:var(--c-coral);color:#fff;font-size:9px;padding:2px 7px;border-radius:var(--r-pill);font-weight:800;}
+.gal-img .badge.new{background:var(--c-primary);}
+.gal-body{padding:6px 8px 8px;}
+.gal-body .nm{font-size:11px;font-weight:700;color:var(--c-ink);}
+.gal-body .pr{font-size:10px;color:var(--c-primary);font-weight:800;}
+
+/* chip filter */
+.chip-row{display:flex;gap:6px;padding:8px 14px;overflow:hidden;}
+.chip{padding:5px 10px;border-radius:var(--r-pill);background:#fff;border:1px solid var(--c-line);font-size:10px;color:var(--c-ink-2);font-weight:700;}
+.chip.on{background:var(--c-primary);color:#fff;border-color:var(--c-primary);}
+
+/* faq */
+.faq{padding:0 14px;display:flex;flex-direction:column;gap:6px;}
+.faq-q{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:9px 10px;display:flex;justify-content:space-between;align-items:center;}
+.faq-q .q{font-size:11px;font-weight:700;color:var(--c-ink);}
+.faq-q .c{color:var(--c-primary);font-size:11px;}
+.faq-q.open{background:var(--c-primary-tint);border-color:var(--c-primary);}
+
+/* CTA buttons */
+.btn-row{padding:14px 14px 0;display:flex;gap:8px;}
+.btn{flex:1;padding:11px;border-radius:var(--r-pill);text-align:center;font-size:11px;font-weight:800;border:0;display:flex;align-items:center;justify-content:center;gap:5px;}
+.btn-primary{background:var(--c-primary);color:#fff;box-shadow:0 6px 14px rgba(245,134,52,.32);}
+.btn-ghost{background:#fff;color:var(--c-ink);border:1px solid var(--c-line);}
+
+/* — A안 전용 — */
+.section-pad{padding-bottom:8px;}
+
+/* — B안 전용 — */
+.b-hero{margin:0;padding:18px 14px 10px;text-align:center;background:linear-gradient(180deg,var(--c-primary-tint),transparent);}
+.b-hero .eyebrow{font-family:var(--font-hand);color:var(--c-primary-deep);font-size:15px;}
+.b-hero h2{font-family:var(--font-display);font-size:20px;color:var(--c-ink);margin:2px 0 4px;line-height:1.25;}
+.b-hero p{font-size:11px;color:var(--c-ink-2);margin:0;}
+
+/* — C안 전용 — */
+.c-hero{margin:0;height:200px;background:radial-gradient(circle at 30% 30%,#FFEACB 0 30%,transparent 31%),radial-gradient(circle at 80% 70%,#FFD3C5 0 35%,transparent 36%),linear-gradient(135deg,var(--c-coral-soft),var(--c-primary-tint));position:relative;display:flex;flex-direction:column;justify-content:center;padding:0 18px;}
+.c-hero::after{content:"🎂";position:absolute;right:18px;top:18px;font-size:42px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.08));}
+.c-hero .hand{font-family:var(--font-hand);color:var(--c-primary-deep);font-size:18px;}
+.c-hero h2{font-family:var(--font-display);font-size:22px;color:var(--c-ink);margin:2px 0 6px;line-height:1.2;}
+.c-hero p{font-size:11px;color:var(--c-ink-2);margin:0;line-height:1.5;}
+
+.scene-grid{padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.scene{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:12px 10px;text-align:center;}
+.scene .em{font-size:24px;}
+.scene .nm{font-size:11px;font-weight:800;color:var(--c-ink);margin-top:4px;}
+.scene .ds{font-family:var(--font-hand);font-size:12px;color:var(--c-primary-deep);}
+
+.story{margin:8px 14px;padding:12px;background:#FFF6E9;border-left:3px solid var(--c-primary);border-radius:0 var(--r-md) var(--r-md) 0;}
+.story .q{font-family:var(--font-hand);font-size:14px;color:var(--c-primary-deep);}
+.story .a{font-size:11px;color:var(--c-ink-2);margin-top:4px;line-height:1.55;}
+
+.review{margin:8px 14px;padding:12px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);}
+.review .stars{color:var(--c-primary);font-size:12px;}
+.review .txt{font-family:var(--font-hand);font-size:13px;color:var(--c-ink);margin:4px 0 6px;line-height:1.4;}
+.review .nm{font-size:10px;color:var(--c-mute);font-weight:700;}
+
+/* — D안 전용 — */
+.d-hero{margin:0;padding:14px 14px 8px;}
+.d-hero .row{display:flex;gap:12px;align-items:center;}
+.d-hero .img{width:80px;height:80px;flex-shrink:0;border-radius:var(--r-md);background:linear-gradient(135deg,#FFEACB,#FFD2B9);position:relative;}
+.d-hero .img::after{content:"🎂";position:absolute;inset:0;display:grid;place-items:center;font-size:36px;}
+.d-hero h2{font-family:var(--font-display);font-size:18px;color:var(--c-ink);margin:0;line-height:1.25;}
+.d-hero p{font-size:10px;color:var(--c-mute);margin-top:2px;}
+
+.big-cta{margin:12px;padding:14px;background:linear-gradient(135deg,var(--c-primary),var(--c-primary-deep));border-radius:var(--r-md);color:#fff;box-shadow:0 10px 24px rgba(245,134,52,.32);}
+.big-cta .label{font-family:var(--font-hand);font-size:14px;}
+.big-cta .h{font-family:var(--font-display);font-size:18px;line-height:1.2;margin-top:2px;}
+.big-cta .row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
+.big-cta .sub{font-size:10px;opacity:.9;}
+.big-cta .arrow{background:#fff;color:var(--c-primary-deep);width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;}
+
+.stepper{padding:10px 14px;display:flex;gap:6px;}
+.step{flex:1;padding:8px 6px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);text-align:center;}
+.step .n{font-family:var(--font-display);background:var(--c-primary-soft);color:var(--c-primary-deep);width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;margin:0 auto;}
+.step .l{font-size:9px;color:var(--c-ink-2);font-weight:700;margin-top:4px;}
+
+.quick-cat{padding:0 14px 8px;display:flex;gap:6px;flex-wrap:wrap;}
+.quick-cat .qc{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-pill);padding:6px 11px;font-size:11px;font-weight:700;color:var(--c-ink-2);display:flex;align-items:center;gap:4px;}
+.quick-cat .qc.on{background:var(--c-primary-soft);color:var(--c-primary-deep);border-color:var(--c-primary);}
+
+/* 사이트 위 안내 핀 */
+.pin{margin:6px 14px;font-size:10px;color:var(--c-mute);font-family:var(--font-hand);}
+.pin::before{content:"✦ ";color:var(--c-primary);}
+
+/* 푸터 */
+.foot{margin-top:60px;text-align:center;color:var(--c-mute);font-size:12px;}
+.foot strong{color:var(--c-primary-deep);}
+
+/* 섹션 다이어그램 */
+.section-map{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:50px;}
+@media(max-width:1180px){.section-map{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:620px){.section-map{grid-template-columns:1fr;}}
+.map-card{background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);padding:18px;box-shadow:var(--sh-1);}
+.map-card h4{font-family:var(--font-display);color:var(--c-primary-deep);margin:0 0 10px;font-size:17px;}
+.map-card ol{padding-left:0;margin:0;list-style:none;counter-reset:item;}
+.map-card li{counter-increment:item;padding:7px 10px;font-size:12px;color:var(--c-ink-2);border-radius:var(--r-sm);margin-bottom:4px;background:var(--c-primary-tint);position:relative;padding-left:32px;}
+.map-card li::before{content:counter(item);position:absolute;left:8px;top:50%;transform:translateY(-50%);background:var(--c-primary);color:#fff;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:800;font-family:var(--font-display);}
+.map-card li.highlight{background:var(--c-coral-soft);}
+.map-card li.highlight::before{background:var(--c-coral);}
+
+/* 비교 테이블 */
+.compare-table{margin-top:50px;background:#fff;border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--sh-1);}
+.compare-table table{width:100%;border-collapse:collapse;}
+.compare-table th,.compare-table td{padding:12px 14px;text-align:left;font-size:13px;border-bottom:1px solid var(--c-line);}
+.compare-table th{background:var(--c-primary-tint);font-family:var(--font-display);color:var(--c-primary-deep);font-weight:normal;font-size:14px;}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table td:first-child{font-weight:800;color:var(--c-ink);}
+.compare-table .star{color:var(--c-primary);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc-head">
+  <span class="doc-eyebrow">HOME · 4 LAYOUT VARIATIONS</span>
+  <h1 class="doc-title">홈 화면 구성안 4종</h1>
+  <p class="doc-sub">같은 콘텐츠를 ‘무엇을 가장 먼저 보여줄까’ 관점에서 4가지 흐름으로 재배치한 비교 시안입니다.</p>
+</header>
+
+<!-- 요약 카드 -->
+<section class="summary">
+  <div class="sum-card">
+    <span class="badge">A안</span>
+    <h3>정통 베이커리</h3>
+    <span class="tag">~ 안정적인 첫인상 ~</span>
+    <p>큰 히어로 → 매장 소개 → 카테고리 → 인기 슬라이더. 기존 PARKHAD와 가장 유사한 안정적 구성.</p>
+    <div class="pros">✓ 신뢰감 ✓ 정보량 ✓ 보편적</div>
+  </div>
+  <div class="sum-card">
+    <span class="badge">B안</span>
+    <h3>갤러리 중심</h3>
+    <span class="tag">~ 인스타 감성 ~</span>
+    <p>작은 슬로건 후 곧장 큰 케이크 그리드. 비주얼이 가장 먼저 ‘맛있어 보이는’ 인상을 전달.</p>
+    <div class="pros">✓ 시각 임팩트 ✓ MZ 타깃 ✓ 빠른 둘러보기</div>
+  </div>
+  <div class="sum-card">
+    <span class="badge">C안</span>
+    <h3>스토리텔링</h3>
+    <span class="tag">~ 마음을 건드려요 ~</span>
+    <p>"오늘은 누구를 위한 케이크?" 시나리오 카드와 손글씨 후기로 ‘선물’의 감성을 강조.</p>
+    <div class="pros">✓ 정서적 공감 ✓ 선물 시장 ✓ 차별화</div>
+  </div>
+  <div class="sum-card">
+    <span class="badge">D안</span>
+    <h3>예약 우선</h3>
+    <span class="tag">~ 바로 예약해요 ~</span>
+    <p>상단부터 큰 예약 CTA와 4-Step 미리보기. 광고로 들어온 사용자를 빠르게 전환.</p>
+    <div class="pros">✓ 전환율 ✓ 광고 랜딩 ✓ 명확한 행동</div>
+  </div>
+</section>
+
+<!-- 모바일 시안 4개 -->
+<section class="variants">
+
+  <!-- ─────────── A안 · 정통 베이커리 ─────────── -->
+  <div class="var-card">
+    <div class="var-head"><span class="var-no">A</span><span class="var-name">정통 베이커리</span></div>
+    <div class="var-desc">~ 안정적인 첫인상 ~</div>
+    <div class="phone">
+      <div class="phone-head"><div class="brand"><span class="brand-mark">🎂</span>오렌지케이크</div><div class="ico">📞</div></div>
+      <div class="phone-body">
+        <!-- 1. Hero -->
+        <div class="hero-cake"><div class="h">달콤한 하루를<br/>케이크에 담아</div><div class="s">~ 오렌지케이크 ~</div></div>
+        <!-- 2. 매장 소개 -->
+        <div class="intro">
+          <div class="meta">서울 | 마포구</div>
+          <div class="name">오렌지케이크</div>
+          <div class="desc">하나뿐인 문구, 하나뿐인 케이크. 그 사람만을 위한 레터링 케이크를 정성껏 굽습니다.</div>
+        </div>
+        <ul class="intro-list">
+          <li><span class="ico">📍</span>마포구 와우산로 32 1층</li>
+          <li><span class="ico">🕐</span>11:00 ~ 20:00<span class="open">· 영업중</span></li>
+        </ul>
+        <!-- 3. 안내 배너 -->
+        <div class="banner"><span class="ico">🧁</span>최소 3일 전 예약을 권해드려요</div>
+        <!-- 4. 카테고리 그리드 -->
+        <div class="sec-head"><h3>카테고리</h3><span class="more">전체 →</span></div>
+        <div class="cat-grid">
+          <div class="cat-card"><div class="ic">🎂</div><div class="nm">생일</div><div class="ds">컬러풀 · 캐릭터</div></div>
+          <div class="cat-card"><div class="ic">💝</div><div class="nm">기념일</div><div class="ds">하트 · 레터링</div></div>
+          <div class="cat-card"><div class="ic">🌸</div><div class="nm">웨딩 · 돌</div><div class="ds">우아한 디자인</div></div>
+          <div class="cat-card"><div class="ic">🧁</div><div class="nm">미니</div><div class="ds">도시락 · 컵케이크</div></div>
+        </div>
+        <!-- 5. 인기 슬라이더 -->
+        <div class="sec-head"><h3>이달의 인기</h3><span class="more">→</span></div>
+        <div class="slide-row">
+          <div class="feat"><div class="feat-img"><span class="badge">BEST</span></div><div class="nm">컬러풀 생일</div><div class="pr">35,000원</div></div>
+          <div class="feat"><div class="feat-img v3"></div><div class="nm">미니 도시락</div><div class="pr">18,000원</div></div>
+          <div class="feat"><div class="feat-img v2"></div><div class="nm">하트 레터링</div><div class="pr">42,000원</div></div>
+        </div>
+        <!-- 6. FAQ 미리보기 -->
+        <div class="sec-head"><h3>자주 묻는 질문</h3><span class="more">전체 →</span></div>
+        <div class="faq">
+          <div class="faq-q open"><span class="q">예약은 며칠 전에 해야 하나요?</span><span class="c">▼</span></div>
+          <div class="faq-q"><span class="q">디자인 시안을 보낼 수 있나요?</span><span class="c">▶</span></div>
+          <div class="faq-q"><span class="q">픽업 시간은 언제까지인가요?</span><span class="c">▶</span></div>
+        </div>
+        <!-- 7. 푸터 CTA -->
+        <div class="btn-row" style="padding-bottom:80px;">
+          <button class="btn btn-ghost">📷 인스타</button>
+          <button class="btn btn-primary">📞 예약하기</button>
+        </div>
+      </div>
+      <div class="phone-foot">
+        <button class="on"><span class="ic">🏠</span>홈</button>
+        <button><span class="ic">🎨</span>디자인</button>
+        <button><span class="ic">📅</span>예약</button>
+        <button><span class="ic">💬</span>Q&A</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── B안 · 갤러리 중심 ─────────── -->
+  <div class="var-card">
+    <div class="var-head"><span class="var-no">B</span><span class="var-name">갤러리 중심</span></div>
+    <div class="var-desc">~ 인스타 감성 ~</div>
+    <div class="phone">
+      <div class="phone-head"><div class="brand"><span class="brand-mark">🎂</span>오렌지케이크</div><div class="ico">🔍</div></div>
+      <div class="phone-body">
+        <!-- 1. 짧은 슬로건 Hero -->
+        <div class="b-hero">
+          <div class="eyebrow">~ 오늘 누구를 위한 케이크인가요? ~</div>
+          <h2>당신의 마음을<br/>케이크에 담아드려요</h2>
+          <p>마포 작은 케이크샵 · 오렌지케이크</p>
+        </div>
+        <!-- 2. 카테고리 chip -->
+        <div class="chip-row">
+          <div class="chip on">전체</div>
+          <div class="chip">생일</div>
+          <div class="chip">기념일</div>
+          <div class="chip">웨딩</div>
+          <div class="chip">미니</div>
+        </div>
+        <!-- 3. 큰 그리드 즉시 노출 -->
+        <div class="gal-grid">
+          <div class="gal-card"><div class="gal-img"><span class="badge">BEST</span></div><div class="gal-body"><div class="nm">컬러풀 생일</div><div class="pr">35,000원~</div></div></div>
+          <div class="gal-card"><div class="gal-img v2"></div><div class="gal-body"><div class="nm">미니 도시락</div><div class="pr">18,000원~</div></div></div>
+          <div class="gal-card"><div class="gal-img v3"><span class="badge new">NEW</span></div><div class="gal-body"><div class="nm">하트 레터링</div><div class="pr">42,000원~</div></div></div>
+          <div class="gal-card"><div class="gal-img v4"></div><div class="gal-body"><div class="nm">곰돌이 케이크</div><div class="pr">48,000원~</div></div></div>
+          <div class="gal-card"><div class="gal-img v2"></div><div class="gal-body"><div class="nm">플라워 케이크</div><div class="pr">55,000원~</div></div></div>
+          <div class="gal-card"><div class="gal-img"></div><div class="gal-body"><div class="nm">웨딩 미니</div><div class="pr">52,000원~</div></div></div>
+        </div>
+        <!-- 4. 매장 소개 (축약) -->
+        <div class="sec-head" style="margin-top:8px;"><h3>오렌지케이크</h3></div>
+        <div class="intro" style="padding-top:0;">
+          <div class="desc">하나뿐인 문구, 하나뿐인 케이크. 마포에서 정성껏 굽습니다.</div>
+        </div>
+        <ul class="intro-list">
+          <li><span class="ico">📍</span>마포구 와우산로 32</li>
+          <li><span class="ico">🕐</span>11:00–20:00 <span class="open">· 영업중</span></li>
+        </ul>
+        <!-- 5. 예약 안내 CTA -->
+        <div class="btn-row" style="padding-bottom:80px;">
+          <button class="btn btn-primary">🎨 디자인 더 보기</button>
+        </div>
+      </div>
+      <div class="phone-foot">
+        <button class="on"><span class="ic">🏠</span>홈</button>
+        <button><span class="ic">🎨</span>디자인</button>
+        <button><span class="ic">📅</span>예약</button>
+        <button><span class="ic">💬</span>Q&A</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── C안 · 스토리텔링 ─────────── -->
+  <div class="var-card">
+    <div class="var-head"><span class="var-no">C</span><span class="var-name">스토리텔링</span></div>
+    <div class="var-desc">~ 마음을 건드려요 ~</div>
+    <div class="phone">
+      <div class="phone-head"><div class="brand"><span class="brand-mark">🎂</span>오렌지케이크</div><div class="ico">📞</div></div>
+      <div class="phone-body">
+        <!-- 1. 풀스크린 Hero (텍스트 중심) -->
+        <div class="c-hero">
+          <div class="hand">~ 오늘은 누구를 위한 케이크인가요? ~</div>
+          <h2>마음을 전하는<br/>한 글자 한 글자</h2>
+          <p>10년 차 베이커가 직접 굽고, 손으로 씁니다.</p>
+        </div>
+        <!-- 2. 시나리오 카드 (선물 상황) -->
+        <div class="sec-head"><h3>어떤 날을 준비하시나요?</h3></div>
+        <div class="scene-grid">
+          <div class="scene"><div class="em">🎂</div><div class="nm">생일</div><div class="ds">축하해 ♡</div></div>
+          <div class="scene"><div class="em">💝</div><div class="nm">기념일</div><div class="ds">사랑해 ♡</div></div>
+          <div class="scene"><div class="em">🌸</div><div class="nm">감사</div><div class="ds">고마워요</div></div>
+          <div class="scene"><div class="em">🌧️</div><div class="nm">위로</div><div class="ds">힘내요</div></div>
+        </div>
+        <!-- 3. 사장님 한 줄 스토리 -->
+        <div class="story">
+          <div class="q">"이름 한 줄 적었을 뿐인데, 받는 분이 우셨대요."</div>
+          <div class="a">10년 차 베이커 김지은. 매일 30개 한정, 정성껏 굽고 있어요.</div>
+        </div>
+        <!-- 4. 인기 케이크 -->
+        <div class="sec-head"><h3>요즘 사랑받는 디자인</h3><span class="more">→</span></div>
+        <div class="slide-row">
+          <div class="feat"><div class="feat-img"><span class="badge">BEST</span></div><div class="nm">컬러풀 생일</div><div class="pr">35,000원</div></div>
+          <div class="feat"><div class="feat-img v3"></div><div class="nm">미니 도시락</div><div class="pr">18,000원</div></div>
+          <div class="feat"><div class="feat-img v2"></div><div class="nm">하트 레터링</div><div class="pr">42,000원</div></div>
+        </div>
+        <!-- 5. 고객 후기 -->
+        <div class="sec-head"><h3>받은 분의 한 마디</h3></div>
+        <div class="review">
+          <div class="stars">★★★★★</div>
+          <div class="txt">"엄마 환갑인데 사진 보고 우셨어요 ㅠㅠ 정말 감사해요!"</div>
+          <div class="nm">— 박○○ 님</div>
+        </div>
+        <!-- 6. 큰 예약 CTA -->
+        <div class="btn-row" style="padding-bottom:80px;">
+          <button class="btn btn-primary">💌 마음 담아 예약하기</button>
+        </div>
+      </div>
+      <div class="phone-foot">
+        <button class="on"><span class="ic">🏠</span>홈</button>
+        <button><span class="ic">🎨</span>디자인</button>
+        <button><span class="ic">📅</span>예약</button>
+        <button><span class="ic">💬</span>Q&A</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── D안 · 예약 우선 ─────────── -->
+  <div class="var-card">
+    <div class="var-head"><span class="var-no">D</span><span class="var-name">예약 우선</span></div>
+    <div class="var-desc">~ 바로 예약해요 ~</div>
+    <div class="phone">
+      <div class="phone-head"><div class="brand"><span class="brand-mark">🎂</span>오렌지케이크</div><div class="ico">📞</div></div>
+      <div class="phone-body">
+        <!-- 1. 컴팩트 Hero (가로형) -->
+        <div class="d-hero">
+          <div class="row">
+            <div class="img"></div>
+            <div>
+              <h2>오렌지케이크</h2>
+              <p>마포 · 레터링 케이크 · 영업중</p>
+              <div style="font-family:var(--font-hand);font-size:13px;color:var(--c-primary-deep);margin-top:4px;">~ 오늘 받아갈 수 있어요 ~</div>
+            </div>
+          </div>
+        </div>
+        <!-- 2. 큰 예약 CTA -->
+        <div class="big-cta">
+          <div class="label">~ 3일 안에 받을 수 있어요 ~</div>
+          <div class="h">지금 바로 예약하기</div>
+          <div class="row">
+            <div class="sub">18,000원부터 시작</div>
+            <div class="arrow">→</div>
+          </div>
+        </div>
+        <!-- 3. 4-Step 미리보기 -->
+        <div class="sec-head"><h3>예약 과정</h3><span class="more">미리보기</span></div>
+        <div class="stepper">
+          <div class="step"><div class="n">1</div><div class="l">디자인</div></div>
+          <div class="step"><div class="n">2</div><div class="l">날짜</div></div>
+          <div class="step"><div class="n">3</div><div class="l">문구</div></div>
+          <div class="step"><div class="n">4</div><div class="l">확인</div></div>
+        </div>
+        <div class="pin">3분이면 예약 끝!</div>
+        <!-- 4. 빠른 카테고리 -->
+        <div class="sec-head"><h3>빠른 둘러보기</h3><span class="more">전체 →</span></div>
+        <div class="quick-cat">
+          <div class="qc on">🎂 생일</div>
+          <div class="qc">💝 기념일</div>
+          <div class="qc">🌸 웨딩</div>
+          <div class="qc">🧁 미니</div>
+        </div>
+        <div class="slide-row">
+          <div class="feat"><div class="feat-img"><span class="badge">BEST</span></div><div class="nm">컬러풀 생일</div><div class="pr">35,000원</div></div>
+          <div class="feat"><div class="feat-img v3"></div><div class="nm">미니 도시락</div><div class="pr">18,000원</div></div>
+        </div>
+        <!-- 5. 매장 정보 압축 -->
+        <ul class="intro-list" style="margin-top:14px;">
+          <li><span class="ico">📍</span>마포구 와우산로 32</li>
+          <li><span class="ico">🕐</span>11:00–20:00 <span class="open">· 영업중</span></li>
+          <li><span class="ico">💬</span>카카오톡 문의 가능</li>
+        </ul>
+        <!-- 6. 핵심 FAQ 1개 -->
+        <div class="sec-head"><h3>가장 많은 질문</h3></div>
+        <div class="faq" style="padding-bottom:80px;">
+          <div class="faq-q open"><span class="q">최소 며칠 전 예약?</span><span class="c">▼</span></div>
+        </div>
+      </div>
+      <div class="phone-foot">
+        <button class="on"><span class="ic">🏠</span>홈</button>
+        <button><span class="ic">🎨</span>디자인</button>
+        <button><span class="ic">📅</span>예약</button>
+        <button><span class="ic">💬</span>Q&A</button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- 섹션 순서 다이어그램 -->
+<section>
+  <div class="doc-head" style="margin-top:60px;margin-bottom:20px;">
+    <span class="doc-eyebrow">SECTION ORDER</span>
+    <h2 style="font-family:var(--font-display);margin:6px 0 0;color:var(--c-ink);font-size:28px;">섹션 순서 한눈에 보기</h2>
+  </div>
+  <div class="section-map">
+    <div class="map-card">
+      <h4>A안 · 정통 베이커리</h4>
+      <ol>
+        <li>큰 히어로 비주얼</li>
+        <li>매장 소개 + 위치/시간</li>
+        <li>안내 배너 (예약 안내)</li>
+        <li>카테고리 그리드 (4종)</li>
+        <li>인기 슬라이더 4종</li>
+        <li>FAQ 미리보기 6개</li>
+        <li>SNS · 예약 푸터 CTA</li>
+      </ol>
+    </div>
+    <div class="map-card">
+      <h4>B안 · 갤러리 중심</h4>
+      <ol>
+        <li>짧은 슬로건 헤더</li>
+        <li class="highlight">카테고리 chip 필터</li>
+        <li class="highlight">큰 2x3 케이크 그리드</li>
+        <li>매장 소개 (축약)</li>
+        <li>위치/시간 리스트</li>
+        <li>‘디자인 더 보기’ CTA</li>
+      </ol>
+    </div>
+    <div class="map-card">
+      <h4>C안 · 스토리텔링</h4>
+      <ol>
+        <li>풀스크린 텍스트 히어로</li>
+        <li class="highlight">시나리오 카드 4개</li>
+        <li class="highlight">사장님 한 줄 스토리</li>
+        <li>인기 케이크 슬라이더</li>
+        <li class="highlight">고객 후기 (손글씨)</li>
+        <li>‘마음 담아 예약’ CTA</li>
+      </ol>
+    </div>
+    <div class="map-card">
+      <h4>D안 · 예약 우선</h4>
+      <ol>
+        <li>컴팩트 가로형 헤더</li>
+        <li class="highlight">큰 예약 CTA 카드</li>
+        <li class="highlight">4-Step 미리보기</li>
+        <li>빠른 카테고리 chip</li>
+        <li>축약 케이크 2종</li>
+        <li>매장 정보 + 카톡</li>
+        <li>핵심 FAQ 1개</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 비교 테이블 -->
+<section>
+  <div class="doc-head" style="margin-top:60px;margin-bottom:20px;">
+    <span class="doc-eyebrow">COMPARISON</span>
+    <h2 style="font-family:var(--font-display);margin:6px 0 0;color:var(--c-ink);font-size:28px;">어떤 안이 어떤 상황에 좋을까?</h2>
+  </div>
+  <div class="compare-table">
+    <table>
+      <thead>
+        <tr><th>항목</th><th>A안 정통</th><th>B안 갤러리</th><th>C안 스토리</th><th>D안 예약우선</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>첫인상</td><td>균형감</td><td>비주얼 임팩트</td><td>감성적 공감</td><td>행동 유도</td></tr>
+        <tr><td>주 타깃</td><td>전 연령</td><td>20–30대 MZ</td><td>30–50대 선물 수요</td><td>광고 유입 사용자</td></tr>
+        <tr><td>예약 전환율</td><td><span class="star">★★★</span></td><td><span class="star">★★★</span></td><td><span class="star">★★★★</span></td><td><span class="star">★★★★★</span></td></tr>
+        <tr><td>브랜딩 깊이</td><td><span class="star">★★★</span></td><td><span class="star">★★★</span></td><td><span class="star">★★★★★</span></td><td><span class="star">★★</span></td></tr>
+        <tr><td>구현 난이도</td><td>중</td><td>중</td><td>높음 (후기/스토리 수급)</td><td>낮음</td></tr>
+        <tr><td>추천 상황</td><td>일반 운영</td><td>인스타 광고 메인</td><td>브랜드 신뢰 구축</td><td>광고/쿠폰 랜딩</td></tr>
+        <tr><td>한 줄 요약</td><td>안 보여주는 게 없다</td><td>맛있어 보인다</td><td>마음에 남는다</td><td>바로 예약한다</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="foot">
+  <p>홈 화면 시안 4안 — <strong>오렌지케이크</strong> 레터링 케이크샵 디자인 검토용</p>
+  <p>선택 후 디자인 요청서 6.1 ‘홈(Home)’ 항목을 해당 안의 섹션 순서로 업데이트하겠습니다.</p>
+</footer>
+
+</div>
+</body>
+</html>

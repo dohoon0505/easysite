@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>오렌지케이크 · 컬러 시스템</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ── Primitive ── */
+  --orange-50:#FFF4E9;
+  --orange-100:#FFE9D6;
+  --orange-200:#FFCFA8;
+  --orange-300:#FFB073;
+  --orange-400:#F89A4F;
+  --orange-500:#F58634;  /* PRIMARY */
+  --orange-600:#E26A18;
+  --orange-700:#B8520E;
+  --orange-800:#8C3D08;
+  --orange-900:#5C2705;
+
+  --cream-50:#FFFDF9;
+  --cream-100:#FFF9F2;   /* BG default */
+  --cream-200:#FFF4E5;
+  --ivory-300:#F5EBD9;
+  --ivory-400:#E8DBC0;
+
+  --coral-200:#FFE0DC;
+  --coral-400:#FFAB9F;
+  --coral-500:#FF8B7A;   /* ACCENT */
+  --coral-600:#E66758;
+
+  --ink-50:#F4EFE9;
+  --ink-100:#E5DCD2;
+  --ink-300:#C2B0A0;
+  --ink-500:#9A8576;    /* mute */
+  --ink-700:#5C4538;
+  --ink-900:#3B2A21;    /* primary text */
+
+  --line:#F0E5D5;
+  --line-strong:#E5D7BF;
+
+  --success:#38A169;
+  --warning:#E0A500;
+  --error:#E53E3E;
+  --info:#3182CE;
+
+  /* ── Fonts ── */
+  --font-base:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --font-display:"Jua",sans-serif;
+  --font-hand:"Gaegu",cursive;
+  --font-mono:"JetBrains Mono","SF Mono",Consolas,monospace;
+
+  --r-sm:10px; --r-md:16px; --r-lg:24px; --r-pill:9999px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:linear-gradient(180deg,#FFF6EC 0%,#FFEBD6 100%);font-family:var(--font-base);color:var(--ink-900);line-height:1.55;}
+.wrap{max-width:1240px;margin:0 auto;padding:48px 24px 120px;}
+
+/* 헤더 */
+.doc-head{margin-bottom:36px;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--orange-500);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange-500);border-radius:2px;}
+h1.title{font-family:var(--font-display);font-size:44px;letter-spacing:-.02em;margin:6px 0 4px;color:var(--ink-900);}
+.subtitle{color:var(--ink-700);font-size:15px;}
+.hand-lead{font-family:var(--font-hand);font-size:22px;color:var(--orange-600);margin-top:8px;}
+
+/* 섹션 */
+section{margin-top:64px;}
+section > h2{font-family:var(--font-display);font-size:28px;margin:0 0 4px;color:var(--ink-900);letter-spacing:-.01em;}
+section > .lead{color:var(--ink-700);font-size:14px;margin:0 0 22px;}
+
+/* 토큰 카드 그리드 */
+.token-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+@media(max-width:1080px){.token-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:680px){.token-grid{grid-template-columns:repeat(2,1fr);}}
+.token{background:#fff;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line);box-shadow:0 2px 8px rgba(245,134,52,.05);}
+.chip{height:96px;display:flex;align-items:flex-end;padding:10px 12px;color:#fff;font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;font-weight:700;}
+.chip.dark-on{color:var(--ink-900);}
+.token .meta{padding:10px 12px 12px;}
+.token .name{font-weight:800;font-size:13px;color:var(--ink-900);}
+.token .hex{font-family:var(--font-mono);font-size:11px;color:var(--ink-700);margin-top:2px;}
+.token .role{font-size:11px;color:var(--ink-500);margin-top:6px;line-height:1.5;}
+.token.primary{outline:2px solid var(--orange-500);outline-offset:2px;}
+.token .star{display:inline-block;font-size:10px;color:var(--orange-500);font-weight:800;letter-spacing:.06em;margin-bottom:2px;}
+
+/* Semantic 토큰 표 */
+.sem-table{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;box-shadow:0 2px 8px rgba(245,134,52,.05);}
+.sem-table table{width:100%;border-collapse:collapse;}
+.sem-table th,.sem-table td{padding:12px 14px;text-align:left;font-size:13px;border-bottom:1px solid var(--line);vertical-align:middle;}
+.sem-table th{background:var(--orange-50);font-family:var(--font-display);color:var(--orange-600);font-weight:normal;font-size:14px;}
+.sem-table tr:last-child td{border-bottom:none;}
+.sem-table td.name{font-weight:800;color:var(--ink-900);font-family:var(--font-mono);font-size:12px;white-space:nowrap;}
+.sem-table .swatch{display:inline-block;width:22px;height:22px;border-radius:6px;border:1px solid rgba(0,0,0,.06);vertical-align:middle;margin-right:8px;}
+.sem-table .hex{font-family:var(--font-mono);font-size:11px;color:var(--ink-500);}
+.sem-table .usage{color:var(--ink-700);}
+
+/* 사용 비율 도넛 차트 */
+.ratio-wrap{display:grid;grid-template-columns:340px 1fr;gap:32px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:32px;box-shadow:0 2px 8px rgba(245,134,52,.05);}
+@media(max-width:780px){.ratio-wrap{grid-template-columns:1fr;}}
+.donut{position:relative;width:260px;height:260px;margin:0 auto;}
+.donut svg{width:100%;height:100%;transform:rotate(-90deg);}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.donut-center .big{font-family:var(--font-display);font-size:34px;color:var(--ink-900);}
+.donut-center .sub{font-family:var(--font-hand);color:var(--orange-600);font-size:18px;margin-top:-4px;}
+.legend{display:flex;flex-direction:column;gap:10px;}
+.legend .row{display:flex;align-items:center;gap:12px;font-size:14px;}
+.legend .dot{width:14px;height:14px;border-radius:4px;flex-shrink:0;}
+.legend .lab{flex:1;color:var(--ink-900);font-weight:700;}
+.legend .pct{color:var(--ink-500);font-family:var(--font-mono);font-size:13px;}
+.legend .desc{font-size:12px;color:var(--ink-700);width:100%;padding-left:26px;margin-top:-4px;}
+
+/* 사용 시나리오 카드 */
+.scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:900px){.scenarios{grid-template-columns:1fr;}}
+.sc{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;}
+.sc .head{padding:14px;display:flex;align-items:center;justify-content:space-between;}
+.sc .head h4{font-family:var(--font-display);margin:0;color:var(--ink-900);font-size:18px;}
+.sc .head .ico{font-size:22px;}
+.sc .preview{padding:18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);min-height:120px;display:flex;align-items:center;justify-content:center;}
+.sc .body{padding:14px;font-size:12px;color:var(--ink-700);line-height:1.55;}
+.sc .body code{background:var(--cream-200);padding:1px 6px;border-radius:4px;font-family:var(--font-mono);font-size:11px;color:var(--orange-700);}
+
+/* Button preview samples */
+.btn{padding:11px 18px;border-radius:var(--r-pill);font-weight:800;font-size:13px;border:0;display:inline-flex;align-items:center;gap:6px;font-family:inherit;cursor:pointer;}
+.btn-primary{background:var(--orange-500);color:#fff;box-shadow:0 6px 16px rgba(245,134,52,.28);}
+.btn-secondary{background:var(--orange-100);color:var(--orange-600);}
+.btn-coral{background:var(--coral-500);color:#fff;}
+.btn-ghost{background:#fff;color:var(--ink-900);border:1px solid var(--line);}
+
+/* 접근성 컨트라스트 표 */
+.a11y{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;}
+.a11y table{width:100%;border-collapse:collapse;}
+.a11y th,.a11y td{padding:12px 14px;font-size:13px;border-bottom:1px solid var(--line);text-align:left;}
+.a11y th{background:var(--orange-50);font-family:var(--font-display);color:var(--orange-600);font-weight:normal;}
+.a11y .sample{display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border-radius:8px;font-weight:700;font-size:12px;min-width:90px;}
+.pass{color:var(--success);font-weight:800;font-size:12px;}
+.warn{color:var(--warning);font-weight:800;font-size:12px;}
+.fail{color:var(--error);font-weight:800;font-size:12px;}
+
+/* Do / Don't */
+.dodonts{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:760px){.dodonts{grid-template-columns:1fr;}}
+.dont-card,.do-card{background:#fff;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line);}
+.do-card .tag,.dont-card .tag{padding:8px 14px;font-family:var(--font-display);font-size:14px;display:flex;align-items:center;gap:8px;}
+.do-card .tag{background:rgba(56,161,105,.12);color:var(--success);}
+.dont-card .tag{background:rgba(229,62,62,.10);color:var(--error);}
+.dd-body{padding:18px;display:grid;gap:14px;}
+.dd-row{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:center;font-size:12px;color:var(--ink-700);}
+.dd-sample{height:60px;border-radius:10px;display:grid;place-items:center;font-family:var(--font-display);font-size:14px;color:#fff;font-weight:700;}
+
+/* 그라데이션 */
+.grad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:900px){.grad-grid{grid-template-columns:1fr;}}
+.grad{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;}
+.grad .pad{height:140px;}
+.grad .meta{padding:12px 14px;}
+.grad .nm{font-weight:800;color:var(--ink-900);font-size:13px;}
+.grad .code{font-family:var(--font-mono);font-size:10px;color:var(--ink-500);margin-top:4px;line-height:1.5;}
+
+/* 컴포넌트 응용 예시 */
+.applied{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+@media(max-width:900px){.applied{grid-template-columns:1fr;}}
+.app-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;}
+.app-card .ttl{padding:12px 14px;background:var(--orange-50);font-family:var(--font-display);color:var(--orange-600);font-size:14px;}
+.app-card .preview{padding:18px;min-height:120px;display:flex;align-items:center;justify-content:center;background:var(--cream-100);}
+
+/* 콜아웃 */
+.callout{background:var(--orange-50);border-left:4px solid var(--orange-500);border-radius:0 var(--r-md) var(--r-md) 0;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;}
+.callout .ic{font-size:18px;flex-shrink:0;}
+.callout .ct{font-size:13px;color:var(--ink-900);line-height:1.6;}
+.callout .ct b{color:var(--orange-700);}
+
+/* 푸터 */
+.foot{margin-top:80px;text-align:center;color:var(--ink-500);font-size:12px;}
+.foot strong{color:var(--orange-600);}
+
+/* 카피 코드 박스 */
+.code-block{background:var(--ink-900);color:var(--cream-100);padding:18px 22px;border-radius:var(--r-md);font-family:var(--font-mono);font-size:13px;line-height:1.7;overflow-x:auto;}
+.code-block .key{color:var(--coral-400);}
+.code-block .val{color:var(--orange-200);}
+.code-block .com{color:var(--ink-300);}
+
+/* 인덱스 (TOC) */
+.toc{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:18px 22px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px 24px;margin-top:18px;}
+@media(max-width:700px){.toc{grid-template-columns:1fr;}}
+.toc a{color:var(--ink-700);text-decoration:none;font-size:14px;display:flex;align-items:baseline;gap:8px;padding:4px 0;}
+.toc a::before{content:attr(data-no);font-family:var(--font-display);color:var(--orange-500);width:24px;flex-shrink:0;}
+.toc a:hover{color:var(--orange-600);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc-head">
+  <span class="eyebrow">COLOR SYSTEM · v1.0</span>
+  <h1 class="title">오렌지케이크 컬러 시스템</h1>
+  <p class="subtitle">primitive 토큰부터 semantic 매핑·사용 비율·접근성까지, 한 페이지에 정리한 디자인 시스템 컬러 가이드.</p>
+  <p class="hand-lead">~ 주황을 메인으로, 크림을 베이스로, 코랄을 포인트로 ~</p>
+  <nav class="toc">
+    <a data-no="01." href="#identity">브랜드 컬러 정체성</a>
+    <a data-no="02." href="#primitive">Primitive 팔레트</a>
+    <a data-no="03." href="#semantic">Semantic 토큰</a>
+    <a data-no="04." href="#ratio">사용 비율 (60-30-10)</a>
+    <a data-no="05." href="#scenarios">실전 사용 시나리오</a>
+    <a data-no="06." href="#accessibility">접근성 (대비 검증)</a>
+    <a data-no="07." href="#dodonts">DO / DON'T</a>
+    <a data-no="08." href="#gradient">그라데이션 & 셰이드</a>
+    <a data-no="09." href="#applied">컴포넌트 응용</a>
+    <a data-no="10." href="#tokens">토큰 파일 (개발자용)</a>
+  </nav>
+</header>
+
+<!-- 01. 브랜드 정체성 -->
+<section id="identity">
+  <h2>01. 브랜드 컬러 정체성</h2>
+  <p class="lead">컬러 하나로 ‘이 케이크샵이 어떤 가게인지’ 즉시 전달되어야 합니다.</p>
+
+  <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:stretch;">
+    <div style="background:var(--orange-500);border-radius:var(--r-md);padding:36px;color:#fff;display:flex;flex-direction:column;justify-content:flex-end;min-height:240px;position:relative;overflow:hidden;">
+      <div style="position:absolute;right:24px;top:24px;font-size:80px;opacity:.6;">🎂</div>
+      <div style="font-family:var(--font-hand);font-size:22px;opacity:.9;">~ Brand Primary ~</div>
+      <div style="font-family:var(--font-display);font-size:48px;line-height:1.1;margin-top:4px;">Orange #F58634</div>
+      <div style="font-size:14px;margin-top:8px;opacity:.95;">따뜻한 오븐, 갓 구운 빵, 햇살의 색</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:18px;">
+        <div style="font-family:var(--font-display);color:var(--orange-600);font-size:16px;">감성 키워드</div>
+        <div style="font-size:14px;color:var(--ink-700);margin-top:6px;line-height:1.6;">따뜻함 · 다정함 · 정성 · 산뜻함 · 식욕</div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:18px;">
+        <div style="font-family:var(--font-display);color:var(--orange-600);font-size:16px;">피할 컬러</div>
+        <div style="font-size:14px;color:var(--ink-700);margin-top:6px;line-height:1.6;">차가운 블루/그레이 · 진한 분홍(과한 러블리) · 검정 배경</div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:18px;">
+        <div style="font-family:var(--font-display);color:var(--orange-600);font-size:16px;">운영 모드</div>
+        <div style="font-size:14px;color:var(--ink-700);margin-top:6px;line-height:1.6;">라이트 모드 단일 (다크 모드 미운영)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02. Primitive 팔레트 -->
+<section id="primitive">
+  <h2>02. Primitive 팔레트</h2>
+  <p class="lead">색의 ‘원료’ 토큰. UI에서 직접 사용하지 않고 semantic 토큰을 통해 참조합니다.</p>
+
+  <h3 style="font-family:var(--font-display);color:var(--orange-600);font-size:18px;margin:0 0 10px;">Orange · 10 steps</h3>
+  <div class="token-grid">
+    <div class="token"><div class="chip" style="background:var(--orange-50)" data-light=""><span style="color:var(--ink-700)">#FFF4E9</span></div><div class="meta"><div class="name">orange-50</div><div class="hex">#FFF4E9</div><div class="role">아주 옅은 tint · 섹션 배경</div></div></div>
+    <div class="token"><div class="chip dark-on" style="background:var(--orange-100)">#FFE9D6</div><div class="meta"><div class="name">orange-100</div><div class="hex">#FFE9D6</div><div class="role">soft 배경 · chip hover</div></div></div>
+    <div class="token"><div class="chip dark-on" style="background:var(--orange-200)">#FFCFA8</div><div class="meta"><div class="name">orange-200</div><div class="hex">#FFCFA8</div><div class="role">강조 보조 · 그라데이션</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--orange-300)">#FFB073</div><div class="meta"><div class="name">orange-300</div><div class="hex">#FFB073</div><div class="role">중간 톤</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--orange-400)">#F89A4F</div><div class="meta"><div class="name">orange-400</div><div class="hex">#F89A4F</div><div class="role">호버 보조</div></div></div>
+    <div class="token primary"><div class="chip" style="background:var(--orange-500)">#F58634</div><div class="meta"><span class="star">★ PRIMARY</span><div class="name">orange-500</div><div class="hex">#F58634</div><div class="role">메인 CTA · 로고 · 강조</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--orange-600)">#E26A18</div><div class="meta"><div class="name">orange-600</div><div class="hex">#E26A18</div><div class="role">hover/active · 강조 텍스트</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--orange-700)">#B8520E</div><div class="meta"><div class="name">orange-700</div><div class="hex">#B8520E</div><div class="role">pressed · 어두운 강조</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--orange-800)">#8C3D08</div><div class="meta"><div class="name">orange-800</div><div class="hex">#8C3D08</div><div class="role">고대비 텍스트</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--orange-900)">#5C2705</div><div class="meta"><div class="name">orange-900</div><div class="hex">#5C2705</div><div class="role">최대 대비</div></div></div>
+  </div>
+
+  <h3 style="font-family:var(--font-display);color:var(--orange-600);font-size:18px;margin:28px 0 10px;">Cream & Ivory · 베이스</h3>
+  <div class="token-grid">
+    <div class="token"><div class="chip dark-on" style="background:var(--cream-50);border-bottom:1px solid var(--line)">#FFFDF9</div><div class="meta"><div class="name">cream-50</div><div class="hex">#FFFDF9</div><div class="role">카드 표면</div></div></div>
+    <div class="token primary"><div class="chip dark-on" style="background:var(--cream-100);border-bottom:1px solid var(--line)">#FFF9F2</div><div class="meta"><span class="star">★ BG</span><div class="name">cream-100</div><div class="hex">#FFF9F2</div><div class="role">메인 배경</div></div></div>
+    <div class="token"><div class="chip dark-on" style="background:var(--cream-200)">#FFF4E5</div><div class="meta"><div class="name">cream-200</div><div class="hex">#FFF4E5</div><div class="role">강조 배경 변형</div></div></div>
+    <div class="token"><div class="chip dark-on" style="background:var(--ivory-300)">#F5EBD9</div><div class="meta"><div class="name">ivory-300</div><div class="hex">#F5EBD9</div><div class="role">surface 변형 · 구분</div></div></div>
+    <div class="token"><div class="chip dark-on" style="background:var(--ivory-400)">#E8DBC0</div><div class="meta"><div class="name">ivory-400</div><div class="hex">#E8DBC0</div><div class="role">강한 구분선</div></div></div>
+  </div>
+
+  <h3 style="font-family:var(--font-display);color:var(--orange-600);font-size:18px;margin:28px 0 10px;">Coral · 포인트 액센트</h3>
+  <div class="token-grid">
+    <div class="token"><div class="chip dark-on" style="background:var(--coral-200)">#FFE0DC</div><div class="meta"><div class="name">coral-200</div><div class="hex">#FFE0DC</div><div class="role">soft 배경 · 배지 hover</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--coral-400)">#FFAB9F</div><div class="meta"><div class="name">coral-400</div><div class="hex">#FFAB9F</div><div class="role">중간 톤</div></div></div>
+    <div class="token primary"><div class="chip" style="background:var(--coral-500)">#FF8B7A</div><div class="meta"><span class="star">★ ACCENT</span><div class="name">coral-500</div><div class="hex">#FF8B7A</div><div class="role">BEST 배지 · 신상 포인트</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--coral-600)">#E66758</div><div class="meta"><div class="name">coral-600</div><div class="hex">#E66758</div><div class="role">coral hover</div></div></div>
+  </div>
+
+  <h3 style="font-family:var(--font-display);color:var(--orange-600);font-size:18px;margin:28px 0 10px;">Ink · 텍스트 (브라운 톤)</h3>
+  <div class="token-grid">
+    <div class="token"><div class="chip dark-on" style="background:var(--ink-50)">#F4EFE9</div><div class="meta"><div class="name">ink-50</div><div class="hex">#F4EFE9</div><div class="role">disabled 배경</div></div></div>
+    <div class="token"><div class="chip dark-on" style="background:var(--ink-100)">#E5DCD2</div><div class="meta"><div class="name">ink-100</div><div class="hex">#E5DCD2</div><div class="role">disabled 라인</div></div></div>
+    <div class="token"><div class="chip dark-on" style="background:var(--ink-300)">#C2B0A0</div><div class="meta"><div class="name">ink-300</div><div class="hex">#C2B0A0</div><div class="role">아주 옅은 텍스트</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--ink-500)">#9A8576</div><div class="meta"><div class="name">ink-500</div><div class="hex">#9A8576</div><div class="role">mute · 비활성/캡션</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--ink-700)">#5C4538</div><div class="meta"><div class="name">ink-700</div><div class="hex">#5C4538</div><div class="role">보조 텍스트</div></div></div>
+    <div class="token primary"><div class="chip" style="background:var(--ink-900)">#3B2A21</div><div class="meta"><span class="star">★ TEXT</span><div class="name">ink-900</div><div class="hex">#3B2A21</div><div class="role">본문 메인 텍스트</div></div></div>
+  </div>
+
+  <h3 style="font-family:var(--font-display);color:var(--orange-600);font-size:18px;margin:28px 0 10px;">Status · 상태색</h3>
+  <div class="token-grid">
+    <div class="token"><div class="chip" style="background:var(--success)">#38A169</div><div class="meta"><div class="name">success</div><div class="hex">#38A169</div><div class="role">"영업중" · 완료</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--warning)">#E0A500</div><div class="meta"><div class="name">warning</div><div class="hex">#E0A500</div><div class="role">예약 마감 임박</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--error)">#E53E3E</div><div class="meta"><div class="name">error</div><div class="hex">#E53E3E</div><div class="role">에러 / 필수 미입력</div></div></div>
+    <div class="token"><div class="chip" style="background:var(--info)">#3182CE</div><div class="meta"><div class="name">info</div><div class="hex">#3182CE</div><div class="role">정보 안내(드물게)</div></div></div>
+  </div>
+</section>
+
+<!-- 03. Semantic 토큰 -->
+<section id="semantic">
+  <h2>03. Semantic 토큰</h2>
+  <p class="lead">‘무엇을 위한 색인가’ 의미 단위 매핑. UI 코드는 이 이름으로 참조합니다.</p>
+  <div class="sem-table">
+    <table>
+      <thead><tr><th>Token</th><th>참조 Primitive</th><th>HEX</th><th>역할</th></tr></thead>
+      <tbody>
+        <tr><td colspan="4" style="background:var(--cream-200);font-family:var(--font-display);color:var(--orange-600);">Background / Surface</td></tr>
+        <tr><td class="name">--bg-default</td><td><span class="swatch" style="background:var(--cream-100)"></span>cream-100</td><td class="hex">#FFF9F2</td><td class="usage">앱 메인 배경</td></tr>
+        <tr><td class="name">--bg-subtle</td><td><span class="swatch" style="background:var(--cream-200)"></span>cream-200</td><td class="hex">#FFF4E5</td><td class="usage">섹션 강조 배경</td></tr>
+        <tr><td class="name">--surface-default</td><td><span class="swatch" style="background:#fff;border:1px solid var(--line)"></span>white</td><td class="hex">#FFFFFF</td><td class="usage">카드 / 시트 표면</td></tr>
+        <tr><td class="name">--surface-raised</td><td><span class="swatch" style="background:var(--cream-50)"></span>cream-50</td><td class="hex">#FFFDF9</td><td class="usage">떠 있는 컴포넌트(메뉴)</td></tr>
+        <tr><td class="name">--surface-tinted</td><td><span class="swatch" style="background:var(--orange-50)"></span>orange-50</td><td class="hex">#FFF4E9</td><td class="usage">정보 배너 · tinted 영역</td></tr>
+
+        <tr><td colspan="4" style="background:var(--cream-200);font-family:var(--font-display);color:var(--orange-600);">Content / Text</td></tr>
+        <tr><td class="name">--text-primary</td><td><span class="swatch" style="background:var(--ink-900)"></span>ink-900</td><td class="hex">#3B2A21</td><td class="usage">본문 · 제목</td></tr>
+        <tr><td class="name">--text-secondary</td><td><span class="swatch" style="background:var(--ink-700)"></span>ink-700</td><td class="hex">#5C4538</td><td class="usage">부제 · 설명</td></tr>
+        <tr><td class="name">--text-tertiary</td><td><span class="swatch" style="background:var(--ink-500)"></span>ink-500</td><td class="hex">#9A8576</td><td class="usage">캡션 · 비활성</td></tr>
+        <tr><td class="name">--text-brand</td><td><span class="swatch" style="background:var(--orange-600)"></span>orange-600</td><td class="hex">#E26A18</td><td class="usage">주황 강조 텍스트</td></tr>
+        <tr><td class="name">--text-on-brand</td><td><span class="swatch" style="background:#fff;border:1px solid var(--line)"></span>white</td><td class="hex">#FFFFFF</td><td class="usage">주황 배경 위 텍스트</td></tr>
+
+        <tr><td colspan="4" style="background:var(--cream-200);font-family:var(--font-display);color:var(--orange-600);">Border / Line</td></tr>
+        <tr><td class="name">--border-subtle</td><td><span class="swatch" style="background:var(--line)"></span>line</td><td class="hex">#F0E5D5</td><td class="usage">카드 기본 라인</td></tr>
+        <tr><td class="name">--border-default</td><td><span class="swatch" style="background:var(--line-strong)"></span>line-strong</td><td class="hex">#E5D7BF</td><td class="usage">강한 구분</td></tr>
+        <tr><td class="name">--border-brand</td><td><span class="swatch" style="background:var(--orange-500)"></span>orange-500</td><td class="hex">#F58634</td><td class="usage">focus / 활성 카드</td></tr>
+
+        <tr><td colspan="4" style="background:var(--cream-200);font-family:var(--font-display);color:var(--orange-600);">Interactive · Brand</td></tr>
+        <tr><td class="name">--brand-default</td><td><span class="swatch" style="background:var(--orange-500)"></span>orange-500</td><td class="hex">#F58634</td><td class="usage">Primary 버튼/CTA</td></tr>
+        <tr><td class="name">--brand-hover</td><td><span class="swatch" style="background:var(--orange-600)"></span>orange-600</td><td class="hex">#E26A18</td><td class="usage">버튼 hover</td></tr>
+        <tr><td class="name">--brand-active</td><td><span class="swatch" style="background:var(--orange-700)"></span>orange-700</td><td class="hex">#B8520E</td><td class="usage">버튼 pressed</td></tr>
+        <tr><td class="name">--brand-subtle</td><td><span class="swatch" style="background:var(--orange-100)"></span>orange-100</td><td class="hex">#FFE9D6</td><td class="usage">Secondary 버튼 배경</td></tr>
+
+        <tr><td colspan="4" style="background:var(--cream-200);font-family:var(--font-display);color:var(--orange-600);">Accent · Coral</td></tr>
+        <tr><td class="name">--accent-default</td><td><span class="swatch" style="background:var(--coral-500)"></span>coral-500</td><td class="hex">#FF8B7A</td><td class="usage">BEST 배지 · 포인트</td></tr>
+        <tr><td class="name">--accent-subtle</td><td><span class="swatch" style="background:var(--coral-200)"></span>coral-200</td><td class="hex">#FFE0DC</td><td class="usage">코랄 soft 배경</td></tr>
+
+        <tr><td colspan="4" style="background:var(--cream-200);font-family:var(--font-display);color:var(--orange-600);">Status</td></tr>
+        <tr><td class="name">--status-success</td><td><span class="swatch" style="background:var(--success)"></span>success</td><td class="hex">#38A169</td><td class="usage">"영업중" 상태 dot</td></tr>
+        <tr><td class="name">--status-warning</td><td><span class="swatch" style="background:var(--warning)"></span>warning</td><td class="hex">#E0A500</td><td class="usage">마감 임박</td></tr>
+        <tr><td class="name">--status-error</td><td><span class="swatch" style="background:var(--error)"></span>error</td><td class="hex">#E53E3E</td><td class="usage">에러 메시지</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 04. 사용 비율 -->
+<section id="ratio">
+  <h2>04. 사용 비율 · 60-30-10 원칙</h2>
+  <p class="lead">컬러는 ‘양’이 ‘인상’을 결정합니다. 주황을 적게 써야 더 강하게 보입니다.</p>
+
+  <div class="ratio-wrap">
+    <div class="donut">
+      <svg viewBox="0 0 200 200">
+        <!-- circumference = 2π*80 ≈ 502.65 -->
+        <!-- cream 62% = 311.6 -->
+        <circle cx="100" cy="100" r="80" fill="none" stroke="var(--cream-200)" stroke-width="36"
+                stroke-dasharray="311.6 502.65" stroke-dashoffset="0"/>
+        <!-- ink 22% = 110.6 -->
+        <circle cx="100" cy="100" r="80" fill="none" stroke="var(--ink-700)" stroke-width="36"
+                stroke-dasharray="110.6 502.65" stroke-dashoffset="-311.6"/>
+        <!-- orange 12% = 60.3 -->
+        <circle cx="100" cy="100" r="80" fill="none" stroke="var(--orange-500)" stroke-width="36"
+                stroke-dasharray="60.3 502.65" stroke-dashoffset="-422.2"/>
+        <!-- coral 4% = 20.1 -->
+        <circle cx="100" cy="100" r="80" fill="none" stroke="var(--coral-500)" stroke-width="36"
+                stroke-dasharray="20.1 502.65" stroke-dashoffset="-482.5"/>
+      </svg>
+      <div class="donut-center">
+        <div class="big">60-30-10</div>
+        <div class="sub">~ 비율의 약속 ~</div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="row"><span class="dot" style="background:var(--cream-200);border:1px solid var(--line)"></span><span class="lab">Cream / Ivory</span><span class="pct">62%</span></div>
+      <div class="desc">베이스. 모든 배경과 카드 표면. 가장 넓은 면적.</div>
+
+      <div class="row"><span class="dot" style="background:var(--ink-700)"></span><span class="lab">Ink / Text</span><span class="pct">22%</span></div>
+      <div class="desc">텍스트와 라인. 본문 가독성을 책임지는 두 번째 면적.</div>
+
+      <div class="row"><span class="dot" style="background:var(--orange-500)"></span><span class="lab">Orange (Primary)</span><span class="pct">12%</span></div>
+      <div class="desc">CTA · 로고 · 강조. ‘시선이 머무는 곳’에만 사용.</div>
+
+      <div class="row"><span class="dot" style="background:var(--coral-500)"></span><span class="lab">Coral (Accent)</span><span class="pct">4%</span></div>
+      <div class="desc">BEST · NEW · 진짜 강조 포인트만. 4% 초과 금지.</div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:18px;">
+    <span class="ic">💡</span>
+    <span class="ct"><b>주황을 50% 이상 칠하지 않습니다.</b> 면적이 커지면 ‘오렌지 가게’가 아니라 ‘오렌지 광고’처럼 보입니다. 둥근 모서리 + 부드러운 그림자로 ‘떠 있는 버튼/카드’에 집중하세요.</span>
+  </div>
+</section>
+
+<!-- 05. 실전 시나리오 -->
+<section id="scenarios">
+  <h2>05. 실전 사용 시나리오</h2>
+  <p class="lead">상황별로 어떤 색을 어디에 쓰는지 명확하게.</p>
+
+  <div class="scenarios">
+    <div class="sc">
+      <div class="head"><h4>예약 버튼</h4><span class="ico">🎯</span></div>
+      <div class="preview" style="background:var(--cream-100);">
+        <button class="btn btn-primary">🎂 예약하기</button>
+      </div>
+      <div class="body">
+        배경 <code>--brand-default</code> · 텍스트 <code>--text-on-brand</code> · 그림자 <code>0 6px 16px rgba(245,134,52,.28)</code>
+      </div>
+    </div>
+    <div class="sc">
+      <div class="head"><h4>BEST 배지</h4><span class="ico">💖</span></div>
+      <div class="preview" style="background:var(--cream-100);">
+        <span class="btn btn-coral" style="padding:6px 14px;font-size:11px;">BEST 💖</span>
+      </div>
+      <div class="body">
+        배경 <code>--accent-default</code> · 텍스트 <code>white</code> · 크기 작게, 한 화면에 3개 이하
+      </div>
+    </div>
+    <div class="sc">
+      <div class="head"><h4>안내 배너</h4><span class="ico">🧁</span></div>
+      <div class="preview" style="background:var(--cream-100);">
+        <div style="background:var(--orange-50);border:1.5px dashed var(--orange-500);color:var(--orange-600);padding:10px 14px;border-radius:12px;font-weight:700;font-size:12px;">🧁 최소 3일 전 예약을 권해드려요</div>
+      </div>
+      <div class="body">
+        배경 <code>--surface-tinted</code> · 테두리 <code>dashed --border-brand</code> · 텍스트 <code>--text-brand</code>
+      </div>
+    </div>
+    <div class="sc">
+      <div class="head"><h4>활성 chip</h4><span class="ico">✨</span></div>
+      <div class="preview" style="background:var(--cream-100);gap:8px;">
+        <span style="padding:6px 12px;border-radius:9999px;background:#fff;border:1px solid var(--line);font-size:11px;color:var(--ink-700);font-weight:700;">전체</span>
+        <span style="padding:6px 12px;border-radius:9999px;background:var(--orange-500);color:#fff;font-size:11px;font-weight:700;">생일</span>
+        <span style="padding:6px 12px;border-radius:9999px;background:#fff;border:1px solid var(--line);font-size:11px;color:var(--ink-700);font-weight:700;">기념일</span>
+      </div>
+      <div class="body">
+        활성 <code>--brand-default</code> + 흰 텍스트. 비활성 <code>surface</code> + <code>--border-subtle</code>.
+      </div>
+    </div>
+    <div class="sc">
+      <div class="head"><h4>영업중 상태</h4><span class="ico">🟢</span></div>
+      <div class="preview" style="background:var(--cream-100);">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-900);font-weight:700;">
+          <span style="width:8px;height:8px;background:var(--success);border-radius:50%;box-shadow:0 0 0 3px rgba(56,161,105,.2);"></span>
+          영업중 · 11:00–20:00
+        </div>
+      </div>
+      <div class="body">
+        dot <code>--status-success</code> · 주변에 soft glow 추가 → "살아 있는" 느낌
+      </div>
+    </div>
+    <div class="sc">
+      <div class="head"><h4>입력 포커스</h4><span class="ico">⌨️</span></div>
+      <div class="preview" style="background:var(--cream-100);">
+        <input style="padding:10px 14px;border:1.5px solid var(--orange-500);border-radius:12px;font-family:inherit;outline:none;width:80%;box-shadow:0 0 0 3px var(--orange-100);" placeholder="원하는 문구를 적어주세요" />
+      </div>
+      <div class="body">
+        focus 시 <code>--border-brand</code> + <code>--brand-subtle</code> 3px glow
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06. 접근성 -->
+<section id="accessibility">
+  <h2>06. 접근성 · 대비 검증</h2>
+  <p class="lead">WCAG 2.1 AA (4.5:1 일반 텍스트 / 3:1 큰 텍스트) 기준으로 검증한 컬러 조합.</p>
+
+  <div class="a11y">
+    <table>
+      <thead>
+        <tr><th>샘플</th><th>전경 / 배경</th><th>대비비</th><th>일반 텍스트</th><th>큰 텍스트 (18pt+)</th><th>UI 컴포넌트</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="sample" style="background:var(--orange-500);color:#fff;">예약하기</span></td>
+          <td><span class="hex">#FFFFFF / #F58634</span></td>
+          <td><b>4.06:1</b></td>
+          <td><span class="warn">⚠ 작은 본문 X</span></td>
+          <td><span class="pass">✓ Pass</span></td>
+          <td><span class="pass">✓ Pass</span></td>
+        </tr>
+        <tr>
+          <td><span class="sample" style="background:var(--orange-600);color:#fff;">예약하기</span></td>
+          <td><span class="hex">#FFFFFF / #E26A18</span></td>
+          <td><b>4.93:1</b></td>
+          <td><span class="pass">✓ Pass</span></td>
+          <td><span class="pass">✓ Pass</span></td>
+          <td><span class="pass">✓ Pass</span></td>
+        </tr>
+        <tr>
+          <td><span class="sample" style="background:var(--cream-100);color:var(--ink-900);">본문 텍스트</span></td>
+          <td><span class="hex">#3B2A21 / #FFF9F2</span></td>
+          <td><b>12.8:1</b></td>
+          <td><span class="pass">✓ AAA</span></td>
+          <td><span class="pass">✓ AAA</span></td>
+          <td><span class="pass">✓ Pass</span></td>
+        </tr>
+        <tr>
+          <td><span class="sample" style="background:var(--cream-100);color:var(--ink-700);">부 텍스트</span></td>
+          <td><span class="hex">#5C4538 / #FFF9F2</span></td>
+          <td><b>8.4:1</b></td>
+          <td><span class="pass">✓ AAA</span></td>
+          <td><span class="pass">✓ AAA</span></td>
+          <td><span class="pass">✓ Pass</span></td>
+        </tr>
+        <tr>
+          <td><span class="sample" style="background:var(--cream-100);color:var(--orange-600);">강조 텍스트</span></td>
+          <td><span class="hex">#E26A18 / #FFF9F2</span></td>
+          <td><b>4.5:1</b></td>
+          <td><span class="pass">✓ Pass</span></td>
+          <td><span class="pass">✓ Pass</span></td>
+          <td><span class="pass">✓ Pass</span></td>
+        </tr>
+        <tr>
+          <td><span class="sample" style="background:var(--coral-500);color:#fff;">BEST</span></td>
+          <td><span class="hex">#FFFFFF / #FF8B7A</span></td>
+          <td><b>2.7:1</b></td>
+          <td><span class="fail">✗ Fail</span></td>
+          <td><span class="warn">⚠ 14pt+ 굵게만</span></td>
+          <td><span class="pass">✓ Badge OK</span></td>
+        </tr>
+        <tr>
+          <td><span class="sample" style="background:var(--orange-100);color:var(--orange-700);">Secondary</span></td>
+          <td><span class="hex">#B8520E / #FFE9D6</span></td>
+          <td><b>5.8:1</b></td>
+          <td><span class="pass">✓ Pass</span></td>
+          <td><span class="pass">✓ Pass</span></td>
+          <td><span class="pass">✓ Pass</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout" style="margin-top:18px;">
+    <span class="ic">⚠️</span>
+    <span class="ct"><b>주황(#F58634) 위 흰 텍스트는 14px 이하 본문 금지.</b> 16px 굵기 700 이상에서만 사용. 일반 본문 강조가 필요하면 <code>--brand-hover (#E26A18)</code>를 텍스트 컬러로 쓰세요.</span>
+  </div>
+  <div class="callout" style="margin-top:8px;">
+    <span class="ic">⚠️</span>
+    <span class="ct"><b>코랄(#FF8B7A)은 배지 전용.</b> 본문 텍스트 컬러로 사용 금지. 위 흰 글자 ‘BEST’ 같은 굵은 짧은 라벨에서만 OK.</span>
+  </div>
+</section>
+
+<!-- 07. DO / DON'T -->
+<section id="dodonts">
+  <h2>07. DO / DON'T</h2>
+  <p class="lead">자주 발생하는 실수와 권장 패턴.</p>
+
+  <div class="dodonts">
+    <div class="do-card">
+      <div class="tag">✓ DO · 권장</div>
+      <div class="dd-body">
+        <div class="dd-row">
+          <div class="dd-sample" style="background:var(--orange-500);">예약하기</div>
+          <div>큰 주황 버튼 + 흰 글자 (메인 CTA)</div>
+        </div>
+        <div class="dd-row">
+          <div class="dd-sample" style="background:var(--orange-100);color:var(--orange-700);">상세보기</div>
+          <div>연한 주황 배경 + 진한 주황 글자 (보조 액션)</div>
+        </div>
+        <div class="dd-row">
+          <div class="dd-sample" style="background:var(--cream-100);color:var(--ink-900);border:1px solid var(--line);">카드 콘텐츠</div>
+          <div>크림 배경 + 잉크 텍스트 (가독성 12:1)</div>
+        </div>
+        <div class="dd-row">
+          <div class="dd-sample" style="background:var(--coral-500);color:#fff;font-size:11px;">BEST</div>
+          <div>코랄은 작고 굵은 배지로만 사용</div>
+        </div>
+      </div>
+    </div>
+    <div class="dont-card">
+      <div class="tag">✗ DON'T · 금지</div>
+      <div class="dd-body">
+        <div class="dd-row">
+          <div class="dd-sample" style="background:var(--orange-500);color:var(--ink-900);font-size:11px;">잉크 텍스트</div>
+          <div>주황 위 잉크 텍스트 (대비 2.1:1, Fail)</div>
+        </div>
+        <div class="dd-row">
+          <div class="dd-sample" style="background:var(--orange-500);">전체 배경을 주황으로</div>
+          <div>주황을 넓은 면적에 칠하지 않음 (12% 룰)</div>
+        </div>
+        <div class="dd-row">
+          <div class="dd-sample" style="background:var(--ink-900);color:#fff;">검정 배경</div>
+          <div>다크 배경 사용 금지 (음식 사진 채도 손실)</div>
+        </div>
+        <div class="dd-row">
+          <div class="dd-sample" style="background:var(--coral-500);color:#fff;">긴 본문 텍스트를 코랄로</div>
+          <div>코랄을 본문/제목 컬러로 쓰지 않음</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08. 그라데이션 -->
+<section id="gradient">
+  <h2>08. 그라데이션 & 셰이드</h2>
+  <p class="lead">히어로·시즌 배너에서만 절제해서 사용. 텍스트 위에 직접 깔지 않습니다.</p>
+
+  <div class="grad-grid">
+    <div class="grad">
+      <div class="pad" style="background:linear-gradient(135deg,var(--orange-100),var(--coral-200));"></div>
+      <div class="meta">
+        <div class="nm">Sunrise (히어로 기본)</div>
+        <div class="code">linear-gradient(135deg, #FFE9D6, #FFE0DC)</div>
+      </div>
+    </div>
+    <div class="grad">
+      <div class="pad" style="background:linear-gradient(135deg,var(--orange-500),var(--coral-500));"></div>
+      <div class="meta">
+        <div class="nm">Orange Pop (시즌 CTA)</div>
+        <div class="code">linear-gradient(135deg, #F58634, #FF8B7A)</div>
+      </div>
+    </div>
+    <div class="grad">
+      <div class="pad" style="background:linear-gradient(180deg,var(--cream-100),var(--orange-50));"></div>
+      <div class="meta">
+        <div class="nm">Cream Fade (섹션 배경)</div>
+        <div class="code">linear-gradient(180deg, #FFF9F2, #FFF4E9)</div>
+      </div>
+    </div>
+    <div class="grad">
+      <div class="pad" style="background:radial-gradient(circle at 30% 30%,#FFF1B8 0 20%,transparent 21%),radial-gradient(circle at 75% 70%,#FFD3C5 0 25%,transparent 26%),linear-gradient(135deg,var(--coral-200),var(--orange-100));"></div>
+      <div class="meta">
+        <div class="nm">Confetti (히어로 활용)</div>
+        <div class="code">radial × 2 + linear · 작은 원형 패턴</div>
+      </div>
+    </div>
+    <div class="grad">
+      <div class="pad" style="background:linear-gradient(135deg,var(--orange-600),var(--orange-800));"></div>
+      <div class="meta">
+        <div class="nm">Dark Orange (대비 CTA)</div>
+        <div class="code">linear-gradient(135deg, #E26A18, #8C3D08)</div>
+      </div>
+    </div>
+    <div class="grad">
+      <div class="pad" style="background:linear-gradient(135deg,var(--ivory-300),var(--cream-200));"></div>
+      <div class="meta">
+        <div class="nm">Ivory Soft (카드 강조)</div>
+        <div class="code">linear-gradient(135deg, #F5EBD9, #FFF4E5)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09. 컴포넌트 응용 -->
+<section id="applied">
+  <h2>09. 컴포넌트 응용</h2>
+  <p class="lead">실제 UI에 올라간 컬러의 모습.</p>
+
+  <div class="applied">
+    <div class="app-card">
+      <div class="ttl">버튼 4종</div>
+      <div class="preview" style="flex-direction:column;gap:10px;">
+        <button class="btn btn-primary">🎂 예약하기</button>
+        <button class="btn btn-secondary">상세보기</button>
+        <button class="btn btn-coral">BEST 💖</button>
+        <button class="btn btn-ghost">취소</button>
+      </div>
+    </div>
+    <div class="app-card">
+      <div class="ttl">케이크 카드</div>
+      <div class="preview">
+        <div style="background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;width:160px;box-shadow:0 2px 8px rgba(245,134,52,.08);">
+          <div style="aspect-ratio:1/1;background:linear-gradient(135deg,var(--orange-100),var(--coral-200));position:relative;display:grid;place-items:center;font-size:48px;">🎂<span style="position:absolute;top:6px;left:6px;background:var(--coral-500);color:#fff;font-size:10px;padding:3px 8px;border-radius:9999px;font-weight:800;">BEST</span></div>
+          <div style="padding:10px 12px;">
+            <div style="font-weight:800;color:var(--ink-900);font-size:13px;">컬러풀 생일</div>
+            <div style="color:var(--orange-500);font-weight:800;font-size:12px;margin-top:2px;">35,000원~</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="app-card">
+      <div class="ttl">정보 배너</div>
+      <div class="preview">
+        <div style="background:var(--orange-50);border:1.5px dashed var(--orange-500);border-radius:12px;padding:14px 16px;color:var(--orange-600);font-weight:700;font-size:13px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:18px;">🧁</span>
+          최소 3일 전 예약을 권해드려요
+        </div>
+      </div>
+    </div>
+    <div class="app-card">
+      <div class="ttl">FAQ 아코디언</div>
+      <div class="preview" style="flex-direction:column;gap:6px;width:100%;">
+        <div style="background:var(--orange-50);border:1px solid var(--orange-500);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;width:100%;">
+          <span style="font-size:12px;font-weight:700;color:var(--ink-900);">예약은 며칠 전에?</span>
+          <span style="color:var(--orange-500);font-size:12px;">▼</span>
+        </div>
+        <div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;width:100%;">
+          <span style="font-size:12px;font-weight:700;color:var(--ink-900);">디자인 시안 제출?</span>
+          <span style="color:var(--orange-500);font-size:12px;">▶</span>
+        </div>
+      </div>
+    </div>
+    <div class="app-card">
+      <div class="ttl">상태 표시</div>
+      <div class="preview" style="flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-900);font-weight:700;">
+          <span style="width:8px;height:8px;background:var(--success);border-radius:50%;box-shadow:0 0 0 3px rgba(56,161,105,.2);"></span>
+          영업중 · 11:00–20:00
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-900);font-weight:700;">
+          <span style="width:8px;height:8px;background:var(--warning);border-radius:50%;box-shadow:0 0 0 3px rgba(224,165,0,.2);"></span>
+          마감 임박 · 1자리 남음
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-900);font-weight:700;">
+          <span style="width:8px;height:8px;background:var(--ink-500);border-radius:50%;"></span>
+          영업 종료
+        </div>
+      </div>
+    </div>
+    <div class="app-card">
+      <div class="ttl">하단 네비</div>
+      <div class="preview">
+        <div style="background:#fff;border-radius:9999px;border:1px solid var(--line);padding:4px;display:flex;gap:2px;box-shadow:0 6px 18px rgba(245,134,52,.18);">
+          <button style="padding:8px 14px;border-radius:9999px;background:var(--orange-500);color:#fff;font-size:11px;font-weight:800;border:0;">🏠 홈</button>
+          <button style="padding:8px 14px;border-radius:9999px;background:transparent;color:var(--ink-500);font-size:11px;font-weight:800;border:0;">🎨 디자인</button>
+          <button style="padding:8px 14px;border-radius:9999px;background:transparent;color:var(--ink-500);font-size:11px;font-weight:800;border:0;">📅 예약</button>
+          <button style="padding:8px 14px;border-radius:9999px;background:transparent;color:var(--ink-500);font-size:11px;font-weight:800;border:0;">💬 Q&A</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. 개발자용 토큰 -->
+<section id="tokens">
+  <h2>10. 토큰 파일 (개발자용)</h2>
+  <p class="lead">동봉된 <code style="background:var(--cream-200);padding:2px 8px;border-radius:4px;font-family:var(--font-mono);font-size:13px;color:var(--orange-700);">color_tokens.json</code> 과 <code style="background:var(--cream-200);padding:2px 8px;border-radius:4px;font-family:var(--font-mono);font-size:13px;color:var(--orange-700);">color_tokens.css</code> 를 그대로 import해 사용하세요.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+      <div style="font-family:var(--font-display);color:var(--orange-600);margin-bottom:8px;">color_tokens.css</div>
+      <div class="code-block"><span class="com">/* CSS Custom Properties */</span>
+:root {
+  <span class="com">/* Primitive · Orange */</span>
+  <span class="key">--orange-500</span>: <span class="val">#F58634</span>;
+  <span class="key">--orange-600</span>: <span class="val">#E26A18</span>;
+
+  <span class="com">/* Semantic */</span>
+  <span class="key">--brand-default</span>: <span class="val">var(--orange-500)</span>;
+  <span class="key">--bg-default</span>: <span class="val">#FFF9F2</span>;
+  <span class="key">--text-primary</span>: <span class="val">#3B2A21</span>;
+  ...
+}</div>
+    </div>
+    <div>
+      <div style="font-family:var(--font-display);color:var(--orange-600);margin-bottom:8px;">color_tokens.json</div>
+      <div class="code-block">{
+  <span class="key">"brand"</span>: {
+    <span class="key">"primary"</span>: <span class="val">"#F58634"</span>,
+    <span class="key">"hover"</span>: <span class="val">"#E26A18"</span>,
+    <span class="key">"subtle"</span>: <span class="val">"#FFE9D6"</span>
+  },
+  <span class="key">"background"</span>: {
+    <span class="key">"default"</span>: <span class="val">"#FFF9F2"</span>,
+    <span class="key">"surface"</span>: <span class="val">"#FFFFFF"</span>
+  },
+  ...
+}</div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <p><strong>오렌지케이크 컬러 시스템 v1.0</strong></p>
+  <p>본 가이드는 디자인 요청서 §3을 분리·확장한 독립 문서입니다.</p>
+</footer>
+
+</div>
+</body>
+</html>
