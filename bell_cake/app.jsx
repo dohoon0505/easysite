@@ -986,10 +986,7 @@ function FaqScreen() {
           <div className="faq-empty">
             <I.Search size={28} strokeWidth={1.5} />
             <h4>검색 결과가 없어요</h4>
-            <p>다른 키워드로 검색하거나 카톡으로 문의해주세요.</p>
-            <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn-secondary btn-secondary-kakao" style={{ marginTop: 12, width: "auto", display: "inline-flex", padding: "0 18px" }}>
-              <I.Send size={16} /> 카톡 문의
-            </a>
+            <p>다른 키워드로 검색해주세요.</p>
           </div>
         ) : filtered.map((it, i) => {
           const id = `${it.cat}-${i}`;
