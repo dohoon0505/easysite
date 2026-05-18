@@ -992,20 +992,18 @@ function FaqScreen() {
           const id = `${it.cat}-${i}`;
           const isOpen = openId === id;
           return (
-            <div key={id} className={"faq-item " + (isOpen ? "open" : "")}>
-              <button className="faq-q" onClick={() => setOpenId(isOpen ? null : id)} aria-expanded={isOpen}>
-                <span className="faq-q-badge">Q</span>
-                <span className="faq-q-text">
-                  <span className="faq-q-title">{it.q}</span>
-                </span>
-                <span className="faq-icon" aria-hidden="true">
+            <li key={id} className={"home-faq-item " + (isOpen ? "open" : "")}>
+              <button className="home-faq-q" onClick={() => setOpenId(isOpen ? null : id)} aria-expanded={isOpen}>
+                <span className="home-faq-q-badge">Q</span>
+                <span className="home-faq-q-text">{it.q}</span>
+                <span className="home-faq-caret" aria-hidden="true">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
                 </span>
               </button>
-              {isOpen && <div className="faq-a">{it.a}</div>}
-            </div>
+              {isOpen && <div className="home-faq-a">{it.a}</div>}
+            </li>
           );
         })}
       </div>
