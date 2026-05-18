@@ -229,12 +229,12 @@ function HomeScreen({ go, openWork }) {
         </div>
         <div className="dev-grid">
           {[
-            { id: "clay",   activity: "아이클레이",   tags: ["소근육 발달", "촉각 자극"], desc: "직접 빚고 만지는 과정에서 손끝 감각과 입체 인지가 함께 자라요.", color: "pink" },
-            { id: "draw",   activity: "소묘·관찰화",   tags: ["집중력", "관찰력"],         desc: "사물을 오래 들여다보며 본 것을 손으로 옮기는 훈련. 차분함이 길러집니다.", color: "blue" },
-            { id: "figure", activity: "인물 묘사",     tags: ["공감 능력", "표현력"],      desc: "표정·자세를 살피며 그리는 사이, 자연스럽게 타인을 읽는 힘이 자라요.", color: "yellow" },
-            { id: "color",  activity: "컬러 일러스트", tags: ["색감", "창의력"],          desc: "마카·색연필로 자신만의 색을 고르고 입히며, 미적 감각이 깨어납니다.", color: "orange" },
-            { id: "goods",  activity: "굿즈 제작",     tags: ["기획력", "성취감"],         desc: "내가 만든 그림이 가방·케이스가 되는 경험. 결과물이 곧 자신감이에요.", color: "purple" },
-            { id: "ipad",   activity: "디지털 드로잉", tags: ["디지털 리터러시", "도전"],  desc: "아이패드로 새로운 도구를 익히며, 표현의 경계를 넓혀갑니다.", color: "teal" },
+            { id: "ipad",   activity: "아이패드 드로잉", tags: ["디지털 리터러시", "창의력"],  desc: "아이패드로 새로운 도구를 익히며, 표현의 경계를 넓혀갑니다.", color: "teal" },
+            { id: "draw",   activity: "기초 드로잉",   tags: ["관찰력", "집중력"],           desc: "선 하나하나를 쌓아가며 손과 눈의 협응력이 자라요.", color: "blue" },
+            { id: "water",  activity: "수채화",         tags: ["색채 감각", "감성 표현"],     desc: "물과 물감이 번지는 순간, 아이의 감수성이 함께 피어납니다.", color: "pink" },
+            { id: "sketch", activity: "소묘",           tags: ["공간 지각력", "정밀함"],      desc: "명암과 형태를 잡으며 사물을 입체로 이해하는 힘을 키워요.", color: "yellow" },
+            { id: "pencil", activity: "색연필화",       tags: ["색감", "섬세함"],             desc: "색을 겹치고 쌓으며 나만의 색 조합을 찾아가는 과정이에요.", color: "orange" },
+            { id: "pen",    activity: "펜화",           tags: ["집중력", "표현력"],           desc: "지울 수 없는 선 위에서 과감하게 표현하는 자신감이 생겨요.", color: "purple" },
           ].map((a) => (
             <div key={a.id} className="dev-card" data-color={a.color}>
               <div className="dev-card-head">
