@@ -653,7 +653,7 @@ function BookingScreen({ initial }) {
         <button type="button" className={"field selectable " + (form.service ? "done" : "")} onClick={() => setServiceSheetOpen(true)}>
           <div className="field-label">
             <span className="lbl"><span className="stepno">1</span> 시술 선택</span>
-            {form.service ? <I.Check size={16} strokeWidth={2.4} style={{ color: "#22C55E" }} /> : <I.Arrow size={14} style={{ color: "var(--ph-mute)" }} />}
+            {form.service ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--ph-brand)" }} /> : <I.Arrow size={14} style={{ color: "var(--ph-mute)" }} />}
           </div>
           <div className={"field-val " + (!form.service ? "placeholder" : "")}>
             {form.service || "시술 카테고리와 스타일을 선택하세요"}
@@ -664,7 +664,7 @@ function BookingScreen({ initial }) {
         <button type="button" className={"field selectable " + (form.date && form.time ? "done" : "")} onClick={() => setPickerOpen(true)}>
           <div className="field-label">
             <span className="lbl"><span className="stepno">2</span> 날짜·시간</span>
-            {(form.date && form.time) ? <I.Check size={16} strokeWidth={2.4} style={{ color: "#22C55E" }} /> : <I.Arrow size={14} style={{ color: "var(--ph-mute)" }} />}
+            {(form.date && form.time) ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--ph-brand)" }} /> : <I.Arrow size={14} style={{ color: "var(--ph-mute)" }} />}
           </div>
           <div className={"field-val " + (!(form.date && form.time) ? "placeholder" : "")}>
             {form.date && form.time
@@ -688,7 +688,7 @@ function BookingScreen({ initial }) {
         <div className={"field " + (form.name.trim() ? "done" : "")}>
           <div className="field-label">
             <span className="lbl"><span className="stepno">4</span> 이름</span>
-            {form.name.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "#22C55E" }} />}
+            {form.name.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--ph-brand)" }} />}
           </div>
           <input type="text" value={form.name} placeholder="EX) 홍길동" onChange={(e) => setForm({ ...form, name: e.target.value })} />
         </div>
@@ -697,7 +697,7 @@ function BookingScreen({ initial }) {
         <div className={"field " + (form.kakao.trim() ? "done" : "")}>
           <div className="field-label">
             <span className="lbl"><span className="stepno">5</span> 카카오톡 ID</span>
-            {form.kakao.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "#22C55E" }} />}
+            {form.kakao.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--ph-brand)" }} />}
           </div>
           <input type="text" value={form.kakao} placeholder="카카오톡 ID를 입력해주세요" onChange={(e) => setForm({ ...form, kakao: e.target.value })} />
         </div>
@@ -1033,7 +1033,7 @@ function formatDateKR(s) {
 // ─── App root ────────────────────────────────────────────────
 function App() {
   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-    "brand": "#F58634",
+    "brand": "#F26522",
     "dark": false
   }/*EDITMODE-END*/;
   const [t, setTweak] = (window.useTweaks ? window.useTweaks(TWEAK_DEFAULTS) : [TWEAK_DEFAULTS, () => {}]);
