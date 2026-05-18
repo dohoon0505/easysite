@@ -1,5 +1,5 @@
 /* eslint-disable */
-// PARKHAD — 헤어 스타일 카탈로그
+// 별케이크 — 케이크 카탈로그
 // 4개 카테고리 × 카테고리별 5-6개 스타일.
 
 const HAIR_CATEGORIES = [

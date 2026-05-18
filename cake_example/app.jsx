@@ -100,7 +100,7 @@ function AppBar({ title, onBack, scrolled, dark, onToggleTheme }) {
       {onBack && (
         <button className="iconbtn" onClick={onBack} aria-label="뒤로 가기"><I.Back /></button>
       )}
-      <div className="pagetitle">{title || "PARKHAD"}</div>
+      <div className="pagetitle">{title || "별케이크"}</div>
       <div className="grow" />
       <button
         className={"theme-toggle " + (dark ? "on" : "")}
@@ -122,8 +122,8 @@ function AppBar({ title, onBack, scrolled, dark, onToggleTheme }) {
 
 async function shareSite() {
   const data = {
-    title: "PARKHAD",
-    text: "남성 전용 헤어샵 PARKHAD — 편안한 환경, 유쾌한 경험.",
+    title: "별케이크",
+    text: "레터링케이크 전문점 별케이크 — 특별한 날을 더 특별하게.",
     url: window.location.href,
   };
   try {
@@ -177,19 +177,19 @@ function BottomNav({ route, go }) {
 function HomeScreen({ go, openStyle, openDesigner }) {
   return (
     <div>
-      <section className="hero" aria-label="PARKHAD">
+      <section className="hero" aria-label="별케이크">
         <div className="hero-img">
-          <img src="img/hero.jpg" alt="PARKHAD 매장" />
+          <img src="img/hero.jpg" alt="별케이크 매장" />
         </div>
       </section>
 
       <section className="intro">
         <div className="intro-meta">대구광역시 | 수성구</div>
-        <h2 className="intro-name">PARKHAD</h2>
+        <h2 className="intro-name">별케이크</h2>
         <p className="intro-desc">남자들에게 미용실은 '가기 귀찮은 곳'인 경우가 많죠. 고객님 한 분 한 분께 편안한 환경과 유쾌한 경험을 제공하여, '다음 만남이 기다려지는 곳'이 될 수 있도록 하겠습니다.</p>
 
         <div className="intro-map" aria-label="매장 위치 지도">
-          <img src="img/map.png" alt="박하디 매장 위치" className="intro-map-img" />
+          <img src="img/map.png" alt="별케이크 매장 위치" className="intro-map-img" />
           <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 수성구 범어로20길 68" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
             <img src="img/naver_map.png" alt="" className="naver-map-icon" /> 네이버 지도
           </a>
@@ -456,7 +456,7 @@ function StylingScreen() {
       return;
     }
     const body = [
-      "[PARKHAD 스타일 추천 요청]",
+      "[별케이크 스타일 추천 요청]",
       "",
       "나이대: " + form.age,
       "희망 스타일: " + moodLabels.join(", "),
@@ -618,7 +618,7 @@ function BookingScreen({ initial }) {
       return;
     }
     const body = [
-      "[PARKHAD 예약 요청]",
+      "[별케이크 예약 요청]",
       "",
       "시술: " + form.service,
       "날짜: " + form.date,

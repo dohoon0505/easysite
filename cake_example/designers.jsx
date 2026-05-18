@@ -1,5 +1,5 @@
 /* eslint-disable */
-// PARKHAD — 디자이너 라인업
+// 별케이크 — 디자이너 라인업
 
 const DESIGNERS = [
   {
