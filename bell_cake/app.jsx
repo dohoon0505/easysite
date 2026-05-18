@@ -249,7 +249,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
           <I.Insta size={18} /> 인스타그램 둘러보기
         </a>
         <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao">
-          <I.Send size={18} /> 카톡 문의
+          카톡 문의 <I.Send size={18} />
         </a>
       </div>
     </div>
@@ -1013,7 +1013,7 @@ function FaqScreen() {
         <h4>여전히 궁금한 점이 있으신가요?</h4>
         <p>카카오톡으로 문의주시면 빠르게 답변드려요.</p>
         <div className="footer-row">
-          <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao"><I.Send size={18} /> 카톡 문의</a>
+          <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao">카톡 문의 <I.Send size={18} /></a>
         </div>
       </div>
     </div>
