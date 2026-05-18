@@ -345,7 +345,6 @@ function CoursesScreen({ activeCat, setActiveCat, onPick }) {
           <span className="dot dot-c" />
         </div>
         <div className="course-hero-meta">
-          <span className="course-hero-sub">{cat.sub}</span>
           <span className="course-hero-count">{list.length}개 과정</span>
         </div>
         <h2 className="course-hero-title">{cat.blurb}</h2>
