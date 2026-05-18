@@ -113,8 +113,8 @@ function AppBar({ title, onBack, scrolled, dark, onToggleTheme }) {
           <span className="theme-toggle-knob" />
         </span>
       </button>
-      <a className="iconbtn" href={KAKAO_HREF} target="_blank" rel="noreferrer" aria-label="카톡 문의"><I.Send /></a>
       <button className="iconbtn" onClick={shareSite} aria-label="공유하기"><I.Share /></button>
+      <a className="iconbtn" href={KAKAO_HREF} target="_blank" rel="noreferrer" aria-label="카톡 문의"><I.Send /></a>
     </div>
   );
 }
@@ -232,7 +232,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
 
       <section className="section home-faq-section">
         <div className="section-head">
-          <h3>케이크 주문 전 자주하는 질문</h3>
+          <h3>주문 전 자주하는 질문</h3>
         </div>
         <ul className="home-faq-list">
           {FAQ_ITEMS.slice(0, 6).map((it, i) => (
@@ -249,7 +249,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
           <I.Insta size={18} /> 인스타그램 둘러보기
         </a>
         <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao">
-          <I.Chat size={18} /> 카톡 문의
+          <I.Send size={18} /> 카톡 문의
         </a>
       </div>
     </div>
@@ -988,7 +988,7 @@ function FaqScreen() {
             <h4>검색 결과가 없어요</h4>
             <p>다른 키워드로 검색하거나 카톡으로 문의해주세요.</p>
             <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn-secondary btn-secondary-kakao" style={{ marginTop: 12, width: "auto", display: "inline-flex", padding: "0 18px" }}>
-              <I.Chat size={16} /> 카톡 문의
+              <I.Send size={16} /> 카톡 문의
             </a>
           </div>
         ) : filtered.map((it, i) => {
@@ -1016,7 +1016,7 @@ function FaqScreen() {
         <h4>여전히 궁금한 점이 있으신가요?</h4>
         <p>카카오톡으로 문의주시면 빠르게 답변드려요.</p>
         <div className="footer-row">
-          <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao"><I.Chat size={18} /> 카톡 문의</a>
+          <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao"><I.Send size={18} /> 카톡 문의</a>
         </div>
       </div>
     </div>

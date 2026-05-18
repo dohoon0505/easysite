@@ -1948,7 +1948,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 .faq-foot h4 { margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.02em; color: #fff; }
 .faq-foot p { margin: 6px 0 16px; font-size: 13px; color: rgba(255,249,242,0.6); }
-.faq-foot .footer-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.faq-foot .footer-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
 .faq-foot .btn-secondary {
   background: rgba(255,255,255,0.1);
   color: #fff;
