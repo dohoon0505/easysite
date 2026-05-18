@@ -184,13 +184,13 @@ function HomeScreen({ go, openStyle, openDesigner }) {
       </section>
 
       <section className="intro">
-        <div className="intro-meta">대구광역시 | 달서구</div>
+        <div className="intro-meta">대구광역시 | 수성구</div>
         <h2 className="intro-name">PARKHAD</h2>
         <p className="intro-desc">남자들에게 미용실은 '가기 귀찮은 곳'인 경우가 많죠. 고객님 한 분 한 분께 편안한 환경과 유쾌한 경험을 제공하여, '다음 만남이 기다려지는 곳'이 될 수 있도록 하겠습니다.</p>
 
         <div className="intro-map" aria-label="매장 위치 지도">
           <img src="img/map.png" alt="박하디 매장 위치" className="intro-map-img" />
-          <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 달서구 와룡로 132 박하디" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
+          <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 수성구 범어로20길 68" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
             <img src="img/naver_map.png" alt="" className="naver-map-icon" /> 네이버 지도
           </a>
         </div>
@@ -198,7 +198,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         <ul className="intro-list">
           <li>
             <span className="intro-list-icon"><I.Map size={18} /></span>
-            <span className="intro-list-text">대구 달서구 와룡로 132 2층 PARKHAD 박하디</span>
+            <span className="intro-list-text">대구 수성구 범어로20길 68 1층 왼쪽상가</span>
           </li>
           <li>
             <span className="intro-list-icon"><I.Calendar size={18} /></span>
