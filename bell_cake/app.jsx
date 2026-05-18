@@ -387,7 +387,7 @@ function DesignerSheet({ designer, onClose, onBook }) {
           </div>
           <div className="sheet-meta">
             <div className="designer-name-lg">{designer.name}</div>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--ph-mute)", marginTop: 4, fontSize: 13 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--sm-content-tertiary)", marginTop: 4, fontSize: 13 }}>
               <span>{designer.role}</span>
               <span className="dotsep">·</span>
               <span>경력 {designer.years}년</span>
@@ -653,7 +653,7 @@ function BookingScreen({ initial }) {
         <button type="button" className={"field selectable " + (form.service ? "done" : "")} onClick={() => setServiceSheetOpen(true)}>
           <div className="field-label">
             <span className="lbl"><span className="stepno">1</span> 시술 선택</span>
-            {form.service ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--ph-brand)" }} /> : <I.Arrow size={14} style={{ color: "var(--ph-mute)" }} />}
+            {form.service ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} /> : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
           </div>
           <div className={"field-val " + (!form.service ? "placeholder" : "")}>
             {form.service || "시술 카테고리와 스타일을 선택하세요"}
@@ -664,7 +664,7 @@ function BookingScreen({ initial }) {
         <button type="button" className={"field selectable " + (form.date && form.time ? "done" : "")} onClick={() => setPickerOpen(true)}>
           <div className="field-label">
             <span className="lbl"><span className="stepno">2</span> 날짜·시간</span>
-            {(form.date && form.time) ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--ph-brand)" }} /> : <I.Arrow size={14} style={{ color: "var(--ph-mute)" }} />}
+            {(form.date && form.time) ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} /> : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
           </div>
           <div className={"field-val " + (!(form.date && form.time) ? "placeholder" : "")}>
             {form.date && form.time
@@ -677,7 +677,7 @@ function BookingScreen({ initial }) {
         <button type="button" className={"field selectable " + (form.designerId ? "done" : "")} onClick={() => setDesignerSheetOpen(true)}>
           <div className="field-label">
             <span className="lbl"><span className="stepno">3</span> 담당 디자이너 <span className="opt-mark">선택</span></span>
-            <I.Arrow size={14} style={{ color: "var(--ph-mute)" }} />
+            <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />
           </div>
           <div className={"field-val " + (!designerObj ? "placeholder" : "")}>
             {designerObj ? `${designerObj.name} · ${designerObj.role}` : "지정하지 않으면 가능한 디자이너로 배정돼요"}
@@ -688,7 +688,7 @@ function BookingScreen({ initial }) {
         <div className={"field " + (form.name.trim() ? "done" : "")}>
           <div className="field-label">
             <span className="lbl"><span className="stepno">4</span> 이름</span>
-            {form.name.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--ph-brand)" }} />}
+            {form.name.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
           <input type="text" value={form.name} placeholder="EX) 홍길동" onChange={(e) => setForm({ ...form, name: e.target.value })} />
         </div>
@@ -697,7 +697,7 @@ function BookingScreen({ initial }) {
         <div className={"field " + (form.kakao.trim() ? "done" : "")}>
           <div className="field-label">
             <span className="lbl"><span className="stepno">5</span> 카카오톡 ID</span>
-            {form.kakao.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--ph-brand)" }} />}
+            {form.kakao.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
           <input type="text" value={form.kakao} placeholder="카카오톡 ID를 입력해주세요" onChange={(e) => setForm({ ...form, kakao: e.target.value })} />
         </div>
