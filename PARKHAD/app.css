@@ -1055,10 +1055,10 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   padding: 28px 20px 16px;
 }
 .styles-sub {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   color: var(--ph-mute);
-  letter-spacing: 0.18em;
+  letter-spacing: -0.01em;
   margin-bottom: 6px;
 }
 .styles-head h2 {
