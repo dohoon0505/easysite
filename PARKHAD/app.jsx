@@ -100,7 +100,7 @@ function AppBar({ title, onBack, scrolled, dark, onToggleTheme }) {
       {onBack && (
         <button className="iconbtn" onClick={onBack} aria-label="뒤로 가기"><I.Back /></button>
       )}
-      <div className="pagetitle">{title || "PARKHAD"}</div>
+      <div className="pagetitle">{title || "박하디 헤어샵"}</div>
       <div className="grow" />
       <button
         className={"theme-toggle " + (dark ? "on" : "")}
@@ -229,7 +229,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
       <FeaturedSlider title="여름철 테토 스타일" meta="시즌 추천"   list={FEATURED_STYLES} openStyle={openStyle} />
       <FeaturedSlider title="면접·미팅을 준비한다면"      meta="단정하고 깔끔하게"   list={BUSINESS_STYLES} openStyle={openStyle} />
       <FeaturedSlider title="요즘 20대 스타일링"       meta="MZ 스타일" list={MZ_STYLES}       openStyle={openStyle} />
-      <FeaturedSlider title="젊어보이는 마법" meta="30대 이상 추천"   list={STARTER_STYLES}  openStyle={openStyle} />
+      <FeaturedSlider title="젊어보이는 마법을" meta="30대 이상 추천"   list={STARTER_STYLES}  openStyle={openStyle} />
 
       <section className="section home-faq-section">
         <div className="section-head">
@@ -345,9 +345,9 @@ function StyleSheet({ item, onClose, onBook }) {
           <div className="sheet-meta">
             <div className="name">{item.name}</div>
             <div className="row" style={{ display: "flex", gap: 14, marginTop: 10, alignItems: "center" }}>
-              <span className="style-time"><I.Clock size={14} /> {item.time}분</span>
-              <span className="dotsep">·</span>
               <span className="price">{fmt(item.price)}<span className="won">원</span></span>
+              <span className="dotsep">·</span>
+              <span className="style-time"><I.Clock size={14} /> {item.time}분</span>
             </div>
             <p className="sheet-desc">{item.desc}</p>
           </div>
