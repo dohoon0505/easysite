@@ -100,7 +100,7 @@ function AppBar({ title, onBack, scrolled, dark, onToggleTheme }) {
       {onBack && (
         <button className="iconbtn" onClick={onBack} aria-label="뒤로 가기"><I.Back /></button>
       )}
-      <div className="pagetitle">{title || "벨케이크"}</div>
+      <div className="pagetitle">{title || "벨케이크 > 레터링 케이크 전문점"}</div>
       <div className="grow" />
       <button
         className={"theme-toggle " + (dark ? "on" : "")}
