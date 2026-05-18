@@ -675,32 +675,47 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   display: block;
   margin: 0;
   padding: 0;
-  border-top: 1px solid var(--ph-line);
 }
 .home-faq-item {
-  border-bottom: 1px solid var(--ph-line);
+  border-radius: var(--ph-radius-md);
+  transition: background 180ms;
+}
+.home-faq-item.open {
+  background: rgba(59, 130, 246, 0.08);
 }
 .home-faq-q {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
-  padding: 18px 4px;
+  padding: 16px 16px;
   text-align: left;
   background: transparent;
+  border-radius: var(--ph-radius-md);
+}
+.home-faq-q-badge {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  display: grid; place-items: center;
+  border-radius: 6px;
+  background: rgba(59, 130, 246, 0.12);
+  color: #3B82F6;
+  font-size: 13px; font-weight: 700;
+}
+.home-faq-item.open .home-faq-q-badge {
+  background: #3B82F6;
+  color: #fff;
 }
 .home-faq-q-text {
   font-size: 15px;
   font-weight: 500;
-  color: var(--ph-mute);
+  color: var(--ph-ink);
   letter-spacing: -0.015em;
   line-height: 1.4;
   flex: 1; min-width: 0;
 }
 .home-faq-item.open .home-faq-q-text {
-  color: var(--ph-ink);
-  font-weight: 700;
+  font-weight: 600;
 }
 .home-faq-caret {
   flex-shrink: 0;
@@ -713,9 +728,9 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   color: var(--ph-ink);
 }
 .home-faq-a {
-  padding: 0 4px 18px;
+  padding: 0 16px 16px 52px;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--ph-mute);
   letter-spacing: -0.01em;
   white-space: pre-line;
@@ -1839,56 +1854,64 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   color: var(--ph-on-brand);
   border-color: var(--ph-ink);
 }
-.faq-list { padding: 20px; display: grid; gap: 10px; }
+.faq-list { padding: 20px; display: grid; gap: 4px; }
 .faq-item {
-  background: var(--ph-surface);
-  border: 1px solid var(--ph-line);
+  background: transparent;
   border-radius: var(--ph-radius-md);
   overflow: hidden;
-  transition: border-color 180ms;
+  transition: background 180ms;
 }
-.faq-item.open { border-color: var(--ph-ink); }
+.faq-item.open {
+  background: rgba(59, 130, 246, 0.08);
+}
 .faq-q {
   width: 100%;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center;
   gap: 12px;
-  padding: 16px 16px 16px 18px;
+  padding: 16px 16px;
   text-align: left;
+  border-radius: var(--ph-radius-md);
 }
-.faq-q:hover { background: var(--ph-bg-2); }
-.faq-q-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.faq-cat {
-  font-size: 13px; font-weight: 600;
-
-  color: var(--ph-mute);
-  text-transform: uppercase;
+.faq-q:hover { background: rgba(59, 130, 246, 0.04); }
+.faq-q-badge {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  display: grid; place-items: center;
+  border-radius: 6px;
+  background: rgba(59, 130, 246, 0.12);
+  color: #3B82F6;
+  font-size: 13px; font-weight: 700;
 }
+.faq-item.open .faq-q-badge {
+  background: #3B82F6;
+  color: #fff;
+}
+.faq-q-text { display: flex; flex-direction: column; gap: 0; min-width: 0; }
 .faq-q-title {
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: -0.02em;
   color: var(--ph-ink);
   line-height: 1.4;
 }
+.faq-item.open .faq-q-title { font-weight: 600; }
 .faq-icon {
-  width: 32px; height: 32px; flex-shrink: 0;
+  flex-shrink: 0;
   display: grid; place-items: center;
-  border-radius: 999px;
-  background: var(--ph-bg-2);
+  color: var(--ph-mute);
+  transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.faq-item.open .faq-icon {
+  transform: rotate(180deg);
   color: var(--ph-ink);
 }
-.faq-item.open .faq-icon { background: var(--ph-ink); color: var(--ph-on-brand); }
 .faq-a {
-  padding: 0 18px 18px;
+  padding: 0 16px 16px 52px;
   font-size: 14px;
   line-height: 1.65;
   color: var(--ph-mute);
   letter-spacing: -0.005em;
   white-space: pre-line;
-  border-top: 1px solid var(--ph-line);
-  padding-top: 14px;
-  margin-top: 4px;
-  background: var(--ph-sunken);
 }
 .faq-empty {
   padding: 60px 24px; text-align: center; color: var(--ph-mute);

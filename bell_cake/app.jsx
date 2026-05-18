@@ -79,6 +79,7 @@ function HomeFaqItem({ item }) {
   return (
     <li className={"home-faq-item " + (open ? "open" : "")}>
       <button className="home-faq-q" onClick={() => setOpen(!open)} aria-expanded={open}>
+        <span className="home-faq-q-badge">Q</span>
         <span className="home-faq-q-text">{item.q}</span>
         <span className="home-faq-caret" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -996,12 +997,14 @@ function FaqScreen() {
           return (
             <div key={id} className={"faq-item " + (isOpen ? "open" : "")}>
               <button className="faq-q" onClick={() => setOpenId(isOpen ? null : id)} aria-expanded={isOpen}>
+                <span className="faq-q-badge">Q</span>
                 <span className="faq-q-text">
-                  <span className="faq-cat">{catLabel(it.cat)}</span>
                   <span className="faq-q-title">{it.q}</span>
                 </span>
                 <span className="faq-icon" aria-hidden="true">
-                  {isOpen ? <I.Minus size={18} /> : <I.Plus size={18} />}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
                 </span>
               </button>
               {isOpen && <div className="faq-a">{it.a}</div>}
