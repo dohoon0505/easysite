@@ -1858,7 +1858,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .faq-q:hover { background: var(--ph-bg-2); }
 .faq-q-text { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .faq-cat {
-  font-size: 10px; font-weight: 800;
+  font-size: 13px; font-weight: 600;
 
   color: var(--ph-mute);
   text-transform: uppercase;
