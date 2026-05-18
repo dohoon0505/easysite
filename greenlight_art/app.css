@@ -86,7 +86,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 .app-frame {
   width: 100%;
-  max-width: 720px;
+  max-width: 480px;
   min-height: 100vh;
   background: var(--ph-surface);
   position: relative;
@@ -1272,7 +1272,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   position: fixed;
   left: 50%; transform: translateX(-50%);
   bottom: 0;
-  width: 100%; max-width: 720px;
+  width: 100%; max-width: 480px;
   background: var(--ph-surface);
   border-top: 1px solid var(--ph-line);
   display: grid;
@@ -1699,7 +1699,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   position: fixed;
   left: 50%; bottom: 0;
   transform: translateX(-50%);
-  width: 100%; max-width: 720px;
+  width: 100%; max-width: 480px;
   background: var(--ph-surface);
   border-radius: 22px 22px 0 0;
   z-index: 51;
