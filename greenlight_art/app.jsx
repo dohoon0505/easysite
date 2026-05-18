@@ -219,7 +219,7 @@ function HomeScreen({ go, openWork }) {
         <p className="info-banner-text">1회 무료 체험 수업이 가능합니다!!</p>
       </div>
 
-      <FeaturedSlider title="우리 학원 베스트 작품"   meta="이달의 픽"      list={GALLERY_BEST}  openWork={openWork} />
+      <FeaturedSlider title="아이들 작품 둘러보기"   meta="이달의 픽"      list={GALLERY_BEST}  openWork={openWork} />
 
       <section className="section dev-section">
         <div className="section-head dev-head">
