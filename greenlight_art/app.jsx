@@ -186,7 +186,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
       <section className="intro">
         <div className="intro-meta">대구광역시 | 달서구</div>
         <h2 className="intro-name">풀빛그림아이미술학원</h2>
-        <p className="intro-desc">남자들에게 미용실은 '가기 귀찮은 곳'인 경우가 많죠. 고객님 한 분 한 분께 편안한 환경과 유쾌한 경험을 제공하여, '다음 만남이 기다려지는 곳'이 될 수 있도록 하겠습니다.</p>
+        <p className="intro-desc">아이들에게 미술학원은 '지루하게 그림만 그리는 곳'이 아니어야 합니다. 가장 발달이 활발한 시기에 맞춰 인지발달과 미적 감각을 일깨우고, 아이에게 '매일 가고 싶은 놀이터'가 될 수 있도록 하겠습니다.</p>
 
         <div className="intro-map" aria-label="매장 위치 지도">
           <img src="img/map.png" alt="박하디 매장 위치" className="intro-map-img" />
