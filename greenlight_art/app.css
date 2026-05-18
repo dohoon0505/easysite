@@ -1812,9 +1812,11 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   margin: 10px auto 6px;
 }
 .sheet-head {
-  padding: 6px 20px 4px;
-  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px 12px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px;
 }
+.sheet-head-text { flex: 1; min-width: 0; }
 .sheet-head h4 {
   margin: 0;
   font-size: 11px;
@@ -1822,6 +1824,17 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   letter-spacing: 0.14em;
   color: var(--ph-mute);
   text-transform: uppercase;
+}
+.sheet-head-name {
+  margin: 4px 0 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--ph-ink);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .sheet-close {
   width: 36px; height: 36px;

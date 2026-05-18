@@ -405,7 +405,10 @@ function StyleSheet({ item, onClose, onBook }) {
       <div className="sheet" role="dialog" aria-modal="true" aria-label={item.name}>
         <div className="sheet-handle" />
         <div className="sheet-head">
-          <h4>{item.category || "작품"}</h4>
+          <div className="sheet-head-text">
+            <h4>{item.category || "작품"}</h4>
+            <div className="sheet-head-name">{item.name}</div>
+          </div>
           <button className="sheet-close" onClick={onClose} aria-label="닫기"><I.Close size={18} /></button>
         </div>
         <div className="sheet-body">
@@ -418,7 +421,6 @@ function StyleSheet({ item, onClose, onBook }) {
             {item.tag && <span className="style-tag">{item.tag}</span>}
           </div>
           <div className="sheet-meta">
-            <div className="name">{item.name}</div>
             {!isWork && (
               <div className="row" style={{ display: "flex", gap: 14, marginTop: 10, alignItems: "center" }}>
                 <span className="style-time"><I.Clock size={14} /> {item.weekly}</span>
