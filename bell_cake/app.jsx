@@ -1,9 +1,7 @@
 /* eslint-disable */
 const { useState, useEffect, useRef, useMemo } = React;
 
-const PHONE = "010-0000-0000";
-const PHONE_HREF = "tel:01000000000";
-const SMS_HREF = "sms:01000000000";
+const KAKAO_HREF = "https://pf.kakao.com/_txnxncb";
 
 // ─── Utilities ──────────────────────────────────────────────
 const fmt = (n) => n.toLocaleString("ko-KR");
@@ -114,7 +112,7 @@ function AppBar({ title, onBack, scrolled, dark, onToggleTheme }) {
           <span className="theme-toggle-knob" />
         </span>
       </button>
-      <a className="iconbtn" href={PHONE_HREF} aria-label="전화 걸기"><I.Phone /></a>
+      <a className="iconbtn" href={KAKAO_HREF} target="_blank" rel="noreferrer" aria-label="카톡 문의"><I.Chat /></a>
       <button className="iconbtn" onClick={shareSite} aria-label="공유하기"><I.Share /></button>
     </div>
   );
@@ -223,7 +221,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
             <path d="M12 8h.01M11 12h1v5h1" />
           </svg>
         </span>
-        <p className="info-banner-text">전화 또는 네이버 예약으로 간편예약이 가능해요!</p>
+        <p className="info-banner-text">카카오톡 또는 네이버 예약으로 간편예약이 가능해요!</p>
       </div>
 
       <FeaturedSlider title="여름철 테토 스타일" meta="시즌 추천"   list={FEATURED_STYLES} openStyle={openStyle} />
@@ -249,8 +247,8 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         <a href="https://www.instagram.com/parkhaddd/" target="_blank" rel="noreferrer" className="btn-secondary">
           <I.Insta size={18} /> 인스타그램 둘러보기
         </a>
-        <a href={PHONE_HREF} className="btn">
-          <I.Phone size={18} /> 전화로 예약하기
+        <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn">
+          <I.Chat size={18} /> 카톡 문의
         </a>
       </div>
     </div>
@@ -308,8 +306,8 @@ function StylesScreen({ activeCat, setActiveCat, onPick }) {
       </div>
 
       <div className="footer">
-        <a className="num" href={PHONE_HREF}>{PHONE}</a>
-        <p>맞춤 스타일링은 디자이너 상담을 권해드려요</p>
+        <a className="num" href={KAKAO_HREF} target="_blank" rel="noreferrer">카카오톡 문의</a>
+        <p>맞춤 스타일링은 카카오톡 상담을 권해드려요</p>
       </div>
     </div>
   );
@@ -464,9 +462,9 @@ function StylingScreen() {
       form.challenges.length ? "모발 특징: " + form.challenges.join(", ") : "",
       form.note ? "요청사항: " + form.note : "",
     ].filter(Boolean).join("\n");
-    const url = SMS_HREF + "?&body=" + encodeURIComponent(body);
-    setToast("문자 앱을 열고 있어요");
-    setTimeout(() => { window.location.href = url; setTimeout(() => setToast(null), 1200); }, 400);
+    const url = KAKAO_HREF;
+    setToast("카카오톡을 열고 있어요");
+    setTimeout(() => { window.open(url, "_blank"); setTimeout(() => setToast(null), 1200); }, 400);
   };
 
   return (
@@ -474,7 +472,7 @@ function StylingScreen() {
       <div className="order-hero">
         <span className="step-pill"><I.Sparkle size={12} strokeWidth={2.2} /> 스타일 추천</span>
         <h2>당신에게 어울리는<br />스타일을 찾아드려요</h2>
-        <p>몇 가지 항목만 알려주시면 디자이너가 맞춤 스타일을 추천하고 문자로 답변드려요.</p>
+        <p>몇 가지 항목만 알려주시면 디자이너가 맞춤 스타일을 추천하고 카톡으로 답변드려요.</p>
       </div>
 
       <div className="styling-form">
@@ -567,9 +565,9 @@ function StylingScreen() {
         <h5>NOTICE</h5>
         <h6>스타일링 추천 안내</h6>
         <ul>
-          <li>입력하신 내용은 문자로 디자이너에게 전달돼요.</li>
+          <li>입력하신 내용은 카카오톡으로 디자이너에게 전달돼요.</li>
           <li>매장 운영시간 내 답변드리며, 영업 시간이 지난 경우 다음 날 답변드려요.</li>
-          <li>추천 후 전화·카카오톡으로 예약을 잡아드려요.</li>
+          <li>추천 후 카카오톡으로 예약을 잡아드려요.</li>
         </ul>
       </div>
 
@@ -593,7 +591,7 @@ function BookingScreen({ initial }) {
     date: "",   // YYYY-MM-DD
     time: "",   // HH:mm
     name: "",
-    phone: "",
+    kakao: "",
     note: "",
   });
   useEffect(() => {
@@ -606,7 +604,7 @@ function BookingScreen({ initial }) {
   const [serviceSheetOpen, setServiceSheetOpen] = useState(false);
   const [designerSheetOpen, setDesignerSheetOpen] = useState(false);
 
-  const required = ["service", "date", "time", "name", "phone"];
+  const required = ["service", "date", "time", "name", "kakao"];
   const done = required.filter((k) => form[k].trim().length > 0).length;
   const total = required.length;
   const designerObj = DESIGNERS.find((d) => d.id === form.designerId);
@@ -625,12 +623,12 @@ function BookingScreen({ initial }) {
       "시간: " + form.time,
       "디자이너: " + (designerObj ? `${designerObj.name} (${designerObj.role})` : "지정 없음"),
       "이름: " + form.name,
-      "연락처: " + form.phone,
+      "카카오톡 ID: " + form.kakao,
       form.note ? "요청사항: " + form.note : "",
     ].filter(Boolean).join("\n");
-    const url = SMS_HREF + "?&body=" + encodeURIComponent(body);
-    setToast("문자 앱을 열고 있어요");
-    setTimeout(() => { window.location.href = url; setTimeout(() => setToast(null), 1200); }, 400);
+    const url = KAKAO_HREF;
+    setToast("카카오톡을 열고 있어요");
+    setTimeout(() => { window.open(url, "_blank"); setTimeout(() => setToast(null), 1200); }, 400);
   };
 
   return (
@@ -638,7 +636,7 @@ function BookingScreen({ initial }) {
       <div className="order-hero">
         <span className="step-pill"><I.Calendar size={12} strokeWidth={2.2} /> 예약하기</span>
         <h2>편한 날짜와 시간을<br />선택해주세요</h2>
-        <p>예약 요청이 접수되면 5분 이내에 확정 문자를 다시 보내드려요.</p>
+        <p>예약 요청이 접수되면 카카오톡으로 확정 안내를 드려요.</p>
       </div>
 
       <div className="progress" aria-label={`${done}/${total} 입력 완료`}>
@@ -694,13 +692,13 @@ function BookingScreen({ initial }) {
           <input type="text" value={form.name} placeholder="EX) 홍길동" onChange={(e) => setForm({ ...form, name: e.target.value })} />
         </div>
 
-        {/* 5. 연락처 */}
-        <div className={"field " + (form.phone.trim() ? "done" : "")}>
+        {/* 5. 카카오톡 ID */}
+        <div className={"field " + (form.kakao.trim() ? "done" : "")}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">5</span> 연락처</span>
-            {form.phone.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "#22C55E" }} />}
+            <span className="lbl"><span className="stepno">5</span> 카카오톡 ID</span>
+            {form.kakao.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "#22C55E" }} />}
           </div>
-          <input type="tel" inputMode="numeric" value={form.phone} placeholder="010-0000-0000" onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+          <input type="text" value={form.kakao} placeholder="카카오톡 ID를 입력해주세요" onChange={(e) => setForm({ ...form, kakao: e.target.value })} />
         </div>
 
         {/* 6. 요청사항 */}
@@ -728,7 +726,7 @@ function BookingScreen({ initial }) {
           <I.Chat size={18} strokeWidth={2} /> 예약 요청 보내기
         </button>
         <div className="dock-sub">
-          또는 <a href={PHONE_HREF}>전화로 바로 예약하기</a>
+          또는 <a href={KAKAO_HREF} target="_blank" rel="noreferrer">카톡으로 바로 문의하기</a>
         </div>
       </div>
 
@@ -966,7 +964,7 @@ function FaqScreen() {
       <div className="faq-hero">
         <span className="step-pill"><I.Help size={12} strokeWidth={2.2} /> 자주 묻는 질문</span>
         <h2>궁금한 점을<br />빠르게 찾아드려요</h2>
-        <p>주문·디자인·수령·결제 관련 답변을 모았어요. 더 궁금한 점은 전화 또는 문자로 문의주세요.</p>
+        <p>주문·디자인·수령·결제 관련 답변을 모았어요. 더 궁금한 점은 카카오톡으로 문의주세요.</p>
         <div className="faq-search">
           <I.Search size={18} strokeWidth={2} />
           <input type="text" placeholder="질문 검색하기" value={query} onChange={(e) => setQuery(e.target.value)} />
@@ -987,9 +985,9 @@ function FaqScreen() {
           <div className="faq-empty">
             <I.Search size={28} strokeWidth={1.5} />
             <h4>검색 결과가 없어요</h4>
-            <p>다른 키워드로 검색하거나 전화로 문의해주세요.</p>
-            <a href={PHONE_HREF} className="btn-secondary" style={{ marginTop: 12, width: "auto", display: "inline-flex", padding: "0 18px" }}>
-              <I.Phone size={16} /> 전화로 문의하기
+            <p>다른 키워드로 검색하거나 카톡으로 문의해주세요.</p>
+            <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn-secondary" style={{ marginTop: 12, width: "auto", display: "inline-flex", padding: "0 18px" }}>
+              <I.Chat size={16} /> 카톡 문의
             </a>
           </div>
         ) : filtered.map((it, i) => {
@@ -1013,10 +1011,9 @@ function FaqScreen() {
       </div>
       <div className="faq-foot">
         <h4>여전히 궁금한 점이 있으신가요?</h4>
-        <p>전화·문자로 문의주시면 빠르게 답변드려요.</p>
+        <p>카카오톡으로 문의주시면 빠르게 답변드려요.</p>
         <div className="footer-row">
-          <a href={SMS_HREF} className="btn-secondary"><I.Chat size={18} /> 문자 문의</a>
-          <a href={PHONE_HREF} className="btn"><I.Phone size={18} /> 전화 걸기</a>
+          <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn"><I.Chat size={18} /> 카톡 문의</a>
         </div>
       </div>
     </div>
