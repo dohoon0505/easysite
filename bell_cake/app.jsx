@@ -186,7 +186,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
       <section className="intro">
         <div className="intro-meta">대구광역시 | 수성구</div>
         <h2 className="intro-name">벨케이크</h2>
-        <p className="intro-desc">예쁘기만 한 케이크는 만들지 않습니다. 세상에 단 하나뿐인 정성스러운 디자인은 물론, 좋은 재료로 꽉 채운 맛까지. 고객님의 가장 완벽한 하루를 완성해 드리겠습니다.</p>
+        <p className="intro-desc">No 밀가루, No 식물성크림. 100% 국내산 쌀가루로 만든 쌀케이크, 동물성 생크림케이크 전문점 벨케이크입니다:){"\n\n"}1인운영매장이라, 전화를 못받을 수 있으니 부재시 카카오톡채널로 연락주세요^^</p>
 
         <div className="intro-map" aria-label="매장 위치 지도">
           <img src="img/map.png" alt="벨케이크 매장 위치" className="intro-map-img" />
