@@ -109,13 +109,25 @@
   --p-ink-300: #C2B0A0;
   --p-ink-500: #9A8576;
   --p-ink-700: #5C4538;
+  --p-ink-800: #4A3529;
   --p-ink-900: #3B2A21;
+  --p-ink-950: #2F2019;
 
   /* Status */
   --p-success: #38A169;
   --p-warning: #E0A500;
   --p-error:   #E53E3E;
   --p-info:    #3182CE;
+
+  /* External Brand · Kakao */
+  --p-kakao:       #FEE500;
+  --p-kakao-hover: #F5DD00;
+  --p-kakao-text:  #191919;
+
+  /* External Brand · Instagram */
+  --p-insta-from:  #F58529;
+  --p-insta-via:   #DD2A7B;
+  --p-insta-to:    #8134AF;
 
   /* ─────────── SEMANTIC TOKENS · LIGHT (default) ─────────── */
   --sm-background-default:  var(--p-cream-100);
@@ -251,7 +263,7 @@
    Same names, different primitive values. Never invent dark-only tokens. */
 [data-theme="dark"] {
   --sm-background-default:  var(--p-ink-900);
-  --sm-background-subtle:   #2F2019;
+  --sm-background-subtle:   var(--p-ink-950);
   --sm-background-muted:    var(--p-ink-700);
   --sm-background-elevated: var(--p-ink-700);
   --sm-background-inverse:  var(--p-cream-100);
@@ -263,15 +275,15 @@
   --sm-content-inverse:   var(--p-ink-900);
   --sm-content-brand:     var(--p-orange-300);
 
-  --sm-border-subtle:  #4A3529;
+  --sm-border-subtle:  var(--p-ink-800);
   --sm-border-default: var(--p-ink-700);
   --sm-border-strong:  var(--p-ink-100);
   --sm-border-brand:   var(--p-orange-400);
   --sm-border-focus:   var(--p-orange-300);
 
   --sm-surface-default: var(--p-ink-700);
-  --sm-surface-raised:  #4A3529;
-  --sm-surface-sunken:  #2F2019;
+  --sm-surface-raised:  var(--p-ink-800);
+  --sm-surface-sunken:  var(--p-ink-950);
 
   --sm-interactive-brand-default: var(--p-orange-400);
   --sm-interactive-brand-hover:   var(--p-orange-300);
