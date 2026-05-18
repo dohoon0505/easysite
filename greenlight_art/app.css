@@ -1123,20 +1123,23 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   margin-left: 2px;
 }
 .feat-duration {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  margin-top: 6px;
-  font-size: 12px;
-  font-weight: 600;
+  align-self: flex-start;
+  margin-top: 8px;
+  padding: 3px 8px;
+  border-radius: var(--ph-radius-full);
+  background: var(--ph-brand-soft);
   color: var(--ph-brand);
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: -0.01em;
 }
 .feat-review {
-  margin-top: 5px;
+  margin-top: 6px;
   font-size: 12px;
   font-weight: 400;
-  color: var(--ph-mute-2);
+  color: var(--ph-ink-3);
   line-height: 1.4;
   letter-spacing: -0.01em;
   white-space: nowrap;
