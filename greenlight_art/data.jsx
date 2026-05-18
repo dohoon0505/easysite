@@ -1,70 +1,39 @@
 /* eslint-disable */
-// PARKHAD — 헤어 스타일 카탈로그
-// 4개 카테고리 × 카테고리별 5-6개 스타일.
+// 풀빛그림아이 미술학원 — 교육과정 카탈로그
 
-const HAIR_CATEGORIES = [
-  {
-    id: "cut",
-    name: "커트",
-    blurb: "정돈된 인상의 시작",
-    sub: "CUT",
-    icon: "scissors",
-  },
-  {
-    id: "perm",
-    name: "펌",
-    blurb: "볼륨감으로 인상을 잡다",
-    sub: "PERM",
-    icon: "perm",
-  },
-  {
-    id: "color",
-    name: "염색",
-    blurb: "분위기를 바꾸는 한 끗",
-    sub: "COLOR",
-    icon: "color",
-  },
-  {
-    id: "care",
-    name: "케어",
-    blurb: "두피부터, 모발까지",
-    sub: "CARE",
-    icon: "care",
-  },
+const COURSE_CATEGORIES = [
+  { id: "kinder", name: "유아 미술",       blurb: "아이의 손끝에 색을 더하는 시간",   sub: "KINDER", icon: "kinder" },
+  { id: "elem",   name: "초등 미술",       blurb: "표현이 풍성해지는 황금기",         sub: "ELEM",   icon: "elem" },
+  { id: "exam",   name: "중·고 입시",      blurb: "재능을 진로로 잇는 본격 수업",      sub: "EXAM",   icon: "exam" },
+  { id: "hobby",  name: "취미·성인",       blurb: "어른의 그림 한 장",                sub: "HOBBY",  icon: "hobby" },
+  { id: "ipad",   name: "아이패드 드로잉", blurb: "디지털로 만나는 새로운 표현",       sub: "IPAD",   icon: "ipad" },
 ];
 
-const HAIR_STYLES = {
-  cut: [
-    { name: "댄디 컷",        price: 35000, time: 40, desc: "단정하고 정직한 인상의 베이직 컷. 어떤 자리에도 무난해요.", tag: "BASIC",   img: "img/style_4.jpg" },
-    { name: "투블럭 컷",      price: 38000, time: 45, desc: "사이드를 짧게, 윗머리는 풍성하게. 가장 인기 있는 남성 스타일.", tag: "BEST",    img: "img/style_2.jpg" },
-    { name: "크롭 컷",        price: 40000, time: 50, desc: "와일드하면서도 정돈된 느낌. 두상을 살리고 싶다면.",     tag: "TREND",   img: "img/style_5.jpg" },
-    { name: "시저스 컷",      price: 45000, time: 60, desc: "가위만으로 완성하는 자연스러운 결. 스타일링이 편해요.",   tag: "PREMIUM", img: "img/style_6.png" },
-    { name: "리프 컷",        price: 42000, time: 55, desc: "잎사귀처럼 흐르는 결. 부드럽고 트렌디한 분위기.",       tag: "TREND",   img: "img/style_3.jpg" },
-    { name: "클래식 사이드",  price: 38000, time: 45, desc: "옆가르마 + 차분한 라인. 비즈니스 캐주얼에 잘 어울려요.", tag: "BASIC",   img: "img/style_8.png" },
+const COURSES = {
+  kinder: [
+    { name: "5~7세 오감 표현반",   age: "5~7세",  per: 50,  weekly: "주 1회",  desc: "찰흙·물감·콜라주로 오감을 깨우는 첫 미술. 자유롭게 만지고 칠하며 표현력을 키워요.",   tag: "BASIC",   img: "img/work_4.jpg" },
+    { name: "6~8세 컬러 놀이반",   age: "6~8세",  per: 60,  weekly: "주 1회",  desc: "원색과 캐릭터로 색감 감각을 키우는 그림 놀이. 친구와 함께 협동 작업도 진행해요.",   tag: "BEST",    img: "img/work_8.jpg" },
+    { name: "7세 누리 통합반",     age: "7세",    per: 70,  weekly: "주 2회",  desc: "누리과정 연계 표현·관찰 수업. 초등 입학 전 미술 감각을 다져요.",                     tag: "PREMIUM", img: "img/work_3.jpg" },
   ],
-  perm: [
-    { name: "다운 펌",         price: 90000,  time: 100, desc: "뜨는 머리를 잡아주는 가장 기본적인 펌. 매일 아침이 편해져요.", tag: "BASIC",   img: "img/style_7.png" },
-    { name: "가르마 펌",       price: 110000, time: 110, desc: "방향을 잡아주는 깔끔한 가르마. 첫인상에서 단정함을 만듭니다.", tag: "BEST",    img: "img/style_8.png" },
-    { name: "쉐도우 펌",       price: 130000, time: 130, desc: "은은한 C컬로 자연스러운 입체감. 과하지 않게 멋있게.",       tag: "TREND",   img: "img/style_9.png" },
-    { name: "댄디 펌",         price: 120000, time: 120, desc: "윗볼륨 + 끝을 살린 C컬. 정돈된 댄디 스타일의 완성.",         tag: "BEST",    img: "img/style_1.jpg" },
-    { name: "글램 펌",         price: 150000, time: 140, desc: "굵은 컬로 시원한 볼륨감. 인상을 강렬하게.",                tag: "PREMIUM", img: "img/style_10.png" },
-    { name: "스왈로우 펌",     price: 140000, time: 130, desc: "옆머리까지 자연스럽게 흐르는 컬. 빈티지한 무드.",          tag: "TREND",   img: "img/style_3.jpg" },
+  elem: [
+    { name: "초1~2 표현 기본반",   age: "초1~2",  per: 70,  weekly: "주 1회",  desc: "관찰화·상상화로 표현의 폭을 넓혀요. 색감과 구도의 기초를 잡아갑니다.",            tag: "BASIC",   img: "img/work_4.jpg" },
+    { name: "초3~4 종합 미술반",   age: "초3~4",  per: 80,  weekly: "주 1~2회", desc: "수채화·아크릴·드로잉을 골고루. 재료별 표현법을 익히고 작품집을 만들어요.",       tag: "BEST",    img: "img/work_1.jpg" },
+    { name: "초5~6 마스터반",      age: "초5~6",  per: 90,  weekly: "주 2회",  desc: "스케일이 커진 본격 작품 제작. 공모전·전시 출품 작품도 함께 준비합니다.",         tag: "PREMIUM", img: "img/work_5.jpg" },
   ],
-  color: [
-    { name: "블랙 컬러",        price: 70000,  time: 80,  desc: "묵직하고 단단한 인상의 정통 블랙. 면접·중요한 자리에.",  tag: "BASIC",   img: "img/style_2.jpg" },
-    { name: "내추럴 브라운",    price: 85000,  time: 90,  desc: "은은한 갈색으로 분위기 전환. 자연스럽게 인상을 부드럽게.", tag: "BEST",    img: "img/style_4.jpg" },
-    { name: "다크 애쉬",        price: 95000,  time: 100, desc: "차분한 회갈색. 시크한 도시 무드.",                       tag: "TREND",   img: "img/style_1.jpg" },
-    { name: "히든 하이라이트",  price: 130000, time: 120, desc: "안쪽에 포인트 색을 넣어 입체감을 더해요.",             tag: "PREMIUM", img: "img/style_9.png" },
-    { name: "그레이 톤다운",    price: 120000, time: 110, desc: "탈색 없이 만드는 무드 있는 그레이. 깊이감을 살려요.",   tag: "TREND",   img: "img/style_6.png" },
-    { name: "투톤 컬러",        price: 150000, time: 130, desc: "윗머리와 사이드의 톤을 분리해 입체감 강조.",            tag: "PREMIUM", img: "img/style_10.png" },
+  exam: [
+    { name: "예중·예고 입시반",    age: "중1~3",  per: 180, weekly: "주 3~5회", desc: "기초 소묘부터 상황표현, 정물 수채까지. 학교별 맞춤 커리큘럼으로 진행합니다.",     tag: "GRAND",   img: "img/work_2.jpg" },
+    { name: "대학 입시 기초반",     age: "고1",   per: 200, weekly: "주 3~5회", desc: "기초 데생·발상의 전환 훈련. 미대 진학을 위한 첫 단추.",                          tag: "PREMIUM", img: "img/work_2.jpg" },
+    { name: "대학 입시 실전반",     age: "고2~3", per: 250, weekly: "주 5~6회", desc: "대학별 기출 분석 + 실기 대응 훈련. 매주 모의 평가로 실력을 점검해요.",            tag: "GRAND",   img: "img/work_2.jpg" },
   ],
-  care: [
-    { name: "두피 클리닉",       price: 50000, time: 50, desc: "두피 진단 + 클렌징 + 마사지. 시술 후 시작하기 좋아요.",    tag: "BASIC",   img: "img/style_8.png" },
-    { name: "모발 트리트먼트",   price: 45000, time: 40, desc: "푸석한 모발에 영양을 채워줍니다.",                       tag: "BASIC",   img: "img/style_4.jpg" },
-    { name: "프리미엄 두피케어", price: 80000, time: 70, desc: "딥 클렌징 + 스케일링 + 영양. 두피 컨디션 리셋.",         tag: "PREMIUM", img: "img/style_7.png" },
-    { name: "탈모 케어",         price: 90000, time: 80, desc: "탈모 진행 단계를 진단하고 케어 루틴을 설계합니다.",      tag: "PREMIUM", img: "img/style_5.jpg" },
-    { name: "흰머리 케어",       price: 60000, time: 60, desc: "흰머리 부분 컬러 + 두피 케어를 한 번에.",                tag: "BEST",    img: "img/style_2.jpg" },
+  hobby: [
+    { name: "성인 취미 드로잉",    age: "성인",   per: 100, weekly: "자유 수강", desc: "퇴근 후·주말, 부담 없이 그리는 시간. 연필·펜·수채 중 원하는 재료로 진행해요.",   tag: "BASIC",   img: "img/work_1.jpg" },
+    { name: "주말 취미반",         age: "성인",   per: 110, weekly: "주 1회",   desc: "토·일 한 주 1회 정기 수강. 작품집을 차곡차곡 쌓아가요.",                         tag: "BEST",    img: "img/work_4.jpg" },
+    { name: "1:1 프라이빗 클래스", age: "전 연령", per: 200, weekly: "주 1회",   desc: "원장님과의 1:1 맞춤 수업. 원하는 작품·주제로 깊이 있게 작업합니다.",            tag: "PREMIUM", img: "img/work_5.jpg" },
+  ],
+  ipad: [
+    { name: "아이패드 드로잉 입문", age: "초3~성인", per: 120, weekly: "주 1회", desc: "프로크리에이트 기초 + 캐릭터 표현. 디지털 굿즈 제작까지 이어집니다.",            tag: "BEST",    img: "img/work_7.jpg" },
+    { name: "굿즈 제작반",          age: "초5~성인", per: 150, weekly: "주 1회", desc: "스티커·폰케이스·에코백 등 나만의 굿즈를 디자인하고 직접 제작해요.",              tag: "PREMIUM", img: "img/work_7.jpg" },
   ],
 };
 
-Object.assign(window, { HAIR_CATEGORIES, HAIR_STYLES });
+Object.assign(window, { COURSE_CATEGORIES, COURSES });
