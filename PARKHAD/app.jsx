@@ -155,7 +155,7 @@ function BottomNav({ route, go }) {
     { id: "home",     label: "홈",       icon: I.Home },
     { id: "styles",   label: "스타일",   icon: I.Grid },
     { id: "styling",  label: "스타일링", icon: I.Sparkle },
-    { id: "faq",     label: "질의응답", icon: I.Help },
+    { id: "faq",     label: "질문/답변", icon: I.Help },
   ];
   return (
     <nav className="bottomnav" aria-label="기본 메뉴">
