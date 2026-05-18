@@ -113,7 +113,7 @@ function AppBar({ title, onBack, scrolled, dark, onToggleTheme }) {
           <span className="theme-toggle-knob" />
         </span>
       </button>
-      <a className="iconbtn iconbtn-kakao" href={KAKAO_HREF} target="_blank" rel="noreferrer" aria-label="카톡 문의"><I.Chat /></a>
+      <a className="iconbtn" href={KAKAO_HREF} target="_blank" rel="noreferrer" aria-label="카톡 문의"><I.Chat /></a>
       <button className="iconbtn" onClick={shareSite} aria-label="공유하기"><I.Share /></button>
     </div>
   );

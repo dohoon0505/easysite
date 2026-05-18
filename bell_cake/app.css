@@ -122,8 +122,6 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   transition: background 180ms;
 }
 .appbar .iconbtn:hover { background: var(--ph-brand-soft); }
-.appbar .iconbtn-kakao { background: #FEE500; color: #191919; border-radius: 8px; }
-.appbar .iconbtn-kakao:hover { background: #F5DD00; }
 .appbar .grow { flex: 1; }
 .appbar .pagetitle {
   font-size: 18px;
