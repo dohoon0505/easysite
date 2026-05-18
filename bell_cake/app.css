@@ -674,16 +674,20 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   margin: 0;
 }
 .home-faq-list {
-  display: block;
+  display: grid;
+  gap: 8px;
   margin: 0;
   padding: 0;
 }
 .home-faq-item {
   border-radius: var(--ph-radius-md);
-  transition: background 180ms;
+  background: var(--ph-surface);
+  border: 1px solid var(--ph-line);
+  transition: background 180ms, border-color 180ms;
 }
 .home-faq-item.open {
-  background: rgba(59, 130, 246, 0.08);
+  background: var(--ph-brand-soft);
+  border-color: var(--ph-brand);
 }
 .home-faq-q {
   width: 100%;
@@ -700,12 +704,12 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   width: 24px; height: 24px;
   display: grid; place-items: center;
   border-radius: 6px;
-  background: rgba(59, 130, 246, 0.12);
-  color: #3B82F6;
+  background: var(--ph-brand-soft);
+  color: var(--ph-brand);
   font-size: 13px; font-weight: 700;
 }
 .home-faq-item.open .home-faq-q-badge {
-  background: #3B82F6;
+  background: var(--ph-brand);
   color: #fff;
 }
 .home-faq-q-text {
@@ -1869,15 +1873,17 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   color: var(--ph-on-brand);
   border-color: var(--ph-ink);
 }
-.faq-list { padding: 20px; display: grid; gap: 4px; }
+.faq-list { padding: 20px; display: grid; gap: 8px; }
 .faq-item {
-  background: transparent;
+  background: var(--ph-surface);
+  border: 1px solid var(--ph-line);
   border-radius: var(--ph-radius-md);
   overflow: hidden;
-  transition: background 180ms;
+  transition: background 180ms, border-color 180ms;
 }
 .faq-item.open {
-  background: rgba(59, 130, 246, 0.08);
+  background: var(--ph-brand-soft);
+  border-color: var(--ph-brand);
 }
 .faq-q {
   width: 100%;
@@ -1887,18 +1893,18 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   text-align: left;
   border-radius: var(--ph-radius-md);
 }
-.faq-q:hover { background: rgba(59, 130, 246, 0.04); }
+.faq-q:hover { background: var(--ph-brand-soft); }
 .faq-q-badge {
   flex-shrink: 0;
   width: 24px; height: 24px;
   display: grid; place-items: center;
   border-radius: 6px;
-  background: rgba(59, 130, 246, 0.12);
-  color: #3B82F6;
+  background: var(--ph-brand-soft);
+  color: var(--ph-brand);
   font-size: 13px; font-weight: 700;
 }
 .faq-item.open .faq-q-badge {
-  background: #3B82F6;
+  background: var(--ph-brand);
   color: #fff;
 }
 .faq-q-text { display: flex; flex-direction: column; gap: 0; min-width: 0; }
