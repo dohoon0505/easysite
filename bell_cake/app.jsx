@@ -123,7 +123,7 @@ function AppBar({ title, onBack, scrolled, dark, onToggleTheme }) {
 async function shareSite() {
   const data = {
     title: "벨케이크",
-    text: "레터링케이크 전문점 벨케이크 — 특별한 날을 더 특별하게.",
+    text: "세상에 단 하나뿐인 레터링케이크, 벨케이크 — 정성스러운 디자인과 좋은 재료로 완벽한 하루를 완성합니다.",
     url: window.location.href,
   };
   try {
@@ -186,7 +186,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
       <section className="intro">
         <div className="intro-meta">대구광역시 | 수성구</div>
         <h2 className="intro-name">벨케이크</h2>
-        <p className="intro-desc">남자들에게 미용실은 '가기 귀찮은 곳'인 경우가 많죠. 고객님 한 분 한 분께 편안한 환경과 유쾌한 경험을 제공하여, '다음 만남이 기다려지는 곳'이 될 수 있도록 하겠습니다.</p>
+        <p className="intro-desc">예쁘기만 한 케이크는 만들지 않습니다. 세상에 단 하나뿐인 정성스러운 디자인은 물론, 좋은 재료로 꽉 채운 맛까지. 고객님의 가장 완벽한 하루를 완성해 드리겠습니다.</p>
 
         <div className="intro-map" aria-label="매장 위치 지도">
           <img src="img/map.png" alt="벨케이크 매장 위치" className="intro-map-img" />
