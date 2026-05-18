@@ -113,7 +113,7 @@ function AppBar({ title, onBack, scrolled, dark, onToggleTheme }) {
           <span className="theme-toggle-knob" />
         </span>
       </button>
-      <a className="iconbtn" href={KAKAO_HREF} target="_blank" rel="noreferrer" aria-label="카톡 문의"><I.Chat /></a>
+      <a className="iconbtn iconbtn-kakao" href={KAKAO_HREF} target="_blank" rel="noreferrer" aria-label="카톡 문의"><I.Chat /></a>
       <button className="iconbtn" onClick={shareSite} aria-label="공유하기"><I.Share /></button>
     </div>
   );
@@ -248,7 +248,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         <a href="https://www.instagram.com/parkhaddd/" target="_blank" rel="noreferrer" className="btn-secondary">
           <I.Insta size={18} /> 인스타그램 둘러보기
         </a>
-        <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn">
+        <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao">
           <I.Chat size={18} /> 카톡 문의
         </a>
       </div>
@@ -987,7 +987,7 @@ function FaqScreen() {
             <I.Search size={28} strokeWidth={1.5} />
             <h4>검색 결과가 없어요</h4>
             <p>다른 키워드로 검색하거나 카톡으로 문의해주세요.</p>
-            <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn-secondary" style={{ marginTop: 12, width: "auto", display: "inline-flex", padding: "0 18px" }}>
+            <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn-secondary btn-secondary-kakao" style={{ marginTop: 12, width: "auto", display: "inline-flex", padding: "0 18px" }}>
               <I.Chat size={16} /> 카톡 문의
             </a>
           </div>
@@ -1016,7 +1016,7 @@ function FaqScreen() {
         <h4>여전히 궁금한 점이 있으신가요?</h4>
         <p>카카오톡으로 문의주시면 빠르게 답변드려요.</p>
         <div className="footer-row">
-          <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn"><I.Chat size={18} /> 카톡 문의</a>
+          <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao"><I.Chat size={18} /> 카톡 문의</a>
         </div>
       </div>
     </div>

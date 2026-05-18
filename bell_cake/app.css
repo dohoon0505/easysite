@@ -122,6 +122,8 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   transition: background 180ms;
 }
 .appbar .iconbtn:hover { background: var(--ph-brand-soft); }
+.appbar .iconbtn-kakao { background: #FEE500; color: #191919; border-radius: 8px; }
+.appbar .iconbtn-kakao:hover { background: #F5DD00; }
 .appbar .grow { flex: 1; }
 .appbar .pagetitle {
   font-size: 18px;
@@ -1028,6 +1030,19 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   width: 100%;
 }
 .btn-secondary:hover { background: var(--ph-brand-soft); }
+
+.btn-kakao {
+  background: #FEE500;
+  color: #191919;
+}
+.btn-kakao:hover { background: #F5DD00; }
+[data-theme="dark"] .btn-kakao { background: #FEE500; color: #191919; }
+.btn-secondary-kakao {
+  background: #FEE500;
+  color: #191919;
+  border-color: #FEE500;
+}
+.btn-secondary-kakao:hover { background: #F5DD00; }
 
 /* ────── Tabbar (styles category) ────── */
 .tabbar {
@@ -1936,8 +1951,8 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   border-color: rgba(255,255,255,0.14);
 }
 .faq-foot .btn-secondary:hover { background: rgba(255,255,255,0.18); }
-.faq-foot .btn { background: #F58634; color: #FFFDF9; }
-.faq-foot .btn:hover { background: #E26A18; }
+.faq-foot .btn { background: #FEE500; color: #191919; }
+.faq-foot .btn:hover { background: #F5DD00; }
 [data-theme="dark"] .faq-foot {
   background: #4A3529;
   border: 1px solid #5C4538;
