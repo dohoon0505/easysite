@@ -56,7 +56,7 @@
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { margin: 0; padding: 0; }
+html, body { margin: 0; padding: 0; overflow-x: hidden; }
 body {
   font-family: var(--font-sans), "Pretendard", system-ui, sans-serif;
   font-size: 14px;
@@ -88,6 +88,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   position: relative;
   padding-bottom: 96px;
   box-shadow: 0 0 0 1px var(--ph-line);
+  overflow-x: clip;
 }
 @media (min-width: 520px) {
   .app { padding: 24px 0; align-items: flex-start; }
@@ -500,6 +501,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .designer-scroll-wrap {
   overflow: hidden;
   margin: 0 -20px 0 0;
+  max-width: 100%;
 }
 .designer-scroll {
   display: flex;
@@ -509,6 +511,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   -webkit-overflow-scrolling: touch;
   padding: 4px 0 4px 0;
   scrollbar-width: none;
+  max-width: 100%;
 }
 .designer-scroll::-webkit-scrollbar { display: none; }
 .designer-scroll-end {
