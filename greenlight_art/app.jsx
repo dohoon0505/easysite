@@ -260,6 +260,28 @@ function HomeScreen({ go, openWork }) {
         </div>
       </section>
 
+      <section className="section award-section">
+        <div className="section-head">
+          <h3>공모전·대회 수상까지!</h3>
+          <p className="section-sub">아이가 노력에 대한 보상을 얻을 수 있도록</p>
+        </div>
+        <div className="award-card">
+          <div className="award-img-wrap">
+            <img src="img/award.jpg" alt="공모전 수상 상장들" loading="lazy" />
+          </div>
+          <div className="award-foot">
+            <span className="award-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M8 14l-2 7 6-3 6 3-2-7"/></svg>
+              입선·수상 다수 배출
+            </span>
+            <span className="award-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/></svg>
+              전국·지역 미술대회 참가
+            </span>
+          </div>
+        </div>
+      </section>
+
       <section className="section philosophy-section">
         <div className="philo-card">
           <div className="philo-mark" aria-hidden="true">“</div>
