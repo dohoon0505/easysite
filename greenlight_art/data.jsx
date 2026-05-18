@@ -36,4 +36,13 @@ const COURSES = {
   ],
 };
 
-Object.assign(window, { COURSE_CATEGORIES, COURSES });
+const TECH_CATEGORIES = [
+  { id: "ipad",   name: "아이패드 드로잉", hue: "pink",     blurb: "디지털로 만나는 새로운 표현",    learns: "프로크리에이트로 디지털 드로잉의 기초를 익히고, 굿즈 제작까지 이어집니다. 레이어·브러시·색 채우기 등 디지털 작업의 즐거움을 경험해요." },
+  { id: "draw",   name: "기초 드로잉",    hue: "peach",    blurb: "선과 형태를 익히는 첫 단계",     learns: "마카와 색연필로 표현하는 기초 일러스트부터 정물 드로잉까지. 선의 굵기, 구도, 색감 대비를 익히며 표현력의 기초를 다져요." },
+  { id: "water",  name: "수채화",          hue: "blue",     blurb: "물과 색으로 감성을 펼쳐요",     learns: "물과 물감의 번짐을 활용한 감성적인 수채화. 투명 채색, 겹치기, 번지기 기법을 익히며 나만의 색감을 찾아요." },
+  { id: "sketch", name: "소묘",            hue: "mint",     blurb: "명암과 형태로 세상을 담아요",    learns: "연필로 명암 5단계를 이해하고 입체감을 표현하는 힘을 키워요. 기초·입시 모두에 필수적인 과정이에요." },
+  { id: "pencil", name: "색연필화",        hue: "yellow",   blurb: "색을 겹치며 나만의 팔레트를",   learns: "색연필로 색을 겹치고 블렌딩하며 섬세한 표현을 연습해요. 광택, 질감, 명암까지 한 자루로 완성할 수 있어요." },
+  { id: "pen",    name: "펜화",            hue: "lavender", blurb: "지울 수 없는 선 위의 자신감",   learns: "지울 수 없는 펜 선 위에서 과감하게 표현하는 자신감을 키워요. 해칭, 점묘, 자유선 등 다양한 기법을 익혀요." },
+];
+
+Object.assign(window, { COURSE_CATEGORIES, COURSES, TECH_CATEGORIES });

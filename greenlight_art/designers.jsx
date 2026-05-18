@@ -28,7 +28,31 @@ const GALLERY_GOODS = [
   { id: "gg3", name: "돌멩이 굿즈",           age: "초3",  duration: "1회", review: "집에 가져가서 책상에 올려뒀어요.", img: "img/work_5.jpg", desc: "돌멩이를 활용한 입체 캐릭터 작업.", develop: ["입체 인지력", "소근육 발달"] },
 ];
 
-window.GALLERY_BEST  = GALLERY_BEST;
-window.GALLERY_KIDS  = GALLERY_KIDS;
-window.GALLERY_EXAM  = GALLERY_EXAM;
-window.GALLERY_GOODS = GALLERY_GOODS;
+const GALLERY_BY_TECH = {
+  ipad:   [
+    { id: "ti1", name: "아이패드 드로잉 굿즈", img: "img/work_7.jpg", desc: "프로크리에이트로 그린 디자인을 폰케이스·에코백으로 제작했어요." },
+  ],
+  draw:   [
+    { id: "td1", name: "포카리스웨트 정물",     img: "img/work_1.jpg", desc: "마카+색연필로 표현한 정물 일러스트. 색감과 빛 표현이 돋보이는 작품." },
+    { id: "td2", name: "츄파춥스 일러스트",     img: "img/work_3.jpg", desc: "마카로 표현한 츄파춥스. 화면 구성과 색감 대비 연습." },
+    { id: "td3", name: "과일 정물 마카",        img: "img/work_6.jpg", desc: "다양한 과일을 마카로 표현. 입체감과 텍스처 묘사를 연습해요." },
+  ],
+  water:  [
+    { id: "tw1", name: "수채화 작품",           img: "img/work_4.jpg", desc: "수채화로 표현한 감성적인 작품. 번짐과 투명 채색을 익혀요." },
+  ],
+  sketch: [
+    { id: "ts1", name: "큐브 소묘",             img: "img/work_2.jpg", desc: "기초 소묘 과제. 명암 단계와 면 처리를 익혀요." },
+  ],
+  pencil: [
+    { id: "tp1", name: "색연필 캐릭터",         img: "img/work_5.jpg", desc: "색연필로 표현한 섬세한 캐릭터 작품." },
+  ],
+  pen:    [
+    { id: "tpn1", name: "클레이 & 드로잉",      img: "img/work_8.jpg", desc: "다양한 재료와 함께하는 입체 드로잉 작업." },
+  ],
+};
+
+window.GALLERY_BEST     = GALLERY_BEST;
+window.GALLERY_KIDS     = GALLERY_KIDS;
+window.GALLERY_EXAM     = GALLERY_EXAM;
+window.GALLERY_GOODS    = GALLERY_GOODS;
+window.GALLERY_BY_TECH  = GALLERY_BY_TECH;

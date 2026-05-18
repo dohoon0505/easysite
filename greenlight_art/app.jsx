@@ -135,12 +135,12 @@ function BottomNav({ route, go }) {
 }
 
 // ─── Featured Slider ────────────────────────────────────────
-function FeaturedSlider({ title, meta, list, openWork }) {
+function FeaturedSlider({ title, sub, list, openWork }) {
   return (
     <section className="section featured-section">
       <div className="section-head">
         <h3>{title}</h3>
-        {meta && <span className="meta">{meta}</span>}
+        {sub && <p className="section-sub">{sub}</p>}
       </div>
       <div className="designer-scroll-wrap">
         <div className="designer-scroll">
@@ -193,15 +193,7 @@ function HomeScreen({ go, openWork }) {
           <li>
             <span className="intro-list-icon"><I.Calendar size={18} /></span>
             <span className="intro-list-text">
-              <span className="hours-grid">
-                <span><b>월</b> 13:00 - 19:00</span>
-                <span><b>화</b> 13:00 - 19:00</span>
-                <span><b>수</b> 13:00 - 19:00</span>
-                <span><b>목</b> 13:00 - 19:00</span>
-                <span><b>금</b> 13:00 - 19:00</span>
-                <span><b>토</b> 13:00 - 19:00</span>
-                <span className="hours-off"><b>일</b> 휴무</span>
-              </span>
+              월~토 13:00 - 19:00 · 일 휴무
               <span className="intro-open-status" data-open={isOpenNow()}>
                 {isOpenNow() ? "현재 영업 중" : "현재 영업 종료"}
               </span>
@@ -220,7 +212,7 @@ function HomeScreen({ go, openWork }) {
         <p className="info-banner-text">1회 무료 체험 수업이 가능합니다!!</p>
       </div>
 
-      <FeaturedSlider title="아이들 작품 둘러보기"   meta="이달의 픽"      list={GALLERY_BEST}  openWork={openWork} />
+      <FeaturedSlider title="아이들 작품 둘러보기" sub="아이들이 완성한 작품들을 소개해요." list={GALLERY_BEST} openWork={openWork} />
 
       <section className="section dev-section">
         <div className="section-head dev-head">
@@ -253,7 +245,7 @@ function HomeScreen({ go, openWork }) {
       <section className="section mosaic-section">
         <div className="section-head">
           <h3>매일의 작업, 매일의 성장</h3>
-          <span className="meta">학원 일상</span>
+          <p className="section-sub">학원의 매일을 담았어요.</p>
         </div>
         <div className="mosaic">
           {[
@@ -315,22 +307,21 @@ const CATEGORY_HUES = {
   ipad:   { hue: "pink",     chip: "#FFE0E8" },
 };
 
-function CoursesScreen({ activeCat, setActiveCat, onPick }) {
+function CoursesScreen({ activeCat, setActiveCat, openWork }) {
   const tabRef = useRef(null);
   useEffect(() => {
     const el = tabRef.current?.querySelector(`[data-tab='${activeCat}']`);
     if (el) el.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
   }, [activeCat]);
 
-  const cat = COURSE_CATEGORIES.find((c) => c.id === activeCat) || COURSE_CATEGORIES[0];
-  const list = COURSES[cat.id];
-  const hue = CATEGORY_HUES[cat.id]?.hue || "peach";
+  const cat = TECH_CATEGORIES.find((c) => c.id === activeCat) || TECH_CATEGORIES[0];
+  const gallery = (window.GALLERY_BY_TECH || {})[cat.id] || [];
 
   return (
     <div>
       <div className="tabbar">
         <div className="tabbar-scroll" ref={tabRef}>
-          {COURSE_CATEGORIES.map((c) => (
+          {TECH_CATEGORIES.map((c) => (
             <button key={c.id} data-tab={c.id} className={"tab " + (c.id === activeCat ? "on" : "")} onClick={() => setActiveCat(c.id)}>
               {c.name}
             </button>
@@ -338,54 +329,42 @@ function CoursesScreen({ activeCat, setActiveCat, onPick }) {
         </div>
       </div>
 
-      <section className="course-hero" data-hue={hue}>
+      <section className="course-hero" data-hue={cat.hue}>
         <div className="course-hero-deco" aria-hidden="true">
           <span className="dot dot-a" />
           <span className="dot dot-b" />
           <span className="dot dot-c" />
         </div>
         <div className="course-hero-meta">
-          <span className="course-hero-count">{list.length}개 과정</span>
+          <span className="course-hero-count">{gallery.length}개 작품</span>
         </div>
-        <h2 className="course-hero-title">{cat.blurb}</h2>
-        <p className="course-hero-desc">{categoryDescription(cat.id)}</p>
+        <h2 className="course-hero-title">{cat.name}</h2>
+        <p className="course-hero-desc">{cat.learns}</p>
       </section>
 
-      <ul className="course-list">
-        {list.map((s, i) => (
-          <li key={i}>
-            <button className="course-row" data-hue={hue} onClick={() => onPick({ ...s, category: cat.name, categoryId: cat.id })}>
-              <div className="course-thumb">
-                {s.img ? (
-                  <img src={s.img} alt={s.name} loading="lazy" />
-                ) : (
-                  <span className="course-thumb-fallback">{String(i + 1).padStart(2, "0")}</span>
-                )}
-              </div>
-              <div className="course-text">
-                <div className="course-age">{s.age}</div>
-                <div className="course-name">{s.name}</div>
-                <div className="course-desc">{s.desc}</div>
-                <div className="course-cta">
-                  자세히 보기 <I.Arrow size={14} />
+      {gallery.length > 0 ? (
+        <ul className="course-gallery-list">
+          {gallery.map((work) => (
+            <li key={work.id}>
+              <button className="course-gallery-item" onClick={() => openWork({ ...work, category: cat.name })}>
+                <div className="course-gallery-thumb">
+                  <img src={work.img} alt={work.name} loading="lazy" />
                 </div>
-              </div>
-            </button>
-          </li>
-        ))}
-      </ul>
+                <div className="course-gallery-info">
+                  <div className="course-gallery-name">{work.name}</div>
+                  <div className="course-gallery-desc">{work.desc}</div>
+                </div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="course-gallery-empty">
+          <p>준비 중인 작품들을 곧 소개할게요.</p>
+        </div>
+      )}
     </div>
   );
-}
-
-function categoryDescription(id) {
-  return ({
-    kinder: "발달이 가장 활발한 시기, 오감으로 익히는 첫 미술. 자유로운 표현을 그대로 받아들여요.",
-    elem:   "관찰과 표현의 폭이 가장 빨리 자라는 시기. 재료와 기법을 폭넓게 익혀요.",
-    exam:   "재능을 진로로 잇는 본격 수업. 학교별 커리큘럼에 맞춘 1:1 코칭으로 진행해요.",
-    hobby:  "쉬어 가는 한 장의 그림. 하루를 차분히 마무리하는 어른의 미술 시간.",
-    ipad:   "디지털로 만나는 새로운 표현. 굿즈 제작까지 이어지는 즐거운 드로잉.",
-  })[id] || "";
 }
 
 // ─── COURSE / WORK SHEET ─────────────────────────────────────
@@ -751,7 +730,7 @@ function App() {
     if (h.startsWith("courses") || h === "booking" || h === "faq") return h;
     return "home";
   });
-  const [activeCat, setActiveCat] = useState("kinder");
+  const [activeCat, setActiveCat] = useState("ipad");
   const [sheet, setSheet] = useState(null);
   const [bookingSeed, setBookingSeed] = useState(null);
 
@@ -794,7 +773,7 @@ function App() {
           onToggleTheme={() => setTweak("dark", !t.dark)}
         />
         {mainRoute === "home"    && <HomeScreen go={go} openWork={setSheet} />}
-        {mainRoute === "courses" && <CoursesScreen activeCat={activeCat} setActiveCat={setActiveCat} onPick={setSheet} />}
+        {mainRoute === "courses" && <CoursesScreen activeCat={activeCat} setActiveCat={setActiveCat} openWork={setSheet} />}
         {mainRoute === "booking" && <BookingScreen initial={bookingSeed} />}
         {mainRoute === "faq"     && <FaqScreen />}
         {sheet && <StyleSheet item={sheet} onClose={() => setSheet(null)} onBook={bookCourse} />}
