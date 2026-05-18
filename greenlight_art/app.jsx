@@ -275,9 +275,8 @@ function HomeScreen({ go, openWork }) {
         <div className="philo-card">
           <div className="philo-mark" aria-hidden="true">“</div>
           <p className="philo-text">
-            그림을 잘 그리게 하는 것보다,<br />
-            <em>스스로 보고 표현하는 즐거움</em>을 알게 하는 것.<br />
-            그것이 풀빛그림아이가 가르치고 싶은 것입니다.
+            탄탄한 표현력은 기본, 스스로 세상을 관찰하고 도화지에 담아내는 즐거움까지.<br />
+            <em>풀빛그림아이</em>는 아이의 시선이 머무는 모든 것을 훌륭한 작품으로 만듭니다.
           </p>
           <div className="philo-sign">— 풀빛그림아이 미술학원</div>
         </div>
