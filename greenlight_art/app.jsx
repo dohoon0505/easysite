@@ -190,7 +190,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
 
         <div className="intro-map" aria-label="매장 위치 지도">
           <img src="img/map.png" alt="박하디 매장 위치" className="intro-map-img" />
-          <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 달서구 와룡로 132 박하디" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
+          <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 달서구 조암남로16길 19 하늘채 상가 2층" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
             <img src="img/naver_map.png" alt="" className="naver-map-icon" /> 네이버 지도
           </a>
         </div>
@@ -198,7 +198,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         <ul className="intro-list">
           <li>
             <span className="intro-list-icon"><I.Map size={18} /></span>
-            <span className="intro-list-text">대구 달서구 와룡로 132 2층 풀빛그림아이미술학원 박하디</span>
+            <span className="intro-list-text">대구 달서구 조암남로16길 19 하늘채 상가 2층</span>
           </li>
           <li>
             <span className="intro-list-icon"><I.Calendar size={18} /></span>
