@@ -206,10 +206,6 @@ function HomeScreen({ go, openWork }) {
               </span>
             </span>
           </li>
-          <li>
-            <span className="intro-list-icon"><I.Info size={18} /></span>
-            <span className="intro-list-text">1회 무료 체험 수업 가능 — 부담 없이 둘러보세요</span>
-          </li>
         </ul>
       </section>
 
@@ -220,7 +216,7 @@ function HomeScreen({ go, openWork }) {
             <path d="M12 8h.01M11 12h1v5h1" />
           </svg>
         </span>
-        <p className="info-banner-text">전화 또는 카카오톡으로 간편 상담 신청이 가능해요!</p>
+        <p className="info-banner-text">1회 무료 체험 수업이 가능합니다!!</p>
       </div>
 
       <FeaturedSlider title="우리 학원 베스트 작품"   meta="이달의 픽"      list={GALLERY_BEST}  openWork={openWork} />
