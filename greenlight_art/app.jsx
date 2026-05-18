@@ -734,7 +734,7 @@ function FaqScreen() {
 // ─── App root ────────────────────────────────────────────────
 function App() {
   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-    "brand": "#7BB7E5",
+    "brand": "#3DAA6E",
     "dark": false
   }/*EDITMODE-END*/;
   const [t, setTweak] = (window.useTweaks ? window.useTweaks(TWEAK_DEFAULTS) : [TWEAK_DEFAULTS, () => {}]);
