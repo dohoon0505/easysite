@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit -m 'Add flower_example static site *)",
+      "Bash(git push *)"
+    ]
+  }
+}
