@@ -233,7 +233,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
 
       <section className="section home-faq-section">
         <div className="section-head">
-          <h3>미용실 방문 전 자주하는 질문</h3>
+          <h3>학원 상담 시 자주하는 질문</h3>
         </div>
         <ul className="home-faq-list">
           {FAQ_ITEMS.slice(0, 6).map((it, i) => (
