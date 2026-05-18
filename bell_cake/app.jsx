@@ -42,9 +42,9 @@ function ExpandableText({ text, limit = 60 }) {
 function isOpenNow() {
   const now = new Date();
   const day = now.getDay(); // 0=Sun … 4=Thu … 6=Sat
-  if (day === 4) return false; // 매주 목요일 휴무
+  if (day === 0) return false; // 매주 일요일 휴무
   const mins = now.getHours() * 60 + now.getMinutes();
-  return mins >= 10 * 60 && mins < 20 * 60;
+  return mins >= 11 * 60 && mins < 19 * 60;
 }
 
 // ─── Featured Slider ────────────────────────────────────────
@@ -203,7 +203,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
           <li>
             <span className="intro-list-icon"><I.Calendar size={18} /></span>
             <span className="intro-list-text">
-              10:00 ~ 20:00 · 매주 목요일 휴무
+              11:00 ~ 19:00 · 매주 일요일 휴무
               <span className="intro-open-status" data-open={isOpenNow()}>
                 {isOpenNow() ? "현재 영업 중" : "현재 영업 종료"}
               </span>
@@ -791,11 +791,11 @@ function DateTimePicker({ initialDate, initialTime, onClose, onConfirm }) {
   const isPicked  = (d) => d && fmtDate(d) === date;
   const dow = (d) => d.getDay();
 
-  // 목요일 휴무 + 운영시간 외 비활성화
-  const isClosed  = (d) => d && dow(d) === 4;
+  // 일요일 휴무 + 운영시간 외 비활성화
+  const isClosed  = (d) => d && dow(d) === 0;
 
   const TIMES = [];
-  for (let h = 10; h < 20; h++) {
+  for (let h = 11; h < 19; h++) {
     TIMES.push(`${String(h).padStart(2, "0")}:00`);
     TIMES.push(`${String(h).padStart(2, "0")}:30`);
   }
