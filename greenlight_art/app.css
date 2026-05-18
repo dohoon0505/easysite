@@ -1846,10 +1846,10 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 .dotsep { color: var(--ph-mute); }
 .sheet-desc {
-  margin: 12px 0 0;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--ph-mute);
+  margin: 14px 0 0;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--ph-ink-2);
   letter-spacing: -0.01em;
 }
 .sheet-develop {

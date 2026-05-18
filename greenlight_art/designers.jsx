@@ -30,7 +30,7 @@ const GALLERY_GOODS = [
 
 const GALLERY_BY_TECH = {
   ipad:   [
-    { id: "ti1", name: "아이패드 드로잉 굿즈", img: "img/work_7.jpg", desc: "프로크리에이트로 그린 디자인을 폰케이스·에코백으로 제작했어요." },
+    { id: "ti1", name: "아이패드 드로잉 굿즈", img: "img/work_7.jpg", desc: "초등학생 5학년 아이가 2회 수업에 완성한 작품이에요. 아이패드를 활용하여 굿즈를 디자인 해보고, 직접 집에 가져갈 수 있도록 프린팅까지 해볼 수 있도록 해주었어요!" },
   ],
   draw:   [
     { id: "td1", name: "포카리스웨트 정물",     img: "img/work_1.jpg", desc: "마카+색연필로 표현한 정물 일러스트. 색감과 빛 표현이 돋보이는 작품." },

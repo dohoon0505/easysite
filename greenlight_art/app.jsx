@@ -428,9 +428,6 @@ function StyleSheet({ item, onClose, onBook }) {
                 <span className="price">{fmt(item.per)}<span className="won">원/월</span></span>
               </div>
             )}
-            {isWork && (
-              <div style={{ marginTop: 8, color: "var(--ph-mute)", fontSize: 14 }}>{item.age}</div>
-            )}
             <p className="sheet-desc">{item.desc}</p>
             {item.develop && item.develop.length > 0 && (
               <div className="sheet-develop">
