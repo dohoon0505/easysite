@@ -256,10 +256,10 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         <p className="info-banner-text">예약요청 탭을 통해 간편히 예약을 요청해보세요!</p>
       </div>
 
-      <FeaturedSlider title="여름철 테토 스타일" meta="시즌 추천"   list={FEATURED_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="면접·미팅을 준비한다면"      meta="단정하고 깔끔하게"   list={BUSINESS_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="요즘 20대 스타일링"       meta="MZ 스타일" list={MZ_STYLES}       openStyle={openStyle} />
-      <FeaturedSlider title="젊어보이는 마법" meta="30대 이상 추천"   list={STARTER_STYLES}  openStyle={openStyle} />
+      <FeaturedSlider title="귀여운 도시락케이크" list={FEATURED_STYLES} openStyle={openStyle} />
+      <FeaturedSlider title="이달의 베스트 케이크" list={BUSINESS_STYLES} openStyle={openStyle} />
+      <FeaturedSlider title="여심저격 베스트 디자인" list={MZ_STYLES} openStyle={openStyle} />
+      <FeaturedSlider title="받는 분 연령이 높으시다면!" list={STARTER_STYLES} openStyle={openStyle} />
 
       <section className="section home-faq-section">
         <div className="section-head">
