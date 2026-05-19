@@ -17,6 +17,37 @@ function useScrolled() {
   return scrolled;
 }
 
+// Lock body scroll while a sheet is open. Uses `position: fixed` so
+// Chrome mobile pull-to-refresh can't trigger and touch scroll inside
+// the sheet doesn't bleed through to the page behind.
+function useBodyLock() {
+  useEffect(() => {
+    const scrollY = window.scrollY;
+    const hs = document.documentElement.style;
+    const bs = document.body.style;
+    const prev = {
+      htmlOverflow: hs.overflow,
+      bodyOverflow: bs.overflow,
+      bodyPosition: bs.position,
+      bodyTop: bs.top,
+      bodyWidth: bs.width,
+    };
+    hs.overflow = "hidden";
+    bs.overflow = "hidden";
+    bs.position = "fixed";
+    bs.top = `-${scrollY}px`;
+    bs.width = "100%";
+    return () => {
+      hs.overflow = prev.htmlOverflow;
+      bs.overflow = prev.bodyOverflow;
+      bs.position = prev.bodyPosition;
+      bs.top = prev.bodyTop;
+      bs.width = prev.bodyWidth;
+      window.scrollTo(0, scrollY);
+    };
+  }, []);
+}
+
 // ─── Expandable text ───────────────────────────────────────
 function ExpandableText({ text, limit = 60 }) {
   const [open, setOpen] = useState(false);
@@ -316,11 +347,11 @@ function StylesScreen({ activeCat, setActiveCat, onPick }) {
 
 // ─── STYLE SHEET (상세) ─────────────────────────────────────
 function StyleSheet({ item, onClose, onBook }) {
+  useBodyLock();
   useEffect(() => {
     const onKey = (e) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
   if (!item) return null;
   return (
@@ -364,11 +395,11 @@ function StyleSheet({ item, onClose, onBook }) {
 
 // ─── DESIGNER SHEET ─────────────────────────────────────────
 function DesignerSheet({ designer, onClose, onBook }) {
+  useBodyLock();
   useEffect(() => {
     const onKey = (e) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
   if (!designer) return null;
   return (
@@ -684,11 +715,11 @@ function BookingScreen({ initial }) {
 
 // ─── Option Sheet (custom dropdown) ─────────────────────────
 function OptionSheet({ title, options, value, renderRow, onClose, onPick }) {
+  useBodyLock();
   useEffect(() => {
     const onKey = (e) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
   return (
     <>
@@ -737,11 +768,11 @@ function DateTimePicker({ initialDate, initialTime, onClose, onConfirm }) {
   const [date, setDate] = useState(initialDate || "");
   const [time, setTime] = useState(initialTime || "");
 
+  useBodyLock();
   useEffect(() => {
     const onKey = (e) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   const year = view.getFullYear();
