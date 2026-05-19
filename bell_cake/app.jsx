@@ -537,7 +537,7 @@ function BookingScreen({ initial }) {
         {/* 1. 픽업 일시 */}
         <button type="button" className={"field selectable " + (form.pickupDate && form.pickupTime ? "done" : "")} onClick={() => setPickerOpen(true)}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">1</span> 픽업 일시</span>
+            <span className="lbl">1. 픽업 일시</span>
             {(form.pickupDate && form.pickupTime)
               ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />
               : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
@@ -552,7 +552,7 @@ function BookingScreen({ initial }) {
         {/* 2. 케이크 종류 */}
         <button type="button" className={"field selectable " + (form.size ? "done" : "")} onClick={() => setSizeSheetOpen(true)}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">2</span> 케이크 종류</span>
+            <span className="lbl">2. 케이크 종류</span>
             {form.size
               ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />
               : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
@@ -565,7 +565,7 @@ function BookingScreen({ initial }) {
         {/* 3. 맛 */}
         <button type="button" className={"field selectable " + (form.flavor ? "done" : "")} onClick={() => setFlavorSheetOpen(true)}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">3</span> 케이크 맛</span>
+            <span className="lbl">3. 케이크 맛</span>
             {form.flavor
               ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />
               : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
@@ -580,7 +580,7 @@ function BookingScreen({ initial }) {
         {/* 4. 디자인 설명 (선택) */}
         <div className="field">
           <div className="field-label">
-            <span className="lbl"><span className="stepno">4</span> 케이크 디자인 설명 <span className="opt-mark">선택</span></span>
+            <span className="lbl">4. 케이크 디자인 설명 <span className="opt-mark">선택</span></span>
           </div>
           <textarea
             className="field-textarea"
@@ -594,7 +594,7 @@ function BookingScreen({ initial }) {
         {/* 5. 판 문구 (선택) */}
         <div className="field">
           <div className="field-label">
-            <span className="lbl"><span className="stepno">5</span> 케이크 판 문구 <span className="opt-mark">선택</span></span>
+            <span className="lbl">5. 케이크 판 문구 <span className="opt-mark">선택</span></span>
           </div>
           <input type="text" value={form.boardText} placeholder="EX) Happy Birthday 윤서" onChange={(e) => setForm({ ...form, boardText: e.target.value })} />
         </div>
@@ -602,7 +602,7 @@ function BookingScreen({ initial }) {
         {/* 6. 옵션 (선택, 중복) */}
         <div className="field">
           <div className="field-label">
-            <span className="lbl"><span className="stepno">6</span> 옵션 <span className="opt-mark">선택 · 중복 가능</span></span>
+            <span className="lbl">6. 옵션 <span className="opt-mark">선택 · 중복 가능</span></span>
           </div>
           <div className="checkbox-list">
             {CAKE_OPTIONS.map((opt) => {
@@ -624,7 +624,7 @@ function BookingScreen({ initial }) {
         {/* 7. 이름 */}
         <div className={"field " + (form.name.trim() ? "done" : "")}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">7</span> 예약자 성함</span>
+            <span className="lbl">7. 예약자 성함</span>
             {form.name.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
           <input type="text" value={form.name} placeholder="성함을 입력해 주세요" onChange={(e) => setForm({ ...form, name: e.target.value })} />
@@ -633,7 +633,7 @@ function BookingScreen({ initial }) {
         {/* 8. 연락처 */}
         <div className={"field " + (form.contact.trim() ? "done" : "")}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">8</span> 예약자 연락처</span>
+            <span className="lbl">8. 예약자 연락처</span>
             {form.contact.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
           <input type="tel" value={form.contact} placeholder="연락처를 입력해 주세요" onChange={(e) => setForm({ ...form, contact: e.target.value })} />

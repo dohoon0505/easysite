@@ -1582,25 +1582,6 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   display: flex; align-items: center; gap: 8px;
 }
 [data-theme="dark"] .field-label .lbl { color: var(--sm-content-primary); }
-.field-label .lbl .stepno {
-  display: inline-grid; place-items: center;
-  width: 22px; height: 22px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-  background: var(--sm-interactive-brand-subtle);
-  color: var(--sm-interactive-brand-default);
-  border: 1px solid var(--sm-interactive-brand-default);
-  border-radius: 7px;
-  box-shadow: 0 1px 0 rgba(234, 179, 8, 0.06);
-  transition: background 220ms ease, color 220ms ease, box-shadow 220ms ease;
-}
-.field.done .stepno {
-  background: var(--sm-interactive-brand-default);
-  color: var(--sm-content-onBrand);
-  box-shadow: 0 2px 6px -2px rgba(234, 179, 8, 0.45);
-}
 .field input {
   width: 100%; border: none; outline: none;
   font-size: 17px; font-weight: 600;
