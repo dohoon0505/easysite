@@ -253,7 +253,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
             <path d="M12 8h.01M11 12h1v5h1" />
           </svg>
         </span>
-        <p className="info-banner-text">카카오톡 또는 네이버 예약으로 간편예약이 가능해요!</p>
+        <p className="info-banner-text">예약요청 탭을 통해 간편히 예약을 요청해보세요!</p>
       </div>
 
       <FeaturedSlider title="여름철 테토 스타일" meta="시즌 추천"   list={FEATURED_STYLES} openStyle={openStyle} />
