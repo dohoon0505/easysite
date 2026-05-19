@@ -433,9 +433,11 @@ function DesignerSheet({ designer, onClose, onBook }) {
 
 // ─── BOOKING (케이크 예약) ───────────────────────────────────
 const CAKE_SIZES = [
-  { id: "size-1", label: "1호 (지름 15cm)", price: 40000 },
-  { id: "size-2", label: "2호 (지름 18cm)", price: 49000 },
-  { id: "size-3", label: "3호 (지름 21cm)", price: 59000 },
+  { id: "type-dosirak", label: "도시락케이크 (9cm)",            price: 17000 },
+  { id: "type-mini",    label: "미니케이크 (12cm, 1~2인)",      price: 30000 },
+  { id: "type-1",       label: "1호 케이크 (16cm, 3~5인)",      price: 40000 },
+  { id: "type-2",       label: "2호 케이크 (18cm, 6~8인)",      price: 50000 },
+  { id: "type-3",       label: "3호 케이크 (21cm, 7~10인)",     price: 60000 },
 ];
 const CAKE_FLAVORS = [
   { id: "vanilla-milk",      label: "바닐라 쌀시트 + 우유크림",                surcharge: 0 },
@@ -500,7 +502,7 @@ function BookingScreen({ initial }) {
       "[벨케이크 예약 요청]",
       "",
       "픽업: " + formatDateKR(form.pickupDate) + " " + form.pickupTime,
-      "사이즈: " + sizeObj.label + " (" + fmt(sizeObj.price) + "원)",
+      "케이크 종류: " + sizeObj.label + " (" + fmt(sizeObj.price) + "원~)",
       "맛: " + flavorObj.label + (flavorObj.surcharge > 0 ? ` (+${fmt(flavorObj.surcharge)}원~)` : ""),
       optionObjs.length ? "옵션: " + optionObjs.map((o) => `${o.label} (${fmt(o.price)}원)`).join(", ") : "",
       form.design ? "디자인 설명: " + form.design : "",
@@ -547,16 +549,16 @@ function BookingScreen({ initial }) {
           </div>
         </button>
 
-        {/* 2. 사이즈 */}
+        {/* 2. 케이크 종류 */}
         <button type="button" className={"field selectable " + (form.size ? "done" : "")} onClick={() => setSizeSheetOpen(true)}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">2</span> 사이즈</span>
+            <span className="lbl"><span className="stepno">2</span> 케이크 종류</span>
             {form.size
               ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />
               : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
           </div>
           <div className={"field-val " + (!sizeObj ? "placeholder" : "")}>
-            {sizeObj ? `${sizeObj.label} · ${fmt(sizeObj.price)}원` : "사이즈를 선택해주세요"}
+            {sizeObj ? `${sizeObj.label} · ${fmt(sizeObj.price)}원~` : "종류를 선택해주세요"}
           </div>
         </button>
 
@@ -682,13 +684,13 @@ function BookingScreen({ initial }) {
       )}
       {sizeSheetOpen && (
         <OptionSheet
-          title="사이즈 선택"
+          title="케이크 종류 선택"
           options={CAKE_SIZES}
           value={form.size}
           renderRow={(s) => (
             <>
               <span className="option-label">{s.label}</span>
-              <span className="option-price">{fmt(s.price)}<span className="won">원</span></span>
+              <span className="option-price">{fmt(s.price)}<span className="won">원~</span></span>
             </>
           )}
           onClose={() => setSizeSheetOpen(false)}
