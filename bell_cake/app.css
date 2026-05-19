@@ -436,7 +436,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 .section-head h3 {
   font-family: "TmoneyRoundWind", var(--font-sans);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.025em;
   margin: 0;
@@ -764,7 +764,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 .home-faq-section .section-head { display: block; margin-bottom: 12px; }
 .home-faq-section h3 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--sm-content-primary);
