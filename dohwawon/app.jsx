@@ -130,7 +130,7 @@ function AppBar({ title, onBack, scrolled, dark, onToggleTheme }) {
       {onBack && (
         <button className="iconbtn" onClick={onBack} aria-label="뒤로 가기"><I.Back /></button>
       )}
-      <div className="pagetitle">{title || "쌀케이크 전문점 벨케이크"}</div>
+      <div className="pagetitle">{title || "도화원플라워"}</div>
       <div className="grow" />
       <button
         className={"theme-toggle " + (dark ? "on" : "")}
@@ -152,8 +152,8 @@ function AppBar({ title, onBack, scrolled, dark, onToggleTheme }) {
 
 async function shareSite() {
   const data = {
-    title: "벨케이크",
-    text: "세상에 단 하나뿐인 레터링케이크, 벨케이크 — 정성스러운 디자인과 좋은 재료로 완벽한 하루를 완성합니다.",
+    title: "도화원플라워",
+    text: "평범한 일상도 꽃 한 송이가 더해지면 특별한 순간이 됩니다. 계절을 듬뿍 머금은 다채로운 꽃들로, 당신의 오늘을 가장 아름답게 피워내겠습니다.",
     url: window.location.href,
   };
   try {
@@ -207,19 +207,19 @@ function BottomNav({ route, go }) {
 function HomeScreen({ go, openStyle, openDesigner }) {
   return (
     <div>
-      <section className="hero" aria-label="벨케이크">
+      <section className="hero" aria-label="도화원플라워">
         <div className="hero-img">
-          <img src="img/hero.jpg" alt="벨케이크 매장" />
+          <img src="img/hero.jpg" alt="도화원플라워 매장" />
         </div>
       </section>
 
       <section className="intro">
         <div className="intro-meta">대구광역시 | 달서구</div>
-        <h2 className="intro-name">벨케이크</h2>
-        <p className="intro-desc">No 밀가루, No 식물성크림. 100% 국내산 쌀가루로 만든 쌀케이크, 동물성 생크림케이크 전문점 벨케이크입니다:){"\n\n"}1인운영매장이라, 전화를 못받을 수 있으니 부재시 카카오톡채널로 연락주세요^^</p>
+        <h2 className="intro-name">도화원플라워</h2>
+        <p className="intro-desc">평범한 일상도 꽃 한 송이가 더해지면 특별한 순간이 됩니다.{"\n\n"}계절을 듬뿍 머금은 다채로운 꽃들로, 당신의 오늘을 가장 아름답게 피워내겠습니다.</p>
 
         <div className="intro-map" aria-label="매장 위치 지도">
-          <img src="img/map.png" alt="벨케이크 매장 위치" className="intro-map-img" />
+          <img src="img/map.png" alt="도화원플라워 매장 위치" className="intro-map-img" />
           <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 달서구 당산로 99" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
             <img src="img/naver_map.png" alt="" className="naver-map-icon" /> 네이버 지도
           </a>

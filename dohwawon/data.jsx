@@ -1,9 +1,9 @@
 /* eslint-disable */
-// 벨케이크 — 케이크 카탈로그
+// 도화원플라워 — 상품 카탈로그
 
 const HAIR_CATEGORIES = [
   { id: "best",      name: "베스트",   blurb: "가장 많이 주문하는 인기 케이크", sub: "BEST" },
-  { id: "signature", name: "시그니처", blurb: "벨케이크만의 특별한 디자인",      sub: "SIGNATURE" },
+  { id: "signature", name: "시그니처", blurb: "도화원플라워만의 특별한 디자인",      sub: "SIGNATURE" },
   { id: "dosirak",   name: "도시락",   blurb: "귀여운 미니 도시락케이크",        sub: "LUNCHBOX" },
   { id: "size-1",    name: "1호",      blurb: "1호 케이크 (16cm, 3~5인)",       sub: "SIZE 1" },
   { id: "size-2",    name: "2호",      blurb: "2호 케이크 (18cm, 6~8인)",       sub: "SIZE 2" },
