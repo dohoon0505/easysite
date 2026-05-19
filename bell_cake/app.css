@@ -1617,6 +1617,148 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   margin-left: 4px;
 }
 
+/* ────── Booking · select / textarea / checkbox / price summary ────── */
+.field-select {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  background: transparent;
+  color: var(--sm-content-primary);
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0 28px 0 0;
+  margin: 0;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+  background-size: 14px;
+}
+.field-select.placeholder { color: var(--sm-content-tertiary); font-weight: 400; }
+.field-select option { color: var(--sm-content-primary); font-weight: 500; background: var(--sm-surface-raised); }
+
+.field-textarea {
+  width: 100%;
+  min-height: 80px;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
+  background: transparent;
+  color: var(--sm-content-primary);
+  resize: vertical;
+  padding: 0;
+}
+.field-textarea::placeholder { color: var(--sm-content-tertiary); font-weight: 400; }
+
+.checkbox-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 4px;
+}
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--sm-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--sm-surface-raised);
+  cursor: pointer;
+  transition: border-color 180ms, background 180ms;
+}
+.checkbox-row:hover { background: var(--sm-background-subtle); }
+.checkbox-row.on {
+  border-color: var(--sm-interactive-brand-default);
+  background: var(--sm-interactive-brand-subtle);
+}
+.checkbox-row input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+.checkbox-mark {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid var(--sm-border-subtle);
+  background: var(--sm-surface-raised);
+  display: grid;
+  place-items: center;
+  color: var(--sm-content-onBrand);
+  transition: background 180ms, border-color 180ms;
+}
+.checkbox-row.on .checkbox-mark {
+  background: var(--sm-interactive-brand-default);
+  border-color: var(--sm-interactive-brand-default);
+}
+.checkbox-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sm-content-primary);
+  letter-spacing: -0.01em;
+}
+.checkbox-price {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sm-content-tertiary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.005em;
+}
+.checkbox-row.on .checkbox-price { color: var(--sm-interactive-brand-active); }
+
+.price-summary {
+  margin: 16px 20px 0;
+  padding: 16px 18px;
+  background: var(--sm-interactive-brand-subtle);
+  border: 1px solid var(--sm-interactive-brand-default);
+  border-radius: var(--radius-md);
+}
+.price-summary-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.price-summary-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--sm-content-primary);
+  letter-spacing: -0.01em;
+}
+.price-summary-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--sm-content-primary);
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+}
+.price-summary-value .won {
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 2px;
+  color: var(--sm-content-secondary);
+}
+.price-summary-meta {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sm-content-secondary);
+  letter-spacing: -0.005em;
+}
+
 /* ────── Notice ────── */
 .notice {
   margin: 0 20px;

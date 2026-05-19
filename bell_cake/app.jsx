@@ -354,7 +354,7 @@ function StyleSheet({ item, onClose, onBook }) {
         <div className="sheet-foot">
           <button className="btn-secondary" onClick={onClose}>닫기</button>
           <button className="btn" onClick={() => onBook(item)}>
-            <I.Calendar size={18} strokeWidth={2} /> 이 스타일로 예약하기
+            <I.Calendar size={18} strokeWidth={2} /> 이 디자인으로 예약하기
           </button>
         </div>
       </div>
@@ -583,32 +583,59 @@ function StylingScreen() {
   );
 }
 
-// ─── BOOKING (예약) — 유지, 진입 동선만 변경 ─────────────────
+// ─── BOOKING (케이크 예약) ───────────────────────────────────
+const CAKE_SIZES = [
+  { id: "size-1", label: "1호 (지름 15cm)", price: 40000 },
+  { id: "size-2", label: "2호 (지름 18cm)", price: 49000 },
+  { id: "size-3", label: "3호 (지름 21cm)", price: 59000 },
+];
+const CAKE_FLAVORS = [
+  { id: "strawberry", label: "동물성생크림 + 생딸기" },
+  { id: "goldkiwi",   label: "동물성생크림 + 골드키위" },
+  { id: "greengrape", label: "동물성생크림 + 청포도" },
+];
+const CAKE_OPTIONS = [
+  { id: "case",    label: "1단 투명케이스",     price: 5000 },
+  { id: "bag-ice", label: "보냉백 + 아이스팩",  price: 6000 },
+  { id: "bag-12",  label: "보냉가방 1~2호",      price: 7500 },
+  { id: "bag-3",   label: "보냉가방 3호",         price: 8500 },
+];
+
 function BookingScreen({ initial }) {
   const [form, setForm] = useState({
-    service: initial?.service || "",
-    serviceId: initial?.serviceId || "",
-    designerId: initial?.designerId || "",
-    date: "",   // YYYY-MM-DD
-    time: "",   // HH:mm
+    pickupDate: "",
+    pickupTime: "",
+    size: "",
+    flavor: "",
+    design: initial?.design || "",
+    boardText: "",
+    options: [],
     name: "",
     kakao: "",
-    note: "",
   });
   useEffect(() => {
-    if (initial?.service) setForm((f) => ({ ...f, service: initial.service, serviceId: initial.serviceId || f.serviceId }));
-    if (initial?.designerId) setForm((f) => ({ ...f, designerId: initial.designerId }));
-  }, [initial?.service, initial?.designerId]);
+    if (initial?.design) setForm((f) => ({ ...f, design: initial.design }));
+  }, [initial?.design]);
 
   const [toast, setToast] = useState(null);
   const [pickerOpen, setPickerOpen] = useState(false);
-  const [serviceSheetOpen, setServiceSheetOpen] = useState(false);
-  const [designerSheetOpen, setDesignerSheetOpen] = useState(false);
 
-  const required = ["service", "date", "time", "name", "kakao"];
-  const done = required.filter((k) => form[k].trim().length > 0).length;
+  const required = ["pickupDate", "pickupTime", "size", "flavor", "name", "kakao"];
+  const done = required.filter((k) => (form[k] || "").trim().length > 0).length;
   const total = required.length;
-  const designerObj = DESIGNERS.find((d) => d.id === form.designerId);
+
+  const sizeObj = CAKE_SIZES.find((s) => s.id === form.size);
+  const flavorObj = CAKE_FLAVORS.find((f) => f.id === form.flavor);
+  const optionObjs = form.options.map((id) => CAKE_OPTIONS.find((o) => o.id === id)).filter(Boolean);
+  const optionTotal = optionObjs.reduce((sum, o) => sum + o.price, 0);
+  const totalPrice = (sizeObj?.price || 0) + optionTotal;
+
+  const toggleOption = (id) => {
+    setForm((f) => ({
+      ...f,
+      options: f.options.includes(id) ? f.options.filter((o) => o !== id) : [...f.options, id],
+    }));
+  };
 
   const send = () => {
     if (done < total) {
@@ -619,24 +646,27 @@ function BookingScreen({ initial }) {
     const body = [
       "[벨케이크 예약 요청]",
       "",
-      "시술: " + form.service,
-      "날짜: " + form.date,
-      "시간: " + form.time,
-      "디자이너: " + (designerObj ? `${designerObj.name} (${designerObj.role})` : "지정 없음"),
+      "픽업: " + formatDateKR(form.pickupDate) + " " + form.pickupTime,
+      "사이즈: " + sizeObj.label + " (" + fmt(sizeObj.price) + "원)",
+      "맛: " + flavorObj.label,
+      optionObjs.length ? "옵션: " + optionObjs.map((o) => `${o.label} (${fmt(o.price)}원)`).join(", ") : "",
+      form.design ? "디자인 설명: " + form.design : "",
+      form.boardText ? "케이크 판 문구: " + form.boardText : "",
+      "",
       "이름: " + form.name,
       "카카오톡 ID: " + form.kakao,
-      form.note ? "요청사항: " + form.note : "",
+      "",
+      "예상 합계: " + fmt(totalPrice) + "원",
     ].filter(Boolean).join("\n");
-    const url = KAKAO_HREF;
     setToast("카카오톡을 열고 있어요");
-    setTimeout(() => { window.open(url, "_blank"); setTimeout(() => setToast(null), 1200); }, 400);
+    setTimeout(() => { window.open(KAKAO_HREF, "_blank"); setTimeout(() => setToast(null), 1200); }, 400);
   };
 
   return (
     <div>
       <div className="order-hero">
-        <span className="step-pill"><I.Calendar size={12} strokeWidth={2.2} /> 예약하기</span>
-        <h2>편한 날짜와 시간을<br />선택해주세요</h2>
+        <span className="step-pill"><I.Calendar size={12} strokeWidth={2.2} /> 케이크 예약</span>
+        <h2>편한 픽업 일시를<br />선택해주세요</h2>
         <p>예약 요청이 접수되면 카카오톡으로 확정 안내를 드려요.</p>
       </div>
 
@@ -649,76 +679,140 @@ function BookingScreen({ initial }) {
       </div>
 
       <div className="form">
-        {/* 1. 시술 선택 */}
-        <button type="button" className={"field selectable " + (form.service ? "done" : "")} onClick={() => setServiceSheetOpen(true)}>
+        {/* 1. 픽업 일시 */}
+        <button type="button" className={"field selectable " + (form.pickupDate && form.pickupTime ? "done" : "")} onClick={() => setPickerOpen(true)}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">1</span> 시술 선택</span>
-            {form.service ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} /> : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
+            <span className="lbl"><span className="stepno">1</span> 픽업 일시</span>
+            {(form.pickupDate && form.pickupTime)
+              ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />
+              : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
           </div>
-          <div className={"field-val " + (!form.service ? "placeholder" : "")}>
-            {form.service || "시술 카테고리와 스타일을 선택하세요"}
+          <div className={"field-val " + (!(form.pickupDate && form.pickupTime) ? "placeholder" : "")}>
+            {form.pickupDate && form.pickupTime
+              ? `${formatDateKR(form.pickupDate)} · ${form.pickupTime}`
+              : "달력에서 픽업 날짜와 시간을 선택하세요"}
           </div>
         </button>
 
-        {/* 2. 날짜 + 시간 */}
-        <button type="button" className={"field selectable " + (form.date && form.time ? "done" : "")} onClick={() => setPickerOpen(true)}>
+        {/* 2. 사이즈 */}
+        <div className={"field " + (form.size ? "done" : "")}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">2</span> 날짜·시간</span>
-            {(form.date && form.time) ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} /> : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
+            <span className="lbl"><span className="stepno">2</span> 사이즈</span>
+            {form.size && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
-          <div className={"field-val " + (!(form.date && form.time) ? "placeholder" : "")}>
-            {form.date && form.time
-              ? `${formatDateKR(form.date)} · ${form.time}`
-              : "달력에서 원하는 날짜와 시간을 선택하세요"}
-          </div>
-        </button>
+          <select
+            className={"field-select " + (!form.size ? "placeholder" : "")}
+            value={form.size}
+            onChange={(e) => setForm({ ...form, size: e.target.value })}
+          >
+            <option value="">사이즈를 선택해주세요</option>
+            {CAKE_SIZES.map((s) => (
+              <option key={s.id} value={s.id}>{s.label} · {fmt(s.price)}원</option>
+            ))}
+          </select>
+        </div>
 
-        {/* 3. 디자이너 (선택) */}
-        <button type="button" className={"field selectable " + (form.designerId ? "done" : "")} onClick={() => setDesignerSheetOpen(true)}>
+        {/* 3. 맛 */}
+        <div className={"field " + (form.flavor ? "done" : "")}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">3</span> 담당 디자이너 <span className="opt-mark">선택</span></span>
-            <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />
+            <span className="lbl"><span className="stepno">3</span> 케이크 맛</span>
+            {form.flavor && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
-          <div className={"field-val " + (!designerObj ? "placeholder" : "")}>
-            {designerObj ? `${designerObj.name} · ${designerObj.role}` : "지정하지 않으면 가능한 디자이너로 배정돼요"}
-          </div>
-        </button>
+          <select
+            className={"field-select " + (!form.flavor ? "placeholder" : "")}
+            value={form.flavor}
+            onChange={(e) => setForm({ ...form, flavor: e.target.value })}
+          >
+            <option value="">맛을 선택해주세요</option>
+            {CAKE_FLAVORS.map((f) => (
+              <option key={f.id} value={f.id}>{f.label}</option>
+            ))}
+          </select>
+        </div>
 
-        {/* 4. 이름 */}
+        {/* 4. 디자인 설명 (선택) */}
+        <div className="field">
+          <div className="field-label">
+            <span className="lbl"><span className="stepno">4</span> 케이크 디자인 설명 <span className="opt-mark">선택</span></span>
+          </div>
+          <textarea
+            className="field-textarea"
+            value={form.design}
+            placeholder="EX) 파스텔톤으로 부드럽게, 꽃 장식 포인트로 부탁드려요"
+            onChange={(e) => setForm({ ...form, design: e.target.value })}
+            rows={3}
+          />
+        </div>
+
+        {/* 5. 판 문구 (선택) */}
+        <div className="field">
+          <div className="field-label">
+            <span className="lbl"><span className="stepno">5</span> 케이크 판 문구 <span className="opt-mark">선택</span></span>
+          </div>
+          <input type="text" value={form.boardText} placeholder="EX) Happy Birthday 윤서" onChange={(e) => setForm({ ...form, boardText: e.target.value })} />
+        </div>
+
+        {/* 6. 옵션 (선택, 중복) */}
+        <div className="field">
+          <div className="field-label">
+            <span className="lbl"><span className="stepno">6</span> 옵션 <span className="opt-mark">선택 · 중복 가능</span></span>
+          </div>
+          <div className="checkbox-list">
+            {CAKE_OPTIONS.map((opt) => {
+              const checked = form.options.includes(opt.id);
+              return (
+                <label key={opt.id} className={"checkbox-row " + (checked ? "on" : "")}>
+                  <input type="checkbox" checked={checked} onChange={() => toggleOption(opt.id)} />
+                  <span className="checkbox-mark" aria-hidden="true">
+                    {checked && <I.Check size={12} strokeWidth={2.8} />}
+                  </span>
+                  <span className="checkbox-label">{opt.label}</span>
+                  <span className="checkbox-price">+{fmt(opt.price)}원</span>
+                </label>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 7. 이름 */}
         <div className={"field " + (form.name.trim() ? "done" : "")}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">4</span> 이름</span>
+            <span className="lbl"><span className="stepno">7</span> 이름</span>
             {form.name.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
           <input type="text" value={form.name} placeholder="EX) 홍길동" onChange={(e) => setForm({ ...form, name: e.target.value })} />
         </div>
 
-        {/* 5. 카카오톡 ID */}
+        {/* 8. 카카오톡 ID */}
         <div className={"field " + (form.kakao.trim() ? "done" : "")}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">5</span> 카카오톡 ID</span>
+            <span className="lbl"><span className="stepno">8</span> 카카오톡 ID</span>
             {form.kakao.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
           <input type="text" value={form.kakao} placeholder="카카오톡 ID를 입력해주세요" onChange={(e) => setForm({ ...form, kakao: e.target.value })} />
         </div>
-
-        {/* 6. 요청사항 */}
-        <div className="field">
-          <div className="field-label">
-            <span className="lbl"><span className="stepno">6</span> 요청사항 <span className="opt-mark">선택</span></span>
-          </div>
-          <input type="text" value={form.note} placeholder="EX) 옆머리는 조금만 다듬어주세요" onChange={(e) => setForm({ ...form, note: e.target.value })} />
-        </div>
       </div>
+
+      {totalPrice > 0 && (
+        <div className="price-summary">
+          <div className="price-summary-row">
+            <span className="price-summary-label">예상 합계</span>
+            <span className="price-summary-value">{fmt(totalPrice)}<span className="won">원</span></span>
+          </div>
+          <div className="price-summary-meta">
+            {sizeObj ? sizeObj.label : ""}{optionObjs.length ? ` + 옵션 ${optionObjs.length}개` : ""}
+          </div>
+        </div>
+      )}
 
       <div className="notice">
         <h5>NOTICE</h5>
         <h6>예약 시 확인해주세요</h6>
         <ul>
-          <li>예약 시간 24시간 전까지는 자유롭게 변경·취소가 가능해요.</li>
-          <li>2시간 이내 노쇼·취소가 반복되면 다음 예약이 제한될 수 있어요.</li>
-          <li>마감 1시간 전에는 예약이 마감되니 참고해주세요.</li>
-          <li>예약금 없이 시술 완료 후 매장에서 결제하시면 돼요.</li>
+          <li>케이크 제작은 픽업 3일 전까지 예약해주세요.</li>
+          <li>디자인 협의 후 예약금 50%를 선입금받습니다.</li>
+          <li>당일 픽업 변경·취소는 어려워요.</li>
+          <li>잔금은 픽업 시 매장에서 결제하시면 돼요.</li>
         </ul>
       </div>
 
@@ -735,23 +829,10 @@ function BookingScreen({ initial }) {
 
       {pickerOpen && (
         <DateTimePicker
-          initialDate={form.date}
-          initialTime={form.time}
+          initialDate={form.pickupDate}
+          initialTime={form.pickupTime}
           onClose={() => setPickerOpen(false)}
-          onConfirm={({ date, time }) => { setForm((f) => ({ ...f, date, time })); setPickerOpen(false); }}
-        />
-      )}
-      {serviceSheetOpen && (
-        <ServicePicker
-          onClose={() => setServiceSheetOpen(false)}
-          onPick={(text, id) => { setForm((f) => ({ ...f, service: text, serviceId: id })); setServiceSheetOpen(false); }}
-        />
-      )}
-      {designerSheetOpen && (
-        <DesignerPicker
-          activeId={form.designerId}
-          onClose={() => setDesignerSheetOpen(false)}
-          onPick={(d) => { setForm((f) => ({ ...f, designerId: d?.id || "" })); setDesignerSheetOpen(false); }}
+          onConfirm={({ date, time }) => { setForm((f) => ({ ...f, pickupDate: date, pickupTime: time })); setPickerOpen(false); }}
         />
       )}
     </div>
@@ -853,90 +934,6 @@ function DateTimePicker({ initialDate, initialTime, onClose, onConfirm }) {
           <button className="btn" disabled={!date || !time} onClick={() => onConfirm({ date, time })}>
             선택 완료
           </button>
-        </div>
-      </div>
-    </>
-  );
-}
-
-// ─── Service Picker ─────────────────────────────────────────
-function ServicePicker({ onClose, onPick }) {
-  const [activeId, setActiveId] = useState(HAIR_CATEGORIES[0].id);
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, []);
-  const cat = HAIR_CATEGORIES.find((c) => c.id === activeId);
-  const list = HAIR_STYLES[activeId];
-  return (
-    <>
-      <div className="scrim" onClick={onClose} />
-      <div className="sheet sheet-tall" role="dialog" aria-modal="true">
-        <div className="sheet-handle" />
-        <div className="guide-head"><h3>시술 선택</h3>
-          <button className="sheet-close" onClick={onClose} aria-label="닫기"><I.Close size={18} /></button>
-        </div>
-        <div className="guide-tabs">
-          {HAIR_CATEGORIES.map((c) => (
-            <button key={c.id} className={"guide-tab " + (c.id === activeId ? "on" : "")} onClick={() => setActiveId(c.id)}>{c.name}</button>
-          ))}
-        </div>
-        <div className="guide-body">
-          <ul className="guide-list">
-            {list.map((s, i) => (
-              <li key={i}>
-                <span className="guide-text">
-                  <span className="guide-q">{s.name}</span>
-                  <span className="guide-note">{fmt(s.price)}원 · {s.time}분</span>
-                </span>
-                <button className="guide-apply" onClick={() => onPick(`${cat.name} · ${s.name} (${fmt(s.price)}원)`, `${cat.id}-${i}`)}>선택</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </>
-  );
-}
-
-// ─── Designer Picker ────────────────────────────────────────
-function DesignerPicker({ activeId, onClose, onPick }) {
-  useEffect(() => {
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, []);
-  return (
-    <>
-      <div className="scrim" onClick={onClose} />
-      <div className="sheet sheet-tall" role="dialog" aria-modal="true">
-        <div className="sheet-handle" />
-        <div className="guide-head"><h3>디자이너 선택</h3>
-          <button className="sheet-close" onClick={onClose} aria-label="닫기"><I.Close size={18} /></button>
-        </div>
-        <div className="guide-body">
-          <button className="d-pick none" onClick={() => onPick(null)}>
-            <div className="d-pick-text">
-              <div className="d-pick-name">지정 없이 예약</div>
-              <div className="d-pick-sub">가능한 디자이너로 자동 배정됩니다</div>
-            </div>
-            {!activeId && <I.Check size={18} strokeWidth={2.4} />}
-          </button>
-          {DESIGNERS.map((d) => (
-            <button key={d.id} className="d-pick" onClick={() => onPick(d)}>
-              <div className="designer-avatar small" data-rank={d.rank}>
-                <span className="designer-initial">{d.initial}</span>
-              </div>
-              <div className="d-pick-text">
-                <div className="d-pick-name">{d.name} <span className="d-pick-role">{d.role}</span></div>
-                <div className="d-pick-sub">{d.specialty.join(" · ")} · {d.years}년</div>
-              </div>
-              {activeId === d.id && <I.Check size={18} strokeWidth={2.4} />}
-            </button>
-          ))}
         </div>
       </div>
     </>
@@ -1063,12 +1060,11 @@ function App() {
   };
 
   const bookStyle = (it) => {
-    setBookingSeed({ service: `${it.category} · ${it.name} (${fmt(it.price)}원)`, serviceId: `${it.categoryId}-${it.name}` });
+    setBookingSeed({ design: `${it.category} · ${it.name}` });
     setStyleSheet(null);
     go("booking");
   };
   const bookDesigner = (d) => {
-    setBookingSeed((prev) => ({ ...(prev || {}), designerId: d.id }));
     setDesignerSheet(null);
     go("booking");
   };
