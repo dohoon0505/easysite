@@ -183,7 +183,7 @@ function showShareToast(text) {
 function BottomNav({ route, go }) {
   const tabs = [
     { id: "home",     label: "홈",       icon: I.Home },
-    { id: "styles",   label: "디자인",   icon: I.Cake },
+    { id: "styles",   label: "디자인",   icon: I.Flower },
     { id: "booking",  label: "예약요청", icon: I.Clipboard },
     { id: "faq",     label: "질문/답변", icon: I.Help },
   ];
