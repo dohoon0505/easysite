@@ -429,20 +429,31 @@ function DesignerSheet({ designer, onClose, onBook }) {
 
 // ─── BOOKING (꽃 예약) ───────────────────────────────────────
 const FLOWER_CATEGORIES = [
-  { id: "bouquet",  label: "꽃다발" },
-  { id: "basket",   label: "꽃바구니" },
-  { id: "moneybox", label: "용돈박스" },
-  { id: "acrylic",  label: "아크릴백" },
+  { id: "bouquet", label: "꽃다발" },
+  { id: "basket",  label: "꽃바구니" },
+  { id: "acrylic", label: "아크릴백" },
 ];
-const CATEGORY_NAME_MAP = { bouquet: "꽃다발", basket: "꽃바구니", moneybox: "용돈박스", acrylic: "아크릴백" };
-const CATEGORY_ID_MAP = { "꽃다발": "bouquet", "꽃바구니": "basket", "용돈박스": "moneybox", "아크릴백": "acrylic" };
+const CATEGORY_ID_MAP = { "꽃다발": "bouquet", "꽃바구니": "basket", "용돈박스": "bouquet", "아크릴백": "acrylic" };
 
-function getProductsByCategory(catId) {
-  return [
-    ...FEATURED_STYLES, ...BUSINESS_STYLES, ...MZ_STYLES,
-    ...STARTER_STYLES, ...ACRYLIC_STYLES,
-  ].filter(p => p.categoryName === CATEGORY_NAME_MAP[catId]);
-}
+const BOOKING_SIZES = {
+  bouquet: [
+    { id: "bouquet-s",       label: "꽃다발 S",       price: 35000 },
+    { id: "bouquet-m",       label: "꽃다발 M",       price: 50000 },
+    { id: "bouquet-l",       label: "꽃다발 L",       price: 80000 },
+    { id: "bouquet-premium", label: "프리미엄 꽃다발", price: 100000 },
+    { id: "bouquet-large",   label: "대형 꽃다발",     price: 150000 },
+  ],
+  basket: [
+    { id: "basket-s",       label: "꽃바구니 S",             price: 60000 },
+    { id: "basket-m",       label: "꽃바구니 M (기본/BEST)", price: 80000 },
+    { id: "basket-l",       label: "꽃바구니 L",             price: 100000 },
+    { id: "basket-premium", label: "프리미엄 꽃바구니",       price: 150000 },
+  ],
+  acrylic: [
+    { id: "acrylic-real",       label: "아크릴백 (생화)", price: 130000 },
+    { id: "acrylic-artificial", label: "아크릴백 (조화)", price: 90000 },
+  ],
+};
 
 const FLOWER_OPTIONS = [
   { id: "bag", label: "쇼핑백", price: 1000 },
@@ -481,7 +492,7 @@ function BookingScreen({ initial }) {
 
   const isPickup = mode === "pickup";
   const catObj = FLOWER_CATEGORIES.find((c) => c.id === form.category);
-  const products = form.category ? getProductsByCategory(form.category) : [];
+  const products = form.category ? (BOOKING_SIZES[form.category] || []) : [];
   const productObj = products.find((p) => p.id === form.product);
   const optionObjs = form.options.map((id) => FLOWER_OPTIONS.find((o) => o.id === id)).filter(Boolean);
   const optionTotal = optionObjs.reduce((sum, o) => sum + o.price, 0);
@@ -524,7 +535,7 @@ function BookingScreen({ initial }) {
       lines.push("수령인 성함: " + form.recipientName);
       lines.push("수령인 연락처: " + form.recipientContact);
     }
-    lines.push("상품: " + catObj.label + " · " + productObj.name);
+    lines.push("상품: " + productObj.label);
     lines.push("가격: " + fmt(productObj.price) + "원");
     if (form.color.trim()) lines.push("원하는 색상: " + form.color);
     if (optionObjs.length) lines.push("옵션: " + optionObjs.map((o) => `${o.label} (+${fmt(o.price)}원)`).join(", "));
@@ -555,7 +566,7 @@ function BookingScreen({ initial }) {
   return (
     <div>
       <div className="order-hero">
-        <span className="step-pill"><I.Calendar size={12} strokeWidth={2.2} /> 꽃 예약</span>
+        <span className="step-pill"><I.Calendar size={12} strokeWidth={2.2} /> 꽃 주문 예약</span>
         <h2>{isPickup ? "편한 픽업 일시를" : "배송 받으실 정보를"}<br />{isPickup ? "선택해주세요" : "입력해주세요"}</h2>
         <p>예약 요청이 접수되면 카카오톡으로 확정 안내를 드려요.</p>
       </div>
@@ -640,7 +651,7 @@ function BookingScreen({ initial }) {
               : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
           </div>
           <div className={"field-val " + (!productObj ? "placeholder" : "")}>
-            {productObj ? `${productObj.name} · ${fmt(productObj.price)}원` : "사이즈를 선택해주세요"}
+            {productObj ? `${productObj.label} · ${fmt(productObj.price)}원` : "사이즈를 선택해주세요"}
           </div>
         </button>
 
@@ -714,7 +725,7 @@ function BookingScreen({ initial }) {
             <span className="price-summary-value">{fmt(totalPrice)}<span className="won">원</span></span>
           </div>
           <div className="price-summary-meta">
-            {productObj ? productObj.name : ""}{optionObjs.length ? ` + 옵션 ${optionObjs.length}개` : ""}
+            {productObj ? productObj.label : ""}{optionObjs.length ? ` + 옵션 ${optionObjs.length}개` : ""}
           </div>
         </div>
       )}
@@ -781,7 +792,7 @@ function BookingScreen({ initial }) {
           value={form.product}
           renderRow={(p) => (
             <>
-              <span className="option-label">{p.name}</span>
+              <span className="option-label">{p.label}</span>
               <span className="option-price">{fmt(p.price)}<span className="won">원</span></span>
             </>
           )}
@@ -1063,7 +1074,7 @@ function App() {
   const bookStyle = (it) => {
     setBookingSeed({
       category: CATEGORY_ID_MAP[it.categoryName] || "",
-      product: it.id,
+      product: "",
     });
     setStyleSheet(null);
     go("booking");
