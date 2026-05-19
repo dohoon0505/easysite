@@ -916,7 +916,7 @@ function FaqScreen() {
       <div className="faq-hero">
         <span className="step-pill"><I.Help size={12} strokeWidth={2.2} /> 자주 묻는 질문</span>
         <h2>궁금한 점을 빠르게 찾아드려요</h2>
-        <p>케이크 주문 시 고객님들이 자주 하시는 질문에 대한 답변을 모아두었어요. 해당 질문/답변 외에 궁금한 것은 카카오톡으로 문의주세요!</p>
+        <p>꽃 주문 시 고객님들이 자주 하시는 질문에 대한 답변을 모아두었어요. 해당 질문/답변 외에 궁금한 것은 카카오톡으로 문의주세요!</p>
         <div className="faq-search">
           <I.Search size={18} strokeWidth={2} />
           <input type="text" placeholder="질문 검색하기" value={query} onChange={(e) => setQuery(e.target.value)} />
