@@ -438,9 +438,12 @@ const CAKE_SIZES = [
   { id: "size-3", label: "3호 (지름 21cm)", price: 59000 },
 ];
 const CAKE_FLAVORS = [
-  { id: "strawberry", label: "동물성생크림 + 생딸기" },
-  { id: "goldkiwi",   label: "동물성생크림 + 골드키위" },
-  { id: "greengrape", label: "동물성생크림 + 청포도" },
+  { id: "vanilla-milk",      label: "바닐라 쌀시트 + 우유크림",                surcharge: 0 },
+  { id: "vanilla-lemon",     label: "바닐라 쌀시트 + 레몬커스터드",            surcharge: 2000 },
+  { id: "vanilla-blueberry", label: "바닐라 쌀시트 + 블루베리잼",              surcharge: 3000 },
+  { id: "choco-oreo",        label: "초코 쌀시트 + 오레오쿠키 + 오레오크림",   surcharge: 3000 },
+  { id: "choco-choco",       label: "초코 쌀시트 + 초코크림",                  surcharge: 3000 },
+  { id: "mugwort",           label: "쑥 시트 + 쑥크림",                        surcharge: 3000 },
 ];
 const CAKE_OPTIONS = [
   { id: "case",    label: "1단 투명케이스",     price: 5000 },
@@ -478,7 +481,7 @@ function BookingScreen({ initial }) {
   const flavorObj = CAKE_FLAVORS.find((f) => f.id === form.flavor);
   const optionObjs = form.options.map((id) => CAKE_OPTIONS.find((o) => o.id === id)).filter(Boolean);
   const optionTotal = optionObjs.reduce((sum, o) => sum + o.price, 0);
-  const totalPrice = (sizeObj?.price || 0) + optionTotal;
+  const totalPrice = (sizeObj?.price || 0) + (flavorObj?.surcharge || 0) + optionTotal;
 
   const toggleOption = (id) => {
     setForm((f) => ({
@@ -498,7 +501,7 @@ function BookingScreen({ initial }) {
       "",
       "픽업: " + formatDateKR(form.pickupDate) + " " + form.pickupTime,
       "사이즈: " + sizeObj.label + " (" + fmt(sizeObj.price) + "원)",
-      "맛: " + flavorObj.label,
+      "맛: " + flavorObj.label + (flavorObj.surcharge > 0 ? ` (+${fmt(flavorObj.surcharge)}원~)` : ""),
       optionObjs.length ? "옵션: " + optionObjs.map((o) => `${o.label} (${fmt(o.price)}원)`).join(", ") : "",
       form.design ? "디자인 설명: " + form.design : "",
       form.boardText ? "케이크 판 문구: " + form.boardText : "",
@@ -566,7 +569,9 @@ function BookingScreen({ initial }) {
               : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
           </div>
           <div className={"field-val " + (!flavorObj ? "placeholder" : "")}>
-            {flavorObj ? flavorObj.label : "맛을 선택해주세요"}
+            {flavorObj
+              ? `${flavorObj.label}${flavorObj.surcharge > 0 ? ` (+${fmt(flavorObj.surcharge)}원~)` : ""}`
+              : "맛을 선택해주세요"}
           </div>
         </button>
 
@@ -695,7 +700,14 @@ function BookingScreen({ initial }) {
           title="케이크 맛 선택"
           options={CAKE_FLAVORS}
           value={form.flavor}
-          renderRow={(f) => <span className="option-label">{f.label}</span>}
+          renderRow={(f) => (
+            <>
+              <span className="option-label">{f.label}</span>
+              {f.surcharge > 0 && (
+                <span className="option-price">+{fmt(f.surcharge)}<span className="won">원~</span></span>
+              )}
+            </>
+          )}
           onClose={() => setFlavorSheetOpen(false)}
           onPick={(opt) => { setForm((f) => ({ ...f, flavor: opt.id })); setFlavorSheetOpen(false); }}
         />
