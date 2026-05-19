@@ -252,10 +252,10 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         <p className="info-banner-text">예약요청 탭을 통해 간편히 예약을 요청해보세요!</p>
       </div>
 
-      <FeaturedSlider title="귀여운 도시락케이크" list={FEATURED_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="이달의 베스트 케이크" list={BUSINESS_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="여심저격 베스트 디자인" list={MZ_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="부모님 베스트픽 디자인" list={STARTER_STYLES} openStyle={openStyle} />
+      <FeaturedSlider title="가벼운 꽃다발 추천" list={FEATURED_STYLES} openStyle={openStyle} />
+      <FeaturedSlider title="풍성한 꽃다발 추천" list={BUSINESS_STYLES} openStyle={openStyle} />
+      <FeaturedSlider title="특별한 날, 꽃바구니 선물!" list={MZ_STYLES} openStyle={openStyle} />
+      <FeaturedSlider title="아름다운 효도, 용돈박스" list={STARTER_STYLES} openStyle={openStyle} />
 
       <section className="section home-faq-section">
         <div className="section-head">
