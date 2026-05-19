@@ -207,7 +207,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   backdrop-filter: none;
   display: flex;
   align-items: center;
-  padding: 0 12px 0 4px;
+  padding: 0 12px 0 16px;
   border-bottom: 1px solid var(--sm-border-subtle);
   transition: border-color 180ms, background 180ms, box-shadow 180ms;
 }
@@ -234,6 +234,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   color: var(--sm-content-primary);
   transition: background 180ms;
 }
+.appbar .iconbtn:first-child { margin-left: -12px; }
 .appbar .iconbtn:hover { background: var(--sm-interactive-brand-subtle); }
 .appbar .grow { flex: 1; }
 .appbar .pagetitle {
