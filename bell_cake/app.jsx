@@ -445,6 +445,8 @@ function BookingScreen({ initial }) {
 
   const [toast, setToast] = useState(null);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [sizeSheetOpen, setSizeSheetOpen] = useState(false);
+  const [flavorSheetOpen, setFlavorSheetOpen] = useState(false);
 
   const required = ["pickupDate", "pickupTime", "size", "flavor", "name", "contact"];
   const done = required.filter((k) => (form[k] || "").trim().length > 0).length;
@@ -521,40 +523,30 @@ function BookingScreen({ initial }) {
         </button>
 
         {/* 2. 사이즈 */}
-        <div className={"field " + (form.size ? "done" : "")}>
+        <button type="button" className={"field selectable " + (form.size ? "done" : "")} onClick={() => setSizeSheetOpen(true)}>
           <div className="field-label">
             <span className="lbl"><span className="stepno">2</span> 사이즈</span>
-            {form.size && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
+            {form.size
+              ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />
+              : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
           </div>
-          <select
-            className={"field-select " + (!form.size ? "placeholder" : "")}
-            value={form.size}
-            onChange={(e) => setForm({ ...form, size: e.target.value })}
-          >
-            <option value="">사이즈를 선택해주세요</option>
-            {CAKE_SIZES.map((s) => (
-              <option key={s.id} value={s.id}>{s.label} · {fmt(s.price)}원</option>
-            ))}
-          </select>
-        </div>
+          <div className={"field-val " + (!sizeObj ? "placeholder" : "")}>
+            {sizeObj ? `${sizeObj.label} · ${fmt(sizeObj.price)}원` : "사이즈를 선택해주세요"}
+          </div>
+        </button>
 
         {/* 3. 맛 */}
-        <div className={"field " + (form.flavor ? "done" : "")}>
+        <button type="button" className={"field selectable " + (form.flavor ? "done" : "")} onClick={() => setFlavorSheetOpen(true)}>
           <div className="field-label">
             <span className="lbl"><span className="stepno">3</span> 케이크 맛</span>
-            {form.flavor && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
+            {form.flavor
+              ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />
+              : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
           </div>
-          <select
-            className={"field-select " + (!form.flavor ? "placeholder" : "")}
-            value={form.flavor}
-            onChange={(e) => setForm({ ...form, flavor: e.target.value })}
-          >
-            <option value="">맛을 선택해주세요</option>
-            {CAKE_FLAVORS.map((f) => (
-              <option key={f.id} value={f.id}>{f.label}</option>
-            ))}
-          </select>
-        </div>
+          <div className={"field-val " + (!flavorObj ? "placeholder" : "")}>
+            {flavorObj ? flavorObj.label : "맛을 선택해주세요"}
+          </div>
+        </button>
 
         {/* 4. 디자인 설명 (선택) */}
         <div className="field">
@@ -661,7 +653,77 @@ function BookingScreen({ initial }) {
           onConfirm={({ date, time }) => { setForm((f) => ({ ...f, pickupDate: date, pickupTime: time })); setPickerOpen(false); }}
         />
       )}
+      {sizeSheetOpen && (
+        <OptionSheet
+          title="사이즈 선택"
+          options={CAKE_SIZES}
+          value={form.size}
+          renderRow={(s) => (
+            <>
+              <span className="option-label">{s.label}</span>
+              <span className="option-price">{fmt(s.price)}<span className="won">원</span></span>
+            </>
+          )}
+          onClose={() => setSizeSheetOpen(false)}
+          onPick={(opt) => { setForm((f) => ({ ...f, size: opt.id })); setSizeSheetOpen(false); }}
+        />
+      )}
+      {flavorSheetOpen && (
+        <OptionSheet
+          title="케이크 맛 선택"
+          options={CAKE_FLAVORS}
+          value={form.flavor}
+          renderRow={(f) => <span className="option-label">{f.label}</span>}
+          onClose={() => setFlavorSheetOpen(false)}
+          onPick={(opt) => { setForm((f) => ({ ...f, flavor: opt.id })); setFlavorSheetOpen(false); }}
+        />
+      )}
     </div>
+  );
+}
+
+// ─── Option Sheet (custom dropdown) ─────────────────────────
+function OptionSheet({ title, options, value, renderRow, onClose, onPick }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, []);
+  return (
+    <>
+      <div className="scrim" onClick={onClose} />
+      <div className="sheet" role="dialog" aria-modal="true" aria-label={title}>
+        <div className="sheet-handle" />
+        <div className="sheet-head">
+          <h4>{title}</h4>
+          <button className="sheet-close" onClick={onClose} aria-label="닫기"><I.Close size={18} /></button>
+        </div>
+        <div className="sheet-body option-sheet-body">
+          <ul className="option-list">
+            {options.map((opt) => {
+              const selected = opt.id === value;
+              return (
+                <li key={opt.id}>
+                  <button
+                    type="button"
+                    className={"option-row " + (selected ? "on" : "")}
+                    onClick={() => onPick(opt)}
+                  >
+                    <span className="option-row-text">
+                      {renderRow ? renderRow(opt) : <span className="option-label">{opt.label}</span>}
+                    </span>
+                    <span className={"option-check " + (selected ? "on" : "")} aria-hidden="true">
+                      {selected && <I.Check size={16} strokeWidth={2.6} />}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+    </>
   );
 }
 
