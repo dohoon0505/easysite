@@ -195,9 +195,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   max-width: 480px;
   margin: 0 auto;
   z-index: 10;
-  background: transparent;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+  background: #fff;
   display: flex;
   align-items: center;
   padding: 0 12px 0 16px;
@@ -298,7 +296,6 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   background: var(--sm-interactive-brand-default);
   width: 100%;
   overflow: hidden;
-  margin-top: -64px;
 }
 .hero-img {
   width: 100%;
