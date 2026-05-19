@@ -1592,6 +1592,24 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 .progress-meta .num { font-weight: 700; color: var(--sm-content-primary); font-variant-numeric: tabular-nums; }
 
+.mode-toggle {
+  display: flex; gap: 8px; padding: 0 20px; margin-top: 16px;
+}
+.mode-btn {
+  flex: 1; padding: 12px 0; border-radius: var(--radius-md);
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  border: 1.5px solid var(--sm-border-subtle);
+  background: var(--sm-surface-raised);
+  color: var(--sm-content-tertiary);
+  transition: all 180ms;
+}
+.mode-btn.on {
+  border-color: var(--sm-content-primary);
+  background: var(--sm-content-primary);
+  color: #fff;
+}
+.mode-btn:not(.on):hover { background: var(--sm-background-subtle); }
+
 .form { padding: 20px; display: grid; gap: 12px; }
 .field {
   background: var(--sm-surface-raised);

@@ -427,65 +427,74 @@ function DesignerSheet({ designer, onClose, onBook }) {
   );
 }
 
-// ─── BOOKING (케이크 예약) ───────────────────────────────────
-const CAKE_SIZES = [
-  { id: "type-dosirak", label: "도시락케이크 (9cm)",            price: 17000 },
-  { id: "type-mini",    label: "미니케이크 (12cm, 1~2인)",      price: 30000 },
-  { id: "type-1",       label: "1호 케이크 (16cm, 3~5인)",      price: 40000 },
-  { id: "type-2",       label: "2호 케이크 (18cm, 6~8인)",      price: 50000 },
-  { id: "type-3",       label: "3호 케이크 (21cm, 7~10인)",     price: 60000 },
+// ─── BOOKING (꽃 예약) ───────────────────────────────────────
+const FLOWER_CATEGORIES = [
+  { id: "bouquet",  label: "꽃다발" },
+  { id: "basket",   label: "꽃바구니" },
+  { id: "moneybox", label: "용돈박스" },
+  { id: "acrylic",  label: "아크릴백" },
 ];
-const CAKE_FLAVORS = [
-  { id: "vanilla-milk",      label: "바닐라 쌀시트 + 우유크림",                surcharge: 0 },
-  { id: "vanilla-lemon",     label: "바닐라 쌀시트 + 레몬커스터드",            surcharge: 2000 },
-  { id: "vanilla-blueberry", label: "바닐라 쌀시트 + 블루베리잼",              surcharge: 3000 },
-  { id: "choco-oreo",        label: "초코 쌀시트 + 오레오쿠키 + 오레오크림",   surcharge: 3000 },
-  { id: "choco-choco",       label: "초코 쌀시트 + 초코크림",                  surcharge: 3000 },
-  { id: "mugwort",           label: "쑥 시트 + 쑥크림",                        surcharge: 3000 },
-];
-const CAKE_OPTIONS = [
-  { id: "case",    label: "1단 투명케이스",     price: 5000 },
-  { id: "bag-ice", label: "보냉백 + 아이스팩",  price: 6000 },
-  { id: "bag-12",  label: "보냉가방 1~2호",      price: 7500 },
-  { id: "bag-3",   label: "보냉가방 3호",         price: 8500 },
+const CATEGORY_NAME_MAP = { bouquet: "꽃다발", basket: "꽃바구니", moneybox: "용돈박스", acrylic: "아크릴백" };
+const CATEGORY_ID_MAP = { "꽃다발": "bouquet", "꽃바구니": "basket", "용돈박스": "moneybox", "아크릴백": "acrylic" };
+
+function getProductsByCategory(catId) {
+  return [
+    ...FEATURED_STYLES, ...BUSINESS_STYLES, ...MZ_STYLES,
+    ...STARTER_STYLES, ...ACRYLIC_STYLES,
+  ].filter(p => p.categoryName === CATEGORY_NAME_MAP[catId]);
+}
+
+const FLOWER_OPTIONS = [
+  { id: "bag", label: "쇼핑백", price: 1000 },
 ];
 
 function BookingScreen({ initial }) {
+  const [mode, setMode] = useState("pickup");
   const [form, setForm] = useState({
-    pickupDate: "",
-    pickupTime: "",
-    size: initial?.size || "",
-    flavor: initial?.flavor || "",
-    design: initial?.design || "",
-    boardText: "",
+    category: "",
+    product: "",
+    color: "",
     options: [],
+    request: "",
     name: "",
     contact: "",
+    pickupDate: "",
+    pickupTime: "",
+    deliveryDate: "",
+    deliveryTime: "",
+    deliveryAddress: "",
+    recipientName: "",
+    recipientContact: "",
   });
   useEffect(() => {
     if (initial) setForm((f) => ({
       ...f,
-      ...(initial.design ? { design: initial.design } : {}),
-      ...(initial.size ? { size: initial.size } : {}),
-      ...(initial.flavor ? { flavor: initial.flavor } : {}),
+      ...(initial.category ? { category: initial.category } : {}),
+      ...(initial.product ? { product: initial.product } : {}),
     }));
   }, [initial]);
 
   const [toast, setToast] = useState(null);
   const [pickerOpen, setPickerOpen] = useState(false);
-  const [sizeSheetOpen, setSizeSheetOpen] = useState(false);
-  const [flavorSheetOpen, setFlavorSheetOpen] = useState(false);
+  const [catSheetOpen, setCatSheetOpen] = useState(false);
+  const [productSheetOpen, setProductSheetOpen] = useState(false);
 
-  const pickupDone = form.pickupDate.trim() && form.pickupTime.trim();
-  const requiredKeys = ["size", "flavor", "name", "contact"];
-  const done = (pickupDone ? 1 : 0) + requiredKeys.filter((k) => (form[k] || "").trim().length > 0).length;
-  const total = requiredKeys.length + 1;
-
-  const sizeObj = CAKE_SIZES.find((s) => s.id === form.size);
-  const flavorObj = CAKE_FLAVORS.find((f) => f.id === form.flavor);
-  const optionObjs = form.options.map((id) => CAKE_OPTIONS.find((o) => o.id === id)).filter(Boolean);
+  const isPickup = mode === "pickup";
+  const catObj = FLOWER_CATEGORIES.find((c) => c.id === form.category);
+  const products = form.category ? getProductsByCategory(form.category) : [];
+  const productObj = products.find((p) => p.id === form.product);
+  const optionObjs = form.options.map((id) => FLOWER_OPTIONS.find((o) => o.id === id)).filter(Boolean);
   const optionTotal = optionObjs.reduce((sum, o) => sum + o.price, 0);
-  const totalPrice = (sizeObj?.price || 0) + (flavorObj?.surcharge || 0) + optionTotal;
+  const totalPrice = (productObj?.price || 0) + optionTotal;
+
+  const dateTimeDone = isPickup
+    ? !!(form.pickupDate.trim() && form.pickupTime.trim())
+    : !!(form.deliveryDate.trim() && form.deliveryTime.trim());
+  const requiredChecks = isPickup
+    ? [dateTimeDone, !!form.category, !!form.product, !!form.name.trim(), !!form.contact.trim()]
+    : [dateTimeDone, !!form.deliveryAddress.trim(), !!form.recipientName.trim(), !!form.recipientContact.trim(), !!form.category, !!form.product, !!form.name.trim(), !!form.contact.trim()];
+  const done = requiredChecks.filter(Boolean).length;
+  const total = requiredChecks.length;
 
   const toggleOption = (id) => {
     setForm((f) => ({
@@ -503,21 +512,29 @@ function BookingScreen({ initial }) {
       setTimeout(() => setToast(null), 2200);
       return;
     }
-    const body = [
-      "[주문서 작성]",
+    const lines = [
+      isPickup ? "[방문수령 주문서]" : "[퀵서비스 주문서]",
       "",
-      "픽업 일시: " + formatDateKR(form.pickupDate) + " " + form.pickupTime,
-      "케이크 종류: " + sizeObj.label,
-      "맛: " + flavorObj.label + (flavorObj.surcharge > 0 ? ` (+${fmt(flavorObj.surcharge)}원)` : ""),
-      optionObjs.length ? "옵션: " + optionObjs.map((o) => `${o.label} (+${fmt(o.price)}원)`).join(", ") : "",
-      form.design ? "디자인 설명: " + form.design : "",
-      form.boardText ? "케이크 판 문구: " + form.boardText : "",
-      "",
-      "예약자 성함: " + form.name,
-      "연락처: " + form.contact,
-      "",
-      "최종 결제비용: " + fmt(totalPrice) + "원",
-    ].filter(Boolean).join("\n");
+    ];
+    if (isPickup) {
+      lines.push("픽업 일시: " + formatDateKR(form.pickupDate) + " " + form.pickupTime);
+    } else {
+      lines.push("배송요청 일시: " + formatDateKR(form.deliveryDate) + " " + form.deliveryTime);
+      lines.push("배송지 주소: " + form.deliveryAddress);
+      lines.push("수령인 성함: " + form.recipientName);
+      lines.push("수령인 연락처: " + form.recipientContact);
+    }
+    lines.push("상품: " + catObj.label + " · " + productObj.name);
+    lines.push("가격: " + fmt(productObj.price) + "원");
+    if (form.color.trim()) lines.push("원하는 색상: " + form.color);
+    if (optionObjs.length) lines.push("옵션: " + optionObjs.map((o) => `${o.label} (+${fmt(o.price)}원)`).join(", "));
+    if (form.request.trim()) lines.push("요청사항: " + form.request);
+    lines.push("");
+    lines.push("주문자 성함: " + form.name);
+    lines.push("주문자 연락처: " + form.contact);
+    lines.push("");
+    lines.push("최종 결제비용: " + fmt(totalPrice) + "원");
+    const body = lines.join("\n");
 
     navigator.clipboard.writeText(body).catch(() => {});
     setCountdown(3);
@@ -538,9 +555,14 @@ function BookingScreen({ initial }) {
   return (
     <div>
       <div className="order-hero">
-        <span className="step-pill"><I.Calendar size={12} strokeWidth={2.2} /> 케이크 예약</span>
-        <h2>편한 픽업 일시를<br />선택해주세요</h2>
+        <span className="step-pill"><I.Calendar size={12} strokeWidth={2.2} /> 꽃 예약</span>
+        <h2>{isPickup ? "편한 픽업 일시를" : "배송 받으실 정보를"}<br />{isPickup ? "선택해주세요" : "입력해주세요"}</h2>
         <p>예약 요청이 접수되면 카카오톡으로 확정 안내를 드려요.</p>
+      </div>
+
+      <div className="mode-toggle">
+        <button className={"mode-btn " + (isPickup ? "on" : "")} onClick={() => setMode("pickup")}>방문수령</button>
+        <button className={"mode-btn " + (!isPickup ? "on" : "")} onClick={() => setMode("delivery")}>퀵서비스</button>
       </div>
 
       <div className="progress" aria-label={`${done}/${total} 입력 완료`}>
@@ -552,78 +574,91 @@ function BookingScreen({ initial }) {
       </div>
 
       <div className="form">
-        {/* 1. 픽업 일시 */}
-        <button type="button" className={"field selectable " + (form.pickupDate && form.pickupTime ? "done" : "")} onClick={() => setPickerOpen(true)}>
+        {/* 날짜/시간 */}
+        <button type="button" className={"field selectable " + (dateTimeDone ? "done" : "")} onClick={() => setPickerOpen(true)}>
           <div className="field-label">
-            <span className="lbl">1. 픽업 일시</span>
-            {(form.pickupDate && form.pickupTime)
+            <span className="lbl">1. {isPickup ? "픽업 일시" : "배송요청 일시"}</span>
+            {dateTimeDone
               ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />
               : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
           </div>
-          <div className={"field-val " + (!(form.pickupDate && form.pickupTime) ? "placeholder" : "")}>
-            {form.pickupDate && form.pickupTime
-              ? `${formatDateKR(form.pickupDate)} · ${form.pickupTime}`
-              : "달력에서 픽업 날짜와 시간을 선택하세요"}
+          <div className={"field-val " + (!dateTimeDone ? "placeholder" : "")}>
+            {dateTimeDone
+              ? `${formatDateKR(isPickup ? form.pickupDate : form.deliveryDate)} · ${isPickup ? form.pickupTime : form.deliveryTime}`
+              : "달력에서 날짜와 시간을 선택하세요"}
           </div>
         </button>
 
-        {/* 2. 케이크 종류 */}
-        <button type="button" className={"field selectable " + (form.size ? "done" : "")} onClick={() => setSizeSheetOpen(true)}>
+        {/* 퀵서비스 전용: 배송지 + 수령인 */}
+        {!isPickup && (
+          <>
+            <div className={"field " + (form.deliveryAddress.trim() ? "done" : "")}>
+              <div className="field-label">
+                <span className="lbl">2. 배송지 주소</span>
+                {form.deliveryAddress.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
+              </div>
+              <input type="text" value={form.deliveryAddress} placeholder="배송받으실 주소를 입력해 주세요" onChange={(e) => setForm({ ...form, deliveryAddress: e.target.value })} />
+            </div>
+
+            <div className={"field " + (form.recipientName.trim() ? "done" : "")}>
+              <div className="field-label">
+                <span className="lbl">3. 수령인 성함</span>
+                {form.recipientName.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
+              </div>
+              <input type="text" value={form.recipientName} placeholder="수령인 성함을 입력해 주세요" onChange={(e) => setForm({ ...form, recipientName: e.target.value })} />
+            </div>
+
+            <div className={"field " + (form.recipientContact.trim() ? "done" : "")}>
+              <div className="field-label">
+                <span className="lbl">4. 수령인 연락처</span>
+                {form.recipientContact.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
+              </div>
+              <input type="tel" value={form.recipientContact} placeholder="수령인 연락처를 입력해 주세요" onChange={(e) => setForm({ ...form, recipientContact: e.target.value })} />
+            </div>
+          </>
+        )}
+
+        {/* 상품선택 */}
+        <button type="button" className={"field selectable " + (form.category ? "done" : "")} onClick={() => setCatSheetOpen(true)}>
           <div className="field-label">
-            <span className="lbl">2. 케이크 종류</span>
-            {form.size
+            <span className="lbl">{isPickup ? "2" : "5"}. 상품선택</span>
+            {form.category
               ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />
               : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
           </div>
-          <div className={"field-val " + (!sizeObj ? "placeholder" : "")}>
-            {sizeObj ? `${sizeObj.label} · ${fmt(sizeObj.price)}원~` : "종류를 선택해주세요"}
+          <div className={"field-val " + (!catObj ? "placeholder" : "")}>
+            {catObj ? catObj.label : "상품 종류를 선택해주세요"}
           </div>
         </button>
 
-        {/* 3. 맛 */}
-        <button type="button" className={"field selectable " + (form.flavor ? "done" : "")} onClick={() => setFlavorSheetOpen(true)}>
+        {/* 사이즈 선택 */}
+        <button type="button" className={"field selectable " + (form.product ? "done" : "")} onClick={() => { if (form.category) setProductSheetOpen(true); else { setToast("상품을 먼저 선택해주세요"); setTimeout(() => setToast(null), 2200); } }}>
           <div className="field-label">
-            <span className="lbl">3. 케이크 맛</span>
-            {form.flavor
+            <span className="lbl">{isPickup ? "3" : "6"}. 사이즈 선택</span>
+            {form.product
               ? <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />
               : <I.Arrow size={14} style={{ color: "var(--sm-content-tertiary)" }} />}
           </div>
-          <div className={"field-val " + (!flavorObj ? "placeholder" : "")}>
-            {flavorObj
-              ? `${flavorObj.label}${flavorObj.surcharge > 0 ? ` (+${fmt(flavorObj.surcharge)}원)` : ""}`
-              : "맛을 선택해주세요"}
+          <div className={"field-val " + (!productObj ? "placeholder" : "")}>
+            {productObj ? `${productObj.name} · ${fmt(productObj.price)}원` : "사이즈를 선택해주세요"}
           </div>
         </button>
 
-        {/* 4. 디자인 설명 (선택) */}
+        {/* 원하는 색상 */}
         <div className="field">
           <div className="field-label">
-            <span className="lbl">4. 케이크 디자인 설명 <span className="opt-mark">선택</span></span>
+            <span className="lbl">{isPickup ? "4" : "7"}. 원하는 색상 <span className="opt-mark">선택</span></span>
           </div>
-          <textarea
-            className="field-textarea"
-            value={form.design}
-            placeholder="EX) 파스텔톤으로 부드럽게, 꽃 장식 포인트로 부탁드려요"
-            onChange={(e) => setForm({ ...form, design: e.target.value })}
-            rows={3}
-          />
+          <input type="text" value={form.color} placeholder="EX) 파스텔톤, 핑크계열, 화이트 등" onChange={(e) => setForm({ ...form, color: e.target.value })} />
         </div>
 
-        {/* 5. 판 문구 (선택) */}
+        {/* 옵션 */}
         <div className="field">
           <div className="field-label">
-            <span className="lbl">5. 케이크 판 문구 <span className="opt-mark">선택</span></span>
-          </div>
-          <input type="text" value={form.boardText} placeholder="EX) Happy Birthday 윤서" onChange={(e) => setForm({ ...form, boardText: e.target.value })} />
-        </div>
-
-        {/* 6. 옵션 (선택, 중복) */}
-        <div className="field">
-          <div className="field-label">
-            <span className="lbl">6. 옵션 <span className="opt-mark">선택 · 중복 가능</span></span>
+            <span className="lbl">{isPickup ? "5" : "8"}. 옵션 <span className="opt-mark">선택</span></span>
           </div>
           <div className="checkbox-list">
-            {CAKE_OPTIONS.map((opt) => {
+            {FLOWER_OPTIONS.map((opt) => {
               const checked = form.options.includes(opt.id);
               return (
                 <label key={opt.id} className={"checkbox-row " + (checked ? "on" : "")}>
@@ -639,19 +674,33 @@ function BookingScreen({ initial }) {
           </div>
         </div>
 
-        {/* 7. 이름 */}
-        <div className={"field " + (form.name.trim() ? "done" : "")}>
+        {/* 요청사항 */}
+        <div className="field">
           <div className="field-label">
-            <span className="lbl">7. 예약자 성함</span>
-            {form.name.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
+            <span className="lbl">{isPickup ? "6" : "9"}. 요청사항 <span className="opt-mark">선택</span></span>
           </div>
-          <input type="text" value={form.name} placeholder="성함을 입력해 주세요" onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          <textarea
+            className="field-textarea"
+            value={form.request}
+            placeholder="추가 요청사항이 있으시면 적어주세요"
+            onChange={(e) => setForm({ ...form, request: e.target.value })}
+            rows={3}
+          />
         </div>
 
-        {/* 8. 연락처 */}
+        {/* 주문자 성함 */}
+        <div className={"field " + (form.name.trim() ? "done" : "")}>
+          <div className="field-label">
+            <span className="lbl">{isPickup ? "7" : "10"}. 주문자 성함</span>
+            {form.name.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
+          </div>
+          <input type="text" value={form.name} placeholder="주문자 성함을 입력해 주세요" onChange={(e) => setForm({ ...form, name: e.target.value })} />
+        </div>
+
+        {/* 주문자 연락처 */}
         <div className={"field " + (form.contact.trim() ? "done" : "")}>
           <div className="field-label">
-            <span className="lbl">8. 예약자 연락처</span>
+            <span className="lbl">{isPickup ? "8" : "11"}. 주문자 연락처</span>
             {form.contact.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
           <input type="tel" value={form.contact} placeholder="연락처를 입력해 주세요" onChange={(e) => setForm({ ...form, contact: e.target.value })} />
@@ -665,7 +714,7 @@ function BookingScreen({ initial }) {
             <span className="price-summary-value">{fmt(totalPrice)}<span className="won">원</span></span>
           </div>
           <div className="price-summary-meta">
-            {sizeObj ? sizeObj.label : ""}{optionObjs.length ? ` + 옵션 ${optionObjs.length}개` : ""}
+            {productObj ? productObj.name : ""}{optionObjs.length ? ` + 옵션 ${optionObjs.length}개` : ""}
           </div>
         </div>
       )}
@@ -674,10 +723,10 @@ function BookingScreen({ initial }) {
         <h5>NOTICE</h5>
         <h6>예약 시 확인해주세요</h6>
         <ul>
-          <li>케이크 제작은 픽업 3일 전까지 예약해주세요.</li>
-          <li>디자인 협의 후 예약금 50%를 선입금받습니다.</li>
-          <li>당일 픽업 변경·취소는 어려워요.</li>
-          <li>잔금은 픽업 시 매장에서 결제하시면 돼요.</li>
+          <li>특정 꽃을 원하시면 2~3일 전에 예약해주세요.</li>
+          <li>당일 주문은 매장 보유 꽃으로 제작됩니다.</li>
+          <li>자연 소재 특성상 100% 동일 제작은 어렵습니다.</li>
+          <li>퀵서비스 비용은 별도이며, 배송 지역에 따라 상이합니다.</li>
         </ul>
       </div>
 
@@ -705,42 +754,39 @@ function BookingScreen({ initial }) {
 
       {pickerOpen && (
         <DateTimePicker
-          initialDate={form.pickupDate}
-          initialTime={form.pickupTime}
+          initialDate={isPickup ? form.pickupDate : form.deliveryDate}
+          initialTime={isPickup ? form.pickupTime : form.deliveryTime}
           onClose={() => setPickerOpen(false)}
-          onConfirm={({ date, time }) => { setForm((f) => ({ ...f, pickupDate: date, pickupTime: time })); setPickerOpen(false); }}
+          onConfirm={({ date, time }) => {
+            if (isPickup) setForm((f) => ({ ...f, pickupDate: date, pickupTime: time }));
+            else setForm((f) => ({ ...f, deliveryDate: date, deliveryTime: time }));
+            setPickerOpen(false);
+          }}
         />
       )}
-      {sizeSheetOpen && (
+      {catSheetOpen && (
         <OptionSheet
-          title="케이크 종류 선택"
-          options={CAKE_SIZES}
-          value={form.size}
-          renderRow={(s) => (
-            <>
-              <span className="option-label">{s.label}</span>
-              <span className="option-price">{fmt(s.price)}<span className="won">원~</span></span>
-            </>
-          )}
-          onClose={() => setSizeSheetOpen(false)}
-          onPick={(opt) => { setForm((f) => ({ ...f, size: opt.id })); setSizeSheetOpen(false); }}
+          title="상품 선택"
+          options={FLOWER_CATEGORIES}
+          value={form.category}
+          renderRow={(c) => <span className="option-label">{c.label}</span>}
+          onClose={() => setCatSheetOpen(false)}
+          onPick={(opt) => { setForm((f) => ({ ...f, category: opt.id, product: "" })); setCatSheetOpen(false); }}
         />
       )}
-      {flavorSheetOpen && (
+      {productSheetOpen && (
         <OptionSheet
-          title="케이크 맛 선택"
-          options={CAKE_FLAVORS}
-          value={form.flavor}
-          renderRow={(f) => (
+          title="사이즈 선택"
+          options={products}
+          value={form.product}
+          renderRow={(p) => (
             <>
-              <span className="option-label">{f.label}</span>
-              {f.surcharge > 0 && (
-                <span className="option-price">+{fmt(f.surcharge)}<span className="won">원</span></span>
-              )}
+              <span className="option-label">{p.name}</span>
+              <span className="option-price">{fmt(p.price)}<span className="won">원</span></span>
             </>
           )}
-          onClose={() => setFlavorSheetOpen(false)}
-          onPick={(opt) => { setForm((f) => ({ ...f, flavor: opt.id })); setFlavorSheetOpen(false); }}
+          onClose={() => setProductSheetOpen(false)}
+          onPick={(opt) => { setForm((f) => ({ ...f, product: opt.id })); setProductSheetOpen(false); }}
         />
       )}
     </div>
@@ -1016,9 +1062,8 @@ function App() {
 
   const bookStyle = (it) => {
     setBookingSeed({
-      design: it.sizeId ? it.name : `${it.category} · ${it.name}`,
-      size: it.sizeId || "",
-      flavor: it.flavorId || "",
+      category: CATEGORY_ID_MAP[it.categoryName] || "",
+      product: it.id,
     });
     setStyleSheet(null);
     go("booking");
