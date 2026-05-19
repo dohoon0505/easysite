@@ -503,7 +503,7 @@ function BookingScreen({ initial }) {
       "",
       "픽업: " + formatDateKR(form.pickupDate) + " " + form.pickupTime,
       "케이크 종류: " + sizeObj.label + " (" + fmt(sizeObj.price) + "원~)",
-      "맛: " + flavorObj.label + (flavorObj.surcharge > 0 ? ` (+${fmt(flavorObj.surcharge)}원~)` : ""),
+      "맛: " + flavorObj.label + (flavorObj.surcharge > 0 ? ` (+${fmt(flavorObj.surcharge)}원)` : ""),
       optionObjs.length ? "옵션: " + optionObjs.map((o) => `${o.label} (${fmt(o.price)}원)`).join(", ") : "",
       form.design ? "디자인 설명: " + form.design : "",
       form.boardText ? "케이크 판 문구: " + form.boardText : "",
@@ -572,7 +572,7 @@ function BookingScreen({ initial }) {
           </div>
           <div className={"field-val " + (!flavorObj ? "placeholder" : "")}>
             {flavorObj
-              ? `${flavorObj.label}${flavorObj.surcharge > 0 ? ` (+${fmt(flavorObj.surcharge)}원~)` : ""}`
+              ? `${flavorObj.label}${flavorObj.surcharge > 0 ? ` (+${fmt(flavorObj.surcharge)}원)` : ""}`
               : "맛을 선택해주세요"}
           </div>
         </button>
@@ -706,7 +706,7 @@ function BookingScreen({ initial }) {
             <>
               <span className="option-label">{f.label}</span>
               {f.surcharge > 0 && (
-                <span className="option-price">+{fmt(f.surcharge)}<span className="won">원~</span></span>
+                <span className="option-price">+{fmt(f.surcharge)}<span className="won">원</span></span>
               )}
             </>
           )}
