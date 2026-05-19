@@ -153,7 +153,7 @@ function BottomNav({ route, go }) {
   const tabs = [
     { id: "home",     label: "홈",       icon: I.Home },
     { id: "styles",   label: "디자인",   icon: I.Cake },
-    { id: "styling",  label: "예약요청", icon: I.Clipboard },
+    { id: "booking",  label: "예약요청", icon: I.Clipboard },
     { id: "faq",     label: "질문/답변", icon: I.Help },
   ];
   return (
@@ -406,180 +406,6 @@ function DesignerSheet({ designer, onClose, onBook }) {
         </div>
       </div>
     </>
-  );
-}
-
-// ─── STYLING (추천받기) ─────────────────────────────────────
-const AGE_OPTIONS   = ["10대", "20대", "30대", "40대", "50대 이상"];
-const MOOD_OPTIONS  = [
-  { id: "manly",   label: "남성적인",  desc: "단단하고 단정한 인상" },
-  { id: "neutral", label: "중성적인",  desc: "부드럽고 유연한 인상" },
-  { id: "mz",      label: "MZ 트렌드", desc: "요즘 가장 핫한 스타일" },
-  { id: "classic", label: "클래식",    desc: "시간에 흔들리지 않는 정통" },
-  { id: "soft",    label: "내추럴",    desc: "꾸민 듯 안 꾸민 듯 자연스럽게" },
-  { id: "edgy",    label: "엣지",      desc: "강렬한 포인트를 주고 싶을 때" },
-];
-const LENGTH_OPTIONS  = ["짧게", "보통", "기르고 싶어요"];
-const CHALLENGE_OPTIONS = [
-  "머리가 잘 떠요",
-  "머리숱이 많아요",
-  "머리숱이 적어요",
-  "곱슬이에요",
-  "두피가 예민해요",
-];
-
-function StylingScreen() {
-  const [form, setForm] = useState({
-    age: "",
-    moods: [],
-    length: "",
-    challenges: [],
-    note: "",
-  });
-  const [toast, setToast] = useState(null);
-
-  const toggleArr = (key, val) => {
-    setForm((f) => {
-      const cur = f[key];
-      return { ...f, [key]: cur.includes(val) ? cur.filter((v) => v !== val) : [...cur, val] };
-    });
-  };
-
-  const requiredDone = !!form.age && form.moods.length > 0 && !!form.length;
-  const moodLabels = form.moods.map((id) => MOOD_OPTIONS.find((m) => m.id === id)?.label).filter(Boolean);
-
-  const send = () => {
-    if (!requiredDone) {
-      setToast("나이대 · 희망 스타일 · 길이를 선택해주세요");
-      setTimeout(() => setToast(null), 2400);
-      return;
-    }
-    const body = [
-      "[벨케이크 스타일 추천 요청]",
-      "",
-      "나이대: " + form.age,
-      "희망 스타일: " + moodLabels.join(", "),
-      "원하는 길이: " + form.length,
-      form.challenges.length ? "모발 특징: " + form.challenges.join(", ") : "",
-      form.note ? "요청사항: " + form.note : "",
-    ].filter(Boolean).join("\n");
-    const url = KAKAO_HREF;
-    setToast("카카오톡을 열고 있어요");
-    setTimeout(() => { window.open(url, "_blank"); setTimeout(() => setToast(null), 1200); }, 400);
-  };
-
-  return (
-    <div>
-      <div className="order-hero">
-        <span className="step-pill"><I.Sparkle size={12} strokeWidth={2.2} /> 스타일 추천</span>
-        <h2>당신에게 어울리는<br />스타일을 찾아드려요</h2>
-        <p>몇 가지 항목만 알려주시면 디자이너가 맞춤 스타일을 추천하고 카톡으로 답변드려요.</p>
-      </div>
-
-      <div className="styling-form">
-        {/* 나이대 */}
-        <div className="styling-field">
-          <div className="styling-field-head">
-            <h4>01. 나이대를 알려주세요</h4>
-          </div>
-          <div className="chip-row">
-            {AGE_OPTIONS.map((a) => (
-              <button
-                key={a} type="button"
-                className={"chip " + (form.age === a ? "on" : "")}
-                onClick={() => setForm({ ...form, age: a })}
-              >{a}</button>
-            ))}
-          </div>
-        </div>
-
-        {/* 희망 스타일 */}
-        <div className="styling-field">
-          <div className="styling-field-head">
-            <h4>02. 희망 스타일 무드 <span className="styling-multi">중복 선택</span></h4>
-          </div>
-          <div className="mood-grid">
-            {MOOD_OPTIONS.map((m) => (
-              <button
-                key={m.id} type="button"
-                className={"mood-card " + (form.moods.includes(m.id) ? "on" : "")}
-                onClick={() => toggleArr("moods", m.id)}
-              >
-                <span className="mood-check" aria-hidden="true">
-                  <I.Check size={14} strokeWidth={2.6} />
-                </span>
-                <span className="mood-label">{m.label}</span>
-                <span className="mood-desc">{m.desc}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 길이 */}
-        <div className="styling-field">
-          <div className="styling-field-head">
-            <h4>03. 원하는 길이</h4>
-          </div>
-          <div className="chip-row">
-            {LENGTH_OPTIONS.map((l) => (
-              <button
-                key={l} type="button"
-                className={"chip " + (form.length === l ? "on" : "")}
-                onClick={() => setForm({ ...form, length: l })}
-              >{l}</button>
-            ))}
-          </div>
-        </div>
-
-        {/* 고민 */}
-        <div className="styling-field">
-          <div className="styling-field-head">
-            <h4>04. 모발 특징 <span className="styling-multi">선택 · 중복 가능</span></h4>
-          </div>
-          <div className="chip-row wrap">
-            {CHALLENGE_OPTIONS.map((c) => (
-              <button
-                key={c} type="button"
-                className={"chip " + (form.challenges.includes(c) ? "on" : "")}
-                onClick={() => toggleArr("challenges", c)}
-              >{c}</button>
-            ))}
-          </div>
-        </div>
-
-        {/* 자유 입력 */}
-        <div className="styling-field">
-          <div className="styling-field-head">
-            <h4>05. 요청 사항 <span className="styling-multi">선택</span></h4>
-          </div>
-          <textarea
-            className="styling-textarea"
-            value={form.note}
-            placeholder="EX) 윗머리는 살리고 옆은 깔끔하게 하고 싶어요."
-            onChange={(e) => setForm({ ...form, note: e.target.value })}
-            rows={3}
-          />
-        </div>
-      </div>
-
-      <div className="notice">
-        <h5>NOTICE</h5>
-        <h6>스타일링 추천 안내</h6>
-        <ul>
-          <li>입력하신 내용은 카카오톡으로 디자이너에게 전달돼요.</li>
-          <li>매장 운영시간 내 답변드리며, 영업 시간이 지난 경우 다음 날 답변드려요.</li>
-          <li>추천 후 카카오톡으로 예약을 잡아드려요.</li>
-        </ul>
-      </div>
-
-      <div className="dock">
-        <button className="btn" onClick={send}>
-          <I.Sparkle size={18} strokeWidth={2} /> 스타일 요청문의
-        </button>
-      </div>
-
-      {toast && <div className="toast"><I.Check size={16} strokeWidth={2.4} /> {toast}</div>}
-    </div>
   );
 }
 
@@ -1041,7 +867,7 @@ function App() {
 
   const [route, setRoute] = useState(() => {
     const h = (location.hash || "").replace("#", "");
-    if (h.startsWith("styles") || h === "booking" || h === "styling" || h === "faq") return h;
+    if (h.startsWith("styles") || h === "booking" || h === "faq") return h;
     return "home";
   });
   const [activeCat, setActiveCat] = useState("cut");
@@ -1074,9 +900,8 @@ function App() {
 
   let title = null;
   let onBack = null;
-  if (route.startsWith("styles") && !route.startsWith("styling")) { title = "스타일 샘플"; onBack = () => go("home"); }
-  if (route === "booking")        { title = "예약하기"; onBack = () => go("home"); }
-  if (route === "styling")        { title = "스타일링 추천"; onBack = () => go("home"); }
+  if (route.startsWith("styles")) { title = "디자인"; onBack = () => go("home"); }
+  if (route === "booking")        { title = "예약요청"; onBack = () => go("home"); }
   if (route === "faq")            { title = "질문/답변"; onBack = () => go("home"); }
 
   const mainRoute = route.split(":")[0];
@@ -1093,7 +918,6 @@ function App() {
         />
         {mainRoute === "home"    && <HomeScreen go={go} openStyle={setStyleSheet} openDesigner={setDesignerSheet} />}
         {mainRoute === "styles"  && <StylesScreen activeCat={styleCat} setActiveCat={setActiveCat} onPick={setStyleSheet} />}
-        {mainRoute === "styling" && <StylingScreen />}
         {mainRoute === "booking" && <BookingScreen initial={bookingSeed} />}
         {mainRoute === "faq"     && <FaqScreen />}
         {styleSheet && <StyleSheet item={styleSheet} onClose={() => setStyleSheet(null)} onBook={bookStyle} />}
