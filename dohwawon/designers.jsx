@@ -84,7 +84,11 @@ const STARTER_STYLES = [
   { id: "st6", name: "골드바 케이크",  price: 70000, sizeId: "type-3", flavorId: "vanilla-lemon",     desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/골드바 케이크.jpeg",   categoryName: "케이크" },
 ];
 
+// 특색있는 아크릴백
+const ACRYLIC_STYLES = [];
+
 window.FEATURED_STYLES = FEATURED_STYLES;
 window.BUSINESS_STYLES = BUSINESS_STYLES;
 window.MZ_STYLES = MZ_STYLES;
 window.STARTER_STYLES = STARTER_STYLES;
+window.ACRYLIC_STYLES = ACRYLIC_STYLES;

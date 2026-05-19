@@ -256,6 +256,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
       <FeaturedSlider title="풍성한 꽃다발 추천" list={BUSINESS_STYLES} openStyle={openStyle} />
       <FeaturedSlider title="특별한 날, 꽃바구니 선물!" list={MZ_STYLES} openStyle={openStyle} />
       <FeaturedSlider title="아름다운 효도, 용돈박스" list={STARTER_STYLES} openStyle={openStyle} />
+      <FeaturedSlider title="특색있는 아크릴백" list={ACRYLIC_STYLES} openStyle={openStyle} />
 
       <section className="section home-faq-section">
         <div className="section-head">
