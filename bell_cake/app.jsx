@@ -437,7 +437,7 @@ function BookingScreen({ initial }) {
     boardText: "",
     options: [],
     name: "",
-    kakao: "",
+    contact: "",
   });
   useEffect(() => {
     if (initial?.design) setForm((f) => ({ ...f, design: initial.design }));
@@ -446,7 +446,7 @@ function BookingScreen({ initial }) {
   const [toast, setToast] = useState(null);
   const [pickerOpen, setPickerOpen] = useState(false);
 
-  const required = ["pickupDate", "pickupTime", "size", "flavor", "name", "kakao"];
+  const required = ["pickupDate", "pickupTime", "size", "flavor", "name", "contact"];
   const done = required.filter((k) => (form[k] || "").trim().length > 0).length;
   const total = required.length;
 
@@ -480,7 +480,7 @@ function BookingScreen({ initial }) {
       form.boardText ? "케이크 판 문구: " + form.boardText : "",
       "",
       "이름: " + form.name,
-      "카카오톡 ID: " + form.kakao,
+      "연락처: " + form.contact,
       "",
       "예상 합계: " + fmt(totalPrice) + "원",
     ].filter(Boolean).join("\n");
@@ -609,13 +609,13 @@ function BookingScreen({ initial }) {
           <input type="text" value={form.name} placeholder="EX) 홍길동" onChange={(e) => setForm({ ...form, name: e.target.value })} />
         </div>
 
-        {/* 8. 카카오톡 ID */}
-        <div className={"field " + (form.kakao.trim() ? "done" : "")}>
+        {/* 8. 연락처 */}
+        <div className={"field " + (form.contact.trim() ? "done" : "")}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">8</span> 카카오톡 ID</span>
-            {form.kakao.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
+            <span className="lbl"><span className="stepno">8</span> 연락처</span>
+            {form.contact.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
-          <input type="text" value={form.kakao} placeholder="카카오톡 ID를 입력해주세요" onChange={(e) => setForm({ ...form, kakao: e.target.value })} />
+          <input type="tel" value={form.contact} placeholder="전화번호 또는 카카오톡 ID" onChange={(e) => setForm({ ...form, contact: e.target.value })} />
         </div>
       </div>
 
