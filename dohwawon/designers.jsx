@@ -50,42 +50,44 @@ const DESIGNERS = [
 
 window.DESIGNERS = DESIGNERS;
 
-// 귀여운 도시락케이크
+// 가벼운 꽃다발 추천
 const FEATURED_STYLES = [
-  { id: "f1", name: "삼성라이온즈", price: 17000, sizeId: "type-dosirak", flavorId: "vanilla-lemon",     desc: "도시락 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/삼성라이온즈.jpg",  categoryName: "케이크" },
-  { id: "f2", name: "기본 레터링",  price: 20000, sizeId: "type-dosirak", flavorId: "choco-choco",       desc: "도시락 · 초코 쌀시트 + 초코크림",                  img: "img/기본 레터링.jpg",   categoryName: "케이크" },
-  { id: "f3", name: "핑크 레터링",  price: 17000, sizeId: "type-dosirak", flavorId: "vanilla-milk",      desc: "도시락 · 바닐라 쌀시트 + 우유크림",                img: "img/핑크 레터링.jpg",   categoryName: "케이크" },
+  { id: "f1", name: "카네이션 꽃다발",  price: 35000, desc: "S 사이즈 · 사랑과 감사를 전하는 카네이션 꽃다발", img: "img/bouquet-s-carnation.jpg", categoryName: "꽃다발" },
+  { id: "f2", name: "코랄톤 꽃다발",    price: 40000, desc: "S 사이즈 · 따뜻한 코랄 컬러의 꽃다발",           img: "img/bouquet-s-coral.jpg",     categoryName: "꽃다발" },
+  { id: "f3", name: "핑크장미 꽃다발",  price: 45000, desc: "S 사이즈 · 사랑스러운 핑크 장미 꽃다발",         img: "img/bouquet-s-pink-rose.jpg", categoryName: "꽃다발" },
+  { id: "f4", name: "강렬한 꽃다발",    price: 46000, desc: "S 사이즈 · 강렬한 색감의 인상적인 꽃다발",       img: "img/bouquet-s-vivid.jpg",     categoryName: "꽃다발" },
 ];
 
-// 이달의 베스트 케이크 — 전체 13개 중 랜덤 큐레이션
+// 풍성한 꽃다발 추천
 const BUSINESS_STYLES = [
-  { id: "b1", name: "장미케이크",     price: 43000, sizeId: "type-1",      flavorId: "vanilla-blueberry", desc: "1호 · 바닐라 쌀시트 + 블루베리잼",              img: "img/장미케이크.jpeg",      categoryName: "케이크" },
-  { id: "b2", name: "기본 레터링",    price: 20000, sizeId: "type-dosirak", flavorId: "choco-choco",       desc: "도시락 · 초코 쌀시트 + 초코크림",               img: "img/기본 레터링.jpg",      categoryName: "케이크" },
-  { id: "b3", name: "카네이션케이크", price: 66000, sizeId: "type-3",      flavorId: "vanilla-lemon",     desc: "3호 · 바닐라 쌀시트 + 레몬커스터드",             img: "img/카네이션케이크.jpg",   categoryName: "케이크" },
-  { id: "b4", name: "로또케이크",     price: 56000, sizeId: "type-2",      flavorId: "vanilla-lemon",     desc: "2호 · 바닐라 쌀시트 + 레몬커스터드",             img: "img/로또케이크.jpg",       categoryName: "케이크" },
-  { id: "b5", name: "티아라케이크",   price: 50000, sizeId: "type-1",      flavorId: "choco-oreo",        desc: "1호 · 초코 쌀시트 + 오레오쿠키 + 오레오크림",   img: "img/티아라케이크.jpeg",    categoryName: "케이크" },
+  { id: "b1", name: "장미 꽃다발",       price: 50000,  desc: "M 사이즈 · 풍성한 장미로 완성한 꽃다발",        img: "img/bouquet-m-rose.jpg",    categoryName: "꽃다발" },
+  { id: "b2", name: "아모르젠 꽃다발",   price: 100000, desc: "L 사이즈 · 고급스러운 대형 꽃다발",             img: "img/bouquet-l-amorgen.jpg", categoryName: "꽃다발" },
+  { id: "b3", name: "초대형 코랄꽃다발", price: 150000, desc: "XL 사이즈 · 코랄톤의 초대형 프리미엄 꽃다발",  img: "img/bouquet-xl-coral.jpg",  categoryName: "꽃다발" },
+  { id: "b4", name: "초대형 핑크꽃다발", price: 150000, desc: "XL 사이즈 · 핑크톤의 초대형 프리미엄 꽃다발",  img: "img/bouquet-xl-pink.jpg",   categoryName: "꽃다발" },
 ];
 
-// 여심저격 베스트 디자인
+// 특별한 날, 꽃바구니 선물!
 const MZ_STYLES = [
-  { id: "m1", name: "꽃잎케이크",   price: 40000, sizeId: "type-1", flavorId: "vanilla-milk",      desc: "1호 · 바닐라 쌀시트 + 우유크림",                img: "img/꽃잎케이크.jpg",   categoryName: "케이크" },
-  { id: "m2", name: "장미케이크",   price: 43000, sizeId: "type-1", flavorId: "vanilla-blueberry", desc: "1호 · 바닐라 쌀시트 + 블루베리잼",              img: "img/장미케이크.jpeg",  categoryName: "케이크" },
-  { id: "m3", name: "수국케이크",   price: 40000, sizeId: "type-1", flavorId: "vanilla-lemon",     desc: "1호 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/수국케이크.jpeg",  categoryName: "케이크" },
-  { id: "m4", name: "티아라케이크", price: 50000, sizeId: "type-1", flavorId: "choco-oreo",        desc: "1호 · 초코 쌀시트 + 오레오쿠키 + 오레오크림",   img: "img/티아라케이크.jpeg", categoryName: "케이크" },
+  { id: "m1", name: "파스텔톤 꽃바구니", price: 70000,  desc: "M 사이즈 · 파스텔 컬러의 부드러운 꽃바구니",   img: "img/basket-m-pastel.jpg", categoryName: "꽃바구니" },
+  { id: "m2", name: "옐로우 꽃바구니",   price: 100000, desc: "L 사이즈 · 화사한 옐로우톤 꽃바구니",          img: "img/basket-l-yellow.jpg", categoryName: "꽃바구니" },
+  { id: "m3", name: "핑크톤 꽃바구니",   price: 100000, desc: "L 사이즈 · 사랑스러운 핑크톤 꽃바구니",        img: "img/basket-l-pink.jpg",   categoryName: "꽃바구니" },
+  { id: "m4", name: "초대형 꽃바구니",   price: 130000, desc: "XL 사이즈 · 풍성하고 화려한 초대형 꽃바구니",  img: "img/basket-xl.jpg",       categoryName: "꽃바구니" },
 ];
 
-// 부모님 베스트픽 디자인
+// 아름다운 효도, 용돈박스
 const STARTER_STYLES = [
-  { id: "st1", name: "퇴직케이크",     price: 53000, sizeId: "type-2", flavorId: "vanilla-lemon",     desc: "2호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/퇴직케이크.jpg",       categoryName: "케이크" },
-  { id: "st2", name: "생신케이크",     price: 35000, sizeId: "type-1", flavorId: "vanilla-milk",      desc: "1호 · 바닐라 쌀시트 + 우유크림",     img: "img/생신케이크.jpg",       categoryName: "케이크" },
-  { id: "st3", name: "카네이션케이크", price: 66000, sizeId: "type-3", flavorId: "vanilla-lemon",     desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/카네이션케이크.jpg",   categoryName: "케이크" },
-  { id: "st4", name: "대형사각케이크", price: 65000, sizeId: "type-3", flavorId: "vanilla-blueberry", desc: "3호 · 바닐라 쌀시트 + 블루베리잼",   img: "img/대형사각케이크.jpeg",  categoryName: "케이크" },
-  { id: "st5", name: "로또케이크",     price: 56000, sizeId: "type-2", flavorId: "vanilla-lemon",     desc: "2호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/로또케이크.jpg",       categoryName: "케이크" },
-  { id: "st6", name: "골드바 케이크",  price: 70000, sizeId: "type-3", flavorId: "vanilla-lemon",     desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/골드바 케이크.jpeg",   categoryName: "케이크" },
+  { id: "st1", name: "화사한 용돈박스",  price: 65000, desc: "화사한 꽃과 함께 마음을 전하는 용돈박스", img: "img/moneybox-bright.jpg",  categoryName: "용돈박스" },
+  { id: "st2", name: "아크릴 용돈박스",  price: 65000, desc: "투명 아크릴 케이스에 담긴 용돈박스",      img: "img/moneybox-acrylic.jpg", categoryName: "용돈박스" },
+  { id: "st3", name: "럭셔리 용돈박스",  price: 80000, desc: "고급스러운 디자인의 프리미엄 용돈박스",   img: "img/moneybox-luxury.jpg",  categoryName: "용돈박스" },
 ];
 
 // 특색있는 아크릴백
-const ACRYLIC_STYLES = [];
+const ACRYLIC_STYLES = [
+  { id: "a1", name: "블루톤 아크릴백",   price: 65000, desc: "시원한 블루톤의 아크릴백 꽃다발",         img: "img/acrylic-blue.jpg",      categoryName: "아크릴백" },
+  { id: "a2", name: "카네이션 아크릴백", price: 75000, desc: "카네이션으로 채운 감사의 아크릴백",       img: "img/acrylic-carnation.jpg", categoryName: "아크릴백" },
+  { id: "a3", name: "품위있는 아크릴백", price: 78000, desc: "품위있고 우아한 디자인의 아크릴백",       img: "img/acrylic-elegant.jpg",   categoryName: "아크릴백" },
+  { id: "a4", name: "디즈니톤 아크릴백", price: 85000, desc: "동화 같은 디즈니톤 컬러의 아크릴백",     img: "img/acrylic-disney.jpg",    categoryName: "아크릴백" },
+];
 
 window.FEATURED_STYLES = FEATURED_STYLES;
 window.BUSINESS_STYLES = BUSINESS_STYLES;
