@@ -1,70 +1,53 @@
 /* eslint-disable */
 // 벨케이크 — 케이크 카탈로그
-// 4개 카테고리 × 카테고리별 5-6개 스타일.
 
 const HAIR_CATEGORIES = [
-  {
-    id: "cut",
-    name: "커트",
-    blurb: "정돈된 인상의 시작",
-    sub: "CUT",
-    icon: "scissors",
-  },
-  {
-    id: "perm",
-    name: "펌",
-    blurb: "볼륨감으로 인상을 잡다",
-    sub: "PERM",
-    icon: "perm",
-  },
-  {
-    id: "color",
-    name: "염색",
-    blurb: "분위기를 바꾸는 한 끗",
-    sub: "COLOR",
-    icon: "color",
-  },
-  {
-    id: "care",
-    name: "케어",
-    blurb: "두피부터, 모발까지",
-    sub: "CARE",
-    icon: "care",
-  },
+  { id: "best",      name: "베스트",   blurb: "가장 많이 주문하는 인기 케이크", sub: "BEST" },
+  { id: "signature", name: "시그니처", blurb: "벨케이크만의 특별한 디자인",      sub: "SIGNATURE" },
+  { id: "dosirak",   name: "도시락",   blurb: "귀여운 미니 도시락케이크",        sub: "LUNCHBOX" },
+  { id: "size-1",    name: "1호",      blurb: "1호 케이크 (16cm, 3~5인)",       sub: "SIZE 1" },
+  { id: "size-2",    name: "2호",      blurb: "2호 케이크 (18cm, 6~8인)",       sub: "SIZE 2" },
+  { id: "size-3",    name: "3호",      blurb: "3호 케이크 (21cm, 7~10인)",      sub: "SIZE 3" },
+  { id: "double",    name: "2단",      blurb: "특별한 날을 위한 2단 케이크",     sub: "DOUBLE" },
 ];
 
 const HAIR_STYLES = {
-  cut: [
-    { name: "댄디 컷",        price: 35000, time: 40, desc: "단정하고 정직한 인상의 베이직 컷. 어떤 자리에도 무난해요.", tag: "BASIC",   img: "img/style_4.jpg" },
-    { name: "투블럭 컷",      price: 38000, time: 45, desc: "사이드를 짧게, 윗머리는 풍성하게. 가장 인기 있는 남성 스타일.", tag: "BEST",    img: "img/style_2.jpg" },
-    { name: "크롭 컷",        price: 40000, time: 50, desc: "와일드하면서도 정돈된 느낌. 두상을 살리고 싶다면.",     tag: "TREND",   img: "img/style_5.jpg" },
-    { name: "시저스 컷",      price: 45000, time: 60, desc: "가위만으로 완성하는 자연스러운 결. 스타일링이 편해요.",   tag: "PREMIUM", img: "img/style_6.png" },
-    { name: "리프 컷",        price: 42000, time: 55, desc: "잎사귀처럼 흐르는 결. 부드럽고 트렌디한 분위기.",       tag: "TREND",   img: "img/style_3.jpg" },
-    { name: "클래식 사이드",  price: 38000, time: 45, desc: "옆가르마 + 차분한 라인. 비즈니스 캐주얼에 잘 어울려요.", tag: "BASIC",   img: "img/style_8.png" },
+  best: [
+    { name: "장미케이크",     price: 43000, desc: "1호 · 바닐라 쌀시트 + 블루베리잼",              img: "img/장미케이크.jpeg",      sizeId: "type-1", flavorId: "vanilla-blueberry", categoryName: "케이크" },
+    { name: "기본 레터링",    price: 20000, desc: "도시락 · 초코 쌀시트 + 초코크림",               img: "img/기본 레터링.jpg",      sizeId: "type-dosirak", flavorId: "choco-choco", categoryName: "케이크" },
+    { name: "카네이션케이크", price: 66000, desc: "3호 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/카네이션케이크.jpg",   sizeId: "type-3", flavorId: "vanilla-lemon", categoryName: "케이크" },
+    { name: "생신케이크",     price: 35000, desc: "1호 · 바닐라 쌀시트 + 우유크림",                img: "img/생신케이크.jpg",       sizeId: "type-1", flavorId: "vanilla-milk", categoryName: "케이크" },
+    { name: "로또케이크",     price: 56000, desc: "2호 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/로또케이크.jpg",       sizeId: "type-2", flavorId: "vanilla-lemon", categoryName: "케이크" },
   ],
-  perm: [
-    { name: "다운 펌",         price: 90000,  time: 100, desc: "뜨는 머리를 잡아주는 가장 기본적인 펌. 매일 아침이 편해져요.", tag: "BASIC",   img: "img/style_7.png" },
-    { name: "가르마 펌",       price: 110000, time: 110, desc: "방향을 잡아주는 깔끔한 가르마. 첫인상에서 단정함을 만듭니다.", tag: "BEST",    img: "img/style_8.png" },
-    { name: "쉐도우 펌",       price: 130000, time: 130, desc: "은은한 C컬로 자연스러운 입체감. 과하지 않게 멋있게.",       tag: "TREND",   img: "img/style_9.png" },
-    { name: "댄디 펌",         price: 120000, time: 120, desc: "윗볼륨 + 끝을 살린 C컬. 정돈된 댄디 스타일의 완성.",         tag: "BEST",    img: "img/style_1.jpg" },
-    { name: "글램 펌",         price: 150000, time: 140, desc: "굵은 컬로 시원한 볼륨감. 인상을 강렬하게.",                tag: "PREMIUM", img: "img/style_10.png" },
-    { name: "스왈로우 펌",     price: 140000, time: 130, desc: "옆머리까지 자연스럽게 흐르는 컬. 빈티지한 무드.",          tag: "TREND",   img: "img/style_3.jpg" },
+  signature: [
+    { name: "골드바 케이크",  price: 70000, desc: "3호 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/골드바 케이크.jpeg",   sizeId: "type-3", flavorId: "vanilla-lemon", categoryName: "케이크" },
+    { name: "대형사각케이크", price: 65000, desc: "3호 · 바닐라 쌀시트 + 블루베리잼",              img: "img/대형사각케이크.jpeg",  sizeId: "type-3", flavorId: "vanilla-blueberry", categoryName: "케이크" },
+    { name: "티아라케이크",   price: 50000, desc: "1호 · 초코 쌀시트 + 오레오쿠키 + 오레오크림",   img: "img/티아라케이크.jpeg",    sizeId: "type-1", flavorId: "choco-oreo", categoryName: "케이크" },
+    { name: "수국케이크",     price: 40000, desc: "1호 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/수국케이크.jpeg",      sizeId: "type-1", flavorId: "vanilla-lemon", categoryName: "케이크" },
+    { name: "꽃잎케이크",     price: 40000, desc: "1호 · 바닐라 쌀시트 + 우유크림",                img: "img/꽃잎케이크.jpg",       sizeId: "type-1", flavorId: "vanilla-milk", categoryName: "케이크" },
   ],
-  color: [
-    { name: "블랙 컬러",        price: 70000,  time: 80,  desc: "묵직하고 단단한 인상의 정통 블랙. 면접·중요한 자리에.",  tag: "BASIC",   img: "img/style_2.jpg" },
-    { name: "내추럴 브라운",    price: 85000,  time: 90,  desc: "은은한 갈색으로 분위기 전환. 자연스럽게 인상을 부드럽게.", tag: "BEST",    img: "img/style_4.jpg" },
-    { name: "다크 애쉬",        price: 95000,  time: 100, desc: "차분한 회갈색. 시크한 도시 무드.",                       tag: "TREND",   img: "img/style_1.jpg" },
-    { name: "히든 하이라이트",  price: 130000, time: 120, desc: "안쪽에 포인트 색을 넣어 입체감을 더해요.",             tag: "PREMIUM", img: "img/style_9.png" },
-    { name: "그레이 톤다운",    price: 120000, time: 110, desc: "탈색 없이 만드는 무드 있는 그레이. 깊이감을 살려요.",   tag: "TREND",   img: "img/style_6.png" },
-    { name: "투톤 컬러",        price: 150000, time: 130, desc: "윗머리와 사이드의 톤을 분리해 입체감 강조.",            tag: "PREMIUM", img: "img/style_10.png" },
+  dosirak: [
+    { name: "삼성라이온즈",   price: 17000, desc: "도시락 · 바닐라 쌀시트 + 레몬커스터드",         img: "img/삼성라이온즈.jpg",     sizeId: "type-dosirak", flavorId: "vanilla-lemon", categoryName: "케이크" },
+    { name: "기본 레터링",    price: 20000, desc: "도시락 · 초코 쌀시트 + 초코크림",               img: "img/기본 레터링.jpg",      sizeId: "type-dosirak", flavorId: "choco-choco", categoryName: "케이크" },
+    { name: "핑크 레터링",    price: 17000, desc: "도시락 · 바닐라 쌀시트 + 우유크림",             img: "img/핑크 레터링.jpg",      sizeId: "type-dosirak", flavorId: "vanilla-milk", categoryName: "케이크" },
   ],
-  care: [
-    { name: "두피 클리닉",       price: 50000, time: 50, desc: "두피 진단 + 클렌징 + 마사지. 시술 후 시작하기 좋아요.",    tag: "BASIC",   img: "img/style_8.png" },
-    { name: "모발 트리트먼트",   price: 45000, time: 40, desc: "푸석한 모발에 영양을 채워줍니다.",                       tag: "BASIC",   img: "img/style_4.jpg" },
-    { name: "프리미엄 두피케어", price: 80000, time: 70, desc: "딥 클렌징 + 스케일링 + 영양. 두피 컨디션 리셋.",         tag: "PREMIUM", img: "img/style_7.png" },
-    { name: "탈모 케어",         price: 90000, time: 80, desc: "탈모 진행 단계를 진단하고 케어 루틴을 설계합니다.",      tag: "PREMIUM", img: "img/style_5.jpg" },
-    { name: "흰머리 케어",       price: 60000, time: 60, desc: "흰머리 부분 컬러 + 두피 케어를 한 번에.",                tag: "BEST",    img: "img/style_2.jpg" },
+  "size-1": [
+    { name: "꽃잎케이크",     price: 40000, desc: "1호 · 바닐라 쌀시트 + 우유크림",                img: "img/꽃잎케이크.jpg",       sizeId: "type-1", flavorId: "vanilla-milk", categoryName: "케이크" },
+    { name: "장미케이크",     price: 43000, desc: "1호 · 바닐라 쌀시트 + 블루베리잼",              img: "img/장미케이크.jpeg",      sizeId: "type-1", flavorId: "vanilla-blueberry", categoryName: "케이크" },
+    { name: "수국케이크",     price: 40000, desc: "1호 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/수국케이크.jpeg",      sizeId: "type-1", flavorId: "vanilla-lemon", categoryName: "케이크" },
+    { name: "티아라케이크",   price: 50000, desc: "1호 · 초코 쌀시트 + 오레오쿠키 + 오레오크림",   img: "img/티아라케이크.jpeg",    sizeId: "type-1", flavorId: "choco-oreo", categoryName: "케이크" },
+    { name: "생신케이크",     price: 35000, desc: "1호 · 바닐라 쌀시트 + 우유크림",                img: "img/생신케이크.jpg",       sizeId: "type-1", flavorId: "vanilla-milk", categoryName: "케이크" },
   ],
+  "size-2": [
+    { name: "퇴직케이크",     price: 53000, desc: "2호 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/퇴직케이크.jpg",       sizeId: "type-2", flavorId: "vanilla-lemon", categoryName: "케이크" },
+    { name: "로또케이크",     price: 56000, desc: "2호 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/로또케이크.jpg",       sizeId: "type-2", flavorId: "vanilla-lemon", categoryName: "케이크" },
+  ],
+  "size-3": [
+    { name: "카네이션케이크", price: 66000, desc: "3호 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/카네이션케이크.jpg",   sizeId: "type-3", flavorId: "vanilla-lemon", categoryName: "케이크" },
+    { name: "대형사각케이크", price: 65000, desc: "3호 · 바닐라 쌀시트 + 블루베리잼",              img: "img/대형사각케이크.jpeg",  sizeId: "type-3", flavorId: "vanilla-blueberry", categoryName: "케이크" },
+    { name: "골드바 케이크",  price: 70000, desc: "3호 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/골드바 케이크.jpeg",   sizeId: "type-3", flavorId: "vanilla-lemon", categoryName: "케이크" },
+  ],
+  double: [],
 };
 
 Object.assign(window, { HAIR_CATEGORIES, HAIR_STYLES });

@@ -296,7 +296,7 @@ function StylesScreen({ activeCat, setActiveCat, onPick }) {
   }, [activeCat]);
 
   const cat = HAIR_CATEGORIES.find((c) => c.id === activeCat) || HAIR_CATEGORIES[0];
-  const list = HAIR_STYLES[cat.id];
+  const list = HAIR_STYLES[cat.id] || [];
 
   return (
     <div>
@@ -1008,7 +1008,7 @@ function App() {
 
   let title = null;
   let onBack = null;
-  if (route.startsWith("styles")) { title = "디자인"; onBack = () => go("home"); }
+  if (route.startsWith("styles")) { title = "디자인 둘러보기"; onBack = () => go("home"); }
   if (route === "booking")        { title = "예약요청"; onBack = () => go("home"); }
   if (route === "faq")            { title = "질문/답변"; onBack = () => go("home"); }
 
