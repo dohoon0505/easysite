@@ -239,10 +239,6 @@ function HomeScreen({ go, openStyle, openDesigner }) {
               </span>
             </span>
           </li>
-          <li>
-            <span className="intro-list-icon"><I.Info size={18} /></span>
-            <span className="intro-list-text">스타일을 둘러보고 간편하게 예약해 보세요!</span>
-          </li>
         </ul>
       </section>
 
