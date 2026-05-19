@@ -50,22 +50,20 @@ const DESIGNERS = [
 
 window.DESIGNERS = DESIGNERS;
 
-// 여름철 테토 스타일 — 시즌 큐레이션
+// 귀여운 도시락케이크
 const FEATURED_STYLES = [
-  { id: "f1", name: "댄디 펌",     price: 120000, time: 120, desc: "윗볼륨 + 끝을 살린 C컬. 정돈된 댄디 스타일의 완성.",     tag: "여름 1위",  img: "img/style_1.jpg", categoryId: "perm", categoryName: "펌" },
-  { id: "f2", name: "투블럭 컷",   price: 38000,  time: 45,  desc: "사이드를 짧게, 윗머리는 풍성하게. 가장 인기 있는 남성 스타일.", tag: "베스트",    img: "img/style_2.jpg", categoryId: "cut",  categoryName: "커트" },
-  { id: "f3", name: "리프 컷",     price: 42000,  time: 55,  desc: "잎사귀처럼 흐르는 결. 부드럽고 트렌디한 분위기.",         tag: "트렌드",    img: "img/style_3.jpg", categoryId: "cut",  categoryName: "커트" },
-  { id: "f4", name: "댄디 컷",     price: 35000,  time: 40,  desc: "단정하고 정직한 인상의 베이직 컷. 어떤 자리에도 무난해요.",  tag: "데일리",    img: "img/style_4.jpg", categoryId: "cut",  categoryName: "커트" },
-  { id: "f5", name: "크롭 컷",     price: 40000,  time: 50,  desc: "와일드하면서도 정돈된 느낌. 두상을 살리고 싶다면.",       tag: "강한 인상", img: "img/style_5.jpg", categoryId: "cut",  categoryName: "커트" },
+  { id: "f1", name: "삼성라이온즈", price: 17000, sizeId: "type-dosirak", flavorId: "vanilla-lemon",     desc: "도시락 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/삼성라이온즈.jpg",  categoryName: "케이크" },
+  { id: "f2", name: "기본 레터링",  price: 20000, sizeId: "type-dosirak", flavorId: "choco-choco",       desc: "도시락 · 초코 쌀시트 + 초코크림",                  img: "img/기본 레터링.jpg",   categoryName: "케이크" },
+  { id: "f3", name: "핑크 레터링",  price: 17000, sizeId: "type-dosirak", flavorId: "vanilla-milk",      desc: "도시락 · 바닐라 쌀시트 + 우유크림",                img: "img/핑크 레터링.jpg",   categoryName: "케이크" },
 ];
 
-// 비즈니스 — 정장·면접·미팅에 어울리는 단정한 스타일
+// 이달의 베스트 케이크 — 전체 13개 중 랜덤 큐레이션
 const BUSINESS_STYLES = [
-  { id: "b1", name: "댄디 컷",      price: 35000,  time: 40,  desc: "단정하고 정직한 인상의 베이직 컷.", img: "img/style_4.jpg", categoryId: "cut",  categoryName: "커트" },
-  { id: "b2", name: "클래식 사이드", price: 38000,  time: 45,  desc: "옆가르마 + 차분한 라인의 비즈니스 캐주얼.", img: "img/style_8.png", categoryId: "cut",  categoryName: "커트" },
-  { id: "b3", name: "가르마 펌",    price: 110000, time: 110, desc: "방향을 잡아주는 깔끔한 가르마.", img: "img/style_7.png", categoryId: "perm", categoryName: "펌" },
-  { id: "b4", name: "블랙 컬러",    price: 70000,  time: 80,  desc: "묵직하고 단단한 인상의 정통 블랙.", img: "img/style_2.jpg", categoryId: "color", categoryName: "염색" },
-  { id: "b5", name: "내추럴 브라운", price: 85000,  time: 90,  desc: "자연스럽게 인상을 부드럽게.", img: "img/style_1.jpg", categoryId: "color", categoryName: "염색" },
+  { id: "b1", name: "장미케이크",     price: 43000, sizeId: "type-1",      flavorId: "vanilla-blueberry", desc: "1호 · 바닐라 쌀시트 + 블루베리잼",              img: "img/장미케이크.jpeg",      categoryName: "케이크" },
+  { id: "b2", name: "기본 레터링",    price: 20000, sizeId: "type-dosirak", flavorId: "choco-choco",       desc: "도시락 · 초코 쌀시트 + 초코크림",               img: "img/기본 레터링.jpg",      categoryName: "케이크" },
+  { id: "b3", name: "카네이션케이크", price: 66000, sizeId: "type-3",      flavorId: "vanilla-lemon",     desc: "3호 · 바닐라 쌀시트 + 레몬커스터드",             img: "img/카네이션케이크.jpg",   categoryName: "케이크" },
+  { id: "b4", name: "로또케이크",     price: 56000, sizeId: "type-2",      flavorId: "vanilla-lemon",     desc: "2호 · 바닐라 쌀시트 + 레몬커스터드",             img: "img/로또케이크.jpg",       categoryName: "케이크" },
+  { id: "b5", name: "티아라케이크",   price: 50000, sizeId: "type-1",      flavorId: "choco-oreo",        desc: "1호 · 초코 쌀시트 + 오레오쿠키 + 오레오크림",   img: "img/티아라케이크.jpeg",    categoryName: "케이크" },
 ];
 
 // 여심저격 베스트 디자인
