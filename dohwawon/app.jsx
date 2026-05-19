@@ -1,7 +1,7 @@
 /* eslint-disable */
 const { useState, useEffect, useRef, useMemo } = React;
 
-const KAKAO_HREF = "https://pf.kakao.com/_txnxncb";
+const KAKAO_HREF = "https://pf.kakao.com/_xleKLxj";
 
 // ─── Utilities ──────────────────────────────────────────────
 const fmt = (n) => n.toLocaleString("ko-KR");
