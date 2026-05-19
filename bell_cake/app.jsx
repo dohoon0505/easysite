@@ -1024,6 +1024,7 @@ function App() {
           dark={!!t.dark}
           onToggleTheme={() => setTweak("dark", !t.dark)}
         />
+        <div className="appbar-spacer" />
         {mainRoute === "home"    && <HomeScreen go={go} openStyle={setStyleSheet} openDesigner={setDesignerSheet} />}
         {mainRoute === "styles"  && <StylesScreen activeCat={styleCat} setActiveCat={setActiveCat} onPick={setStyleSheet} />}
         {mainRoute === "booking" && <BookingScreen initial={bookingSeed} />}
