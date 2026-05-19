@@ -624,19 +624,19 @@ function BookingScreen({ initial }) {
         {/* 7. 이름 */}
         <div className={"field " + (form.name.trim() ? "done" : "")}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">7</span> 이름</span>
+            <span className="lbl"><span className="stepno">7</span> 예약자 성함</span>
             {form.name.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
-          <input type="text" value={form.name} placeholder="EX) 홍길동" onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          <input type="text" value={form.name} placeholder="성함을 입력해 주세요" onChange={(e) => setForm({ ...form, name: e.target.value })} />
         </div>
 
         {/* 8. 연락처 */}
         <div className={"field " + (form.contact.trim() ? "done" : "")}>
           <div className="field-label">
-            <span className="lbl"><span className="stepno">8</span> 연락처</span>
+            <span className="lbl"><span className="stepno">8</span> 예약자 연락처</span>
             {form.contact.trim() && <I.Check size={16} strokeWidth={2.4} style={{ color: "var(--sm-interactive-brand-default)" }} />}
           </div>
-          <input type="tel" value={form.contact} placeholder="전화번호 또는 카카오톡 ID" onChange={(e) => setForm({ ...form, contact: e.target.value })} />
+          <input type="tel" value={form.contact} placeholder="연락처를 입력해 주세요" onChange={(e) => setForm({ ...form, contact: e.target.value })} />
         </div>
       </div>
 
