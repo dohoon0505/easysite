@@ -68,13 +68,12 @@ const BUSINESS_STYLES = [
   { id: "b5", name: "내추럴 브라운", price: 85000,  time: 90,  desc: "자연스럽게 인상을 부드럽게.", img: "img/style_1.jpg", categoryId: "color", categoryName: "염색" },
 ];
 
-// MZ 트렌드 — 20~30대 핫한 스타일
+// 여심저격 베스트 디자인
 const MZ_STYLES = [
-  { id: "m1", name: "크롭 컷",     price: 40000,  time: 50,  desc: "와일드하면서도 정돈된 느낌.", img: "img/style_5.jpg", categoryId: "cut",  categoryName: "커트" },
-  { id: "m2", name: "쉐도우 펌",   price: 130000, time: 130, desc: "은은한 C컬로 자연스러운 입체감.", img: "img/style_9.png", categoryId: "perm", categoryName: "펌" },
-  { id: "m3", name: "스왈로우 펌", price: 140000, time: 130, desc: "옆머리까지 흐르는 컬, 빈티지한 무드.", img: "img/style_3.jpg", categoryId: "perm", categoryName: "펌" },
-  { id: "m4", name: "글램 펌",     price: 150000, time: 140, desc: "굵은 컬로 시원한 볼륨감.",    img: "img/style_10.png", categoryId: "perm", categoryName: "펌" },
-  { id: "m5", name: "다크 애쉬",   price: 95000,  time: 100, desc: "차분한 회갈색, 시크한 도시 무드.", img: "img/style_6.png", categoryId: "color", categoryName: "염색" },
+  { id: "m1", name: "꽃잎케이크",   price: 40000, sizeId: "type-1", flavorId: "vanilla-milk",      desc: "1호 · 바닐라 쌀시트 + 우유크림",                img: "img/꽃잎케이크.jpg",   categoryName: "케이크" },
+  { id: "m2", name: "장미케이크",   price: 43000, sizeId: "type-1", flavorId: "vanilla-blueberry", desc: "1호 · 바닐라 쌀시트 + 블루베리잼",              img: "img/장미케이크.jpeg",  categoryName: "케이크" },
+  { id: "m3", name: "수국케이크",   price: 40000, sizeId: "type-1", flavorId: "vanilla-lemon",     desc: "1호 · 바닐라 쌀시트 + 레몬커스터드",            img: "img/수국케이크.jpeg",  categoryName: "케이크" },
+  { id: "m4", name: "티아라케이크", price: 50000, sizeId: "type-1", flavorId: "choco-oreo",        desc: "1호 · 초코 쌀시트 + 오레오쿠키 + 오레오크림",   img: "img/티아라케이크.jpeg", categoryName: "케이크" },
 ];
 
 // 부모님 베스트픽 디자인
