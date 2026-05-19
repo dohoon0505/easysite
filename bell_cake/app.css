@@ -202,12 +202,17 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   max-width: 480px;
   margin: 0 auto;
   z-index: 10;
-  background: #fff;
+  background: #ffffff;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
   display: flex;
   align-items: center;
   padding: 0 12px 0 16px;
-  border-bottom: 1px solid transparent;
-  transition: border-color 180ms, background 180ms, box-shadow 180ms, backdrop-filter 180ms;
+  border-bottom: 1px solid var(--sm-border-subtle);
+  transition: border-color 180ms, background 180ms, box-shadow 180ms;
+}
+[data-theme="dark"] .appbar {
+  background: var(--sm-surface-raised);
 }
 .appbar.shadow {
   background: rgba(255, 255, 255, 0.25);
