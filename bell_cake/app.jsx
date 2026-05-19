@@ -974,7 +974,7 @@ function App() {
     if (h.startsWith("styles") || h === "booking" || h === "faq") return h;
     return "home";
   });
-  const [activeCat, setActiveCat] = useState("cut");
+  const [activeCat, setActiveCat] = useState("best");
   const [styleSheet, setStyleSheet] = useState(null);
   const [designerSheet, setDesignerSheet] = useState(null);
   const [bookingSeed, setBookingSeed] = useState(null);
