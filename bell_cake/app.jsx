@@ -475,9 +475,10 @@ function BookingScreen({ initial }) {
   const [sizeSheetOpen, setSizeSheetOpen] = useState(false);
   const [flavorSheetOpen, setFlavorSheetOpen] = useState(false);
 
-  const required = ["pickupDate", "pickupTime", "size", "flavor", "name", "contact"];
-  const done = required.filter((k) => (form[k] || "").trim().length > 0).length;
-  const total = required.length;
+  const pickupDone = form.pickupDate.trim() && form.pickupTime.trim();
+  const requiredKeys = ["size", "flavor", "name", "contact"];
+  const done = (pickupDone ? 1 : 0) + requiredKeys.filter((k) => (form[k] || "").trim().length > 0).length;
+  const total = requiredKeys.length + 1;
 
   const sizeObj = CAKE_SIZES.find((s) => s.id === form.size);
   const flavorObj = CAKE_FLAVORS.find((f) => f.id === form.flavor);
