@@ -493,6 +493,9 @@ function BookingScreen({ initial }) {
     }));
   };
 
+  const [orderModal, setOrderModal] = useState(false);
+  const [countdown, setCountdown] = useState(3);
+
   const send = () => {
     if (done < total) {
       setToast("필수 항목을 모두 입력해주세요");
@@ -500,23 +503,36 @@ function BookingScreen({ initial }) {
       return;
     }
     const body = [
-      "[벨케이크 예약 요청]",
+      "[주문서 작성]",
       "",
-      "픽업: " + formatDateKR(form.pickupDate) + " " + form.pickupTime,
-      "케이크 종류: " + sizeObj.label + " (" + fmt(sizeObj.price) + "원~)",
+      "픽업 일시: " + formatDateKR(form.pickupDate) + " " + form.pickupTime,
+      "케이크 종류: " + sizeObj.label,
       "맛: " + flavorObj.label + (flavorObj.surcharge > 0 ? ` (+${fmt(flavorObj.surcharge)}원)` : ""),
-      optionObjs.length ? "옵션: " + optionObjs.map((o) => `${o.label} (${fmt(o.price)}원)`).join(", ") : "",
+      optionObjs.length ? "옵션: " + optionObjs.map((o) => `${o.label} (+${fmt(o.price)}원)`).join(", ") : "",
       form.design ? "디자인 설명: " + form.design : "",
       form.boardText ? "케이크 판 문구: " + form.boardText : "",
       "",
-      "이름: " + form.name,
+      "예약자 성함: " + form.name,
       "연락처: " + form.contact,
       "",
-      "예상 합계: " + fmt(totalPrice) + "원",
+      "최종 결제비용: " + fmt(totalPrice) + "원",
     ].filter(Boolean).join("\n");
-    setToast("카카오톡을 열고 있어요");
-    setTimeout(() => { window.open(KAKAO_HREF, "_blank"); setTimeout(() => setToast(null), 1200); }, 400);
+
+    navigator.clipboard.writeText(body).catch(() => {});
+    setCountdown(3);
+    setOrderModal(true);
   };
+
+  useEffect(() => {
+    if (!orderModal) return;
+    if (countdown <= 0) {
+      setOrderModal(false);
+      window.open(KAKAO_HREF, "_blank");
+      return;
+    }
+    const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [orderModal, countdown]);
 
   return (
     <div>
@@ -527,7 +543,7 @@ function BookingScreen({ initial }) {
       </div>
 
       <div className="progress" aria-label={`${done}/${total} 입력 완료`}>
-        {required.map((_, i) => <span key={i} className={i < done ? "on" : ""} />)}
+        {Array.from({ length: total }, (_, i) => <span key={i} className={i < done ? "on" : ""} />)}
       </div>
       <div className="progress-meta">
         <span>입력 진행</span>
@@ -674,6 +690,17 @@ function BookingScreen({ initial }) {
       </div>
 
       {toast && <div className="toast"><I.Check size={16} strokeWidth={2.4} /> {toast}</div>}
+
+      {orderModal && (
+        <>
+          <div className="scrim" />
+          <div className="order-modal">
+            <div className="order-modal-icon"><I.Check size={32} strokeWidth={2.4} /></div>
+            <h3>성공적으로 주문서가 복사되었어요</h3>
+            <p><strong>{countdown}초</strong> 후 카카오톡으로 연결되며,<br />그대로 붙여넣기 해주시면 됩니다!</p>
+          </div>
+        </>
+      )}
 
       {pickerOpen && (
         <DateTimePicker

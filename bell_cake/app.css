@@ -1906,6 +1906,45 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 @keyframes toastin { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 
+/* ────── Order confirm modal ────── */
+.order-modal {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 48px);
+  max-width: 340px;
+  background: #fff;
+  border-radius: var(--radius-2xl);
+  padding: 40px 28px 36px;
+  text-align: center;
+  z-index: var(--z-modal);
+  animation: modalIn 280ms var(--ease-emphasized);
+}
+.order-modal-icon {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #16a34a;
+  display: grid; place-items: center;
+  margin: 0 auto 20px;
+}
+.order-modal h3 {
+  font-size: 18px; font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+  color: var(--sm-content-primary);
+}
+.order-modal p {
+  font-size: 14px; line-height: 1.6;
+  color: var(--sm-content-secondary);
+  margin: 0;
+}
+.order-modal p strong {
+  color: var(--sm-interactive-brand-default);
+  font-weight: 700;
+}
+@keyframes modalIn { from { transform: translate(-50%, -50%) scale(0.92); opacity: 0; } }
+
 /* ────── DatePicker ────── */
 .cal-head {
   display: flex; align-items: center; justify-content: space-between;
