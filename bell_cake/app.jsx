@@ -749,9 +749,11 @@ function OptionSheet({ title, options, value, renderRow, onClose, onPick }) {
                     <span className="option-row-text">
                       {renderRow ? renderRow(opt) : <span className="option-label">{opt.label}</span>}
                     </span>
-                    <span className={"option-check " + (selected ? "on" : "")} aria-hidden="true">
-                      {selected && <I.Check size={16} strokeWidth={2.6} />}
-                    </span>
+                    {selected && (
+                      <span className="option-check" aria-hidden="true">
+                        <I.Check size={16} strokeWidth={2.6} />
+                      </span>
+                    )}
                   </button>
                 </li>
               );
