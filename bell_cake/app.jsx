@@ -366,8 +366,7 @@ function StyleSheet({ item, onClose, onBook }) {
           <div className="sheet-meta">
             <div className="name">{item.name}</div>
             <div className="row" style={{ display: "flex", gap: 14, marginTop: 10, alignItems: "center" }}>
-              <span className="style-time"><I.Clock size={14} /> {item.time}분</span>
-              <span className="dotsep">·</span>
+              {item.time && <><span className="style-time"><I.Clock size={14} /> {item.time}분</span><span className="dotsep">·</span></>}
               <span className="price">{fmt(item.price)}<span className="won">원</span></span>
             </div>
             <p className="sheet-desc">{item.desc}</p>
@@ -376,7 +375,7 @@ function StyleSheet({ item, onClose, onBook }) {
         <div className="sheet-foot">
           <button className="btn-secondary" onClick={onClose}>닫기</button>
           <button className="btn" onClick={() => onBook(item)}>
-            <I.Calendar size={18} strokeWidth={2} /> 이 디자인으로 예약하기
+            <I.Calendar size={18} strokeWidth={2} /> 이 옵션으로 주문하기
           </button>
         </div>
       </div>
@@ -458,8 +457,8 @@ function BookingScreen({ initial }) {
   const [form, setForm] = useState({
     pickupDate: "",
     pickupTime: "",
-    size: "",
-    flavor: "",
+    size: initial?.size || "",
+    flavor: initial?.flavor || "",
     design: initial?.design || "",
     boardText: "",
     options: [],
@@ -467,8 +466,13 @@ function BookingScreen({ initial }) {
     contact: "",
   });
   useEffect(() => {
-    if (initial?.design) setForm((f) => ({ ...f, design: initial.design }));
-  }, [initial?.design]);
+    if (initial) setForm((f) => ({
+      ...f,
+      ...(initial.design ? { design: initial.design } : {}),
+      ...(initial.size ? { size: initial.size } : {}),
+      ...(initial.flavor ? { flavor: initial.flavor } : {}),
+    }));
+  }, [initial]);
 
   const [toast, setToast] = useState(null);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -986,7 +990,11 @@ function App() {
   };
 
   const bookStyle = (it) => {
-    setBookingSeed({ design: `${it.category} · ${it.name}` });
+    setBookingSeed({
+      design: it.sizeId ? it.name : `${it.category} · ${it.name}`,
+      size: it.sizeId || "",
+      flavor: it.flavorId || "",
+    });
     setStyleSheet(null);
     go("booking");
   };

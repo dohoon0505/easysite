@@ -77,13 +77,14 @@ const MZ_STYLES = [
   { id: "m5", name: "다크 애쉬",   price: 95000,  time: 100, desc: "차분한 회갈색, 시크한 도시 무드.", img: "img/style_6.png", categoryId: "color", categoryName: "염색" },
 ];
 
-// 첫 방문 — 부담 없는 시작
+// 부모님 베스트픽 디자인
 const STARTER_STYLES = [
-  { id: "s1", name: "댄디 컷",       price: 35000, time: 40, desc: "어떤 자리에도 무난한 베이직.", img: "img/style_4.jpg", categoryId: "cut",  categoryName: "커트" },
-  { id: "s2", name: "투블럭 컷",     price: 38000, time: 45, desc: "가장 인기 있는 남성 스타일.", img: "img/style_2.jpg", categoryId: "cut",  categoryName: "커트" },
-  { id: "s3", name: "다운 펌",       price: 90000, time: 100, desc: "뜨는 머리를 잡아주는 가장 기본적인 펌.", img: "img/style_7.png", categoryId: "perm", categoryName: "펌" },
-  { id: "s4", name: "두피 클리닉",   price: 50000, time: 50, desc: "두피 진단 + 클렌징 + 마사지.", img: "img/style_8.png", categoryId: "care", categoryName: "케어" },
-  { id: "s5", name: "모발 트리트먼트", price: 45000, time: 40, desc: "푸석한 모발에 영양을 채워줍니다.", img: "img/style_4.jpg", categoryId: "care", categoryName: "케어" },
+  { id: "st1", name: "퇴직케이크",     price: 53000, sizeId: "type-2", flavorId: "vanilla-lemon",     desc: "2호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/퇴직케이크.jpg",       categoryName: "케이크" },
+  { id: "st2", name: "생신케이크",     price: 35000, sizeId: "type-1", flavorId: "vanilla-milk",      desc: "1호 · 바닐라 쌀시트 + 우유크림",     img: "img/생신케이크.jpg",       categoryName: "케이크" },
+  { id: "st3", name: "카네이션케이크", price: 66000, sizeId: "type-3", flavorId: "vanilla-lemon",     desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/카네이션케이크.jpg",   categoryName: "케이크" },
+  { id: "st4", name: "대형사각케이크", price: 65000, sizeId: "type-3", flavorId: "vanilla-blueberry", desc: "3호 · 바닐라 쌀시트 + 블루베리잼",   img: "img/대형사각케이크.jpeg",  categoryName: "케이크" },
+  { id: "st5", name: "로또케이크",     price: 56000, sizeId: "type-2", flavorId: "vanilla-lemon",     desc: "2호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/로또케이크.jpg",       categoryName: "케이크" },
+  { id: "st6", name: "골드바 케이크",  price: 70000, sizeId: "type-3", flavorId: "vanilla-lemon",     desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/골드바 케이크.jpeg",   categoryName: "케이크" },
 ];
 
 window.FEATURED_STYLES = FEATURED_STYLES;
