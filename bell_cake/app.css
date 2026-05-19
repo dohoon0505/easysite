@@ -1759,7 +1759,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .checkbox-price {
   flex-shrink: 0;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--sm-content-tertiary);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.005em;

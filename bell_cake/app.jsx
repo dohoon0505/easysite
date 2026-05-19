@@ -328,18 +328,9 @@ function StylesScreen({ activeCat, setActiveCat, onPick }) {
             </div>
             <div className="style-body">
               <div className="style-name">{s.name}</div>
-              <div className="style-meta">
-                <span className="style-time"><I.Clock size={13} /> {s.time}분</span>
-                <span className="style-price">{fmt(s.price)}<span className="won">원</span></span>
-              </div>
             </div>
           </button>
         ))}
-      </div>
-
-      <div className="footer">
-        <a className="num" href={KAKAO_HREF} target="_blank" rel="noreferrer">카카오톡 문의</a>
-        <p>맞춤 스타일링은 카카오톡 상담을 권해드려요</p>
       </div>
     </div>
   );
