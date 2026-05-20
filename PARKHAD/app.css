@@ -833,6 +833,13 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   color: var(--ph-mute);
   margin-left: 2px;
 }
+.feat-duration {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ph-mute);
+  letter-spacing: -0.01em;
+}
 .how-section { padding-top: 36px; }
 .how-section .section-head { display: block; margin-bottom: 20px; }
 .how-section h3 {

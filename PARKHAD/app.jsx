@@ -7,6 +7,13 @@ const SMS_HREF = "sms:01000000000";
 
 // ─── Utilities ──────────────────────────────────────────────
 const fmt = (n) => n.toLocaleString("ko-KR");
+const fmtDuration = (m) => {
+  if (!m && m !== 0) return "";
+  if (m < 60) return `${m}분 소요 예상`;
+  const h = Math.floor(m / 60);
+  const r = m % 60;
+  return r === 0 ? `${h}시간 소요 예상` : `${h}시간 ${r}분 소요 예상`;
+};
 
 function useScrolled() {
   const [scrolled, set] = useState(false);
@@ -63,8 +70,8 @@ function FeaturedSlider({ title, meta, list, openStyle }) {
                 <img src={s.img} alt={s.name} />
               </div>
               <div className="feat-info">
-                <div className="feat-headline">{s.name}</div>
-                <div className="feat-price">{fmt(s.price)}<span className="won">원</span></div>
+                <div className="feat-headline">{s.works || s.name}</div>
+                <div className="feat-duration">{fmtDuration(s.time)}</div>
               </div>
             </button>
           ))}
