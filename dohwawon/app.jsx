@@ -581,6 +581,7 @@ function BookingScreen({ initial }) {
   const optionObjs = form.options.map((id) => FLOWER_OPTIONS.find((o) => o.id === id)).filter(Boolean);
   const optionTotal = optionObjs.reduce((sum, o) => sum + o.price, 0);
   const totalPrice = (productObj?.price || 0) + optionTotal;
+  const deposit = totalPrice > 0 ? Math.round(totalPrice * 0.3) : 0;
 
   const dateTimeDone = isPickup
     ? !!(form.pickupDate.trim() && form.pickupTime.trim())
@@ -628,7 +629,8 @@ function BookingScreen({ initial }) {
     lines.push("주문자 성함: " + form.name);
     lines.push("주문자 연락처: " + form.contact);
     lines.push("");
-    lines.push("최종 결제비용: " + fmt(totalPrice) + "원");
+    lines.push("총 결제 금액: " + fmt(totalPrice) + "원");
+    lines.push("예약금 (30%): " + fmt(deposit) + "원");
     const body = lines.join("\n");
 
     navigator.clipboard.writeText(body).catch(() => {});
@@ -804,12 +806,28 @@ function BookingScreen({ initial }) {
 
       {totalPrice > 0 && (
         <div className="price-summary">
-          <div className="price-summary-row">
-            <span className="price-summary-label">예상 합계</span>
-            <span className="price-summary-value">{fmt(totalPrice)}<span className="won">원</span></span>
+          <h5>ORDER SUMMARY</h5>
+          <h6>주문 금액 안내</h6>
+          <ul className="price-lines">
+            <li className="price-line">
+              <span>{productObj.label}</span>
+              <span>{fmt(productObj.price)}<span className="won">원</span></span>
+            </li>
+            {optionObjs.map((o) => (
+              <li key={o.id} className="price-line">
+                <span>{o.label}</span>
+                <span>+{fmt(o.price)}<span className="won">원</span></span>
+              </li>
+            ))}
+          </ul>
+          <div className="price-divider" />
+          <div className="price-total-row">
+            <span className="price-total-label">총 결제 금액</span>
+            <span className="price-total-value">{fmt(totalPrice)}<span className="won">원</span></span>
           </div>
-          <div className="price-summary-meta">
-            {productObj ? productObj.label : ""}{optionObjs.length ? ` + 옵션 ${optionObjs.length}개` : ""}
+          <div className="price-deposit-row">
+            <span>예약금 (30%)</span>
+            <span className="price-deposit-value">{fmt(deposit)}<span className="won">원</span></span>
           </div>
         </div>
       )}

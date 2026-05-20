@@ -1851,42 +1851,91 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 
 .price-summary {
   margin: 16px 20px 0;
-  padding: 16px 18px;
-  background: var(--sm-interactive-brand-subtle);
-  border: 1px solid var(--sm-interactive-brand-default);
+  padding: 18px 20px;
+  background: var(--sm-surface-sunken);
+  border: 1px solid var(--sm-border-subtle);
   border-radius: var(--radius-md);
 }
-.price-summary-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
+.price-summary h5 {
+  margin: 0 0 4px;
+  font-size: 13px;
+  color: var(--sm-content-tertiary);
+  font-weight: 800;
 }
-.price-summary-label {
+.price-summary h6 {
+  margin: 0 0 14px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--sm-content-primary);
+}
+.price-lines {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.price-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--sm-content-secondary);
+  letter-spacing: -0.01em;
+}
+.price-line .won {
+  font-size: 12px;
+  margin-left: 1px;
+}
+.price-divider {
+  height: 1px;
+  background: var(--sm-border-subtle);
+  margin: 14px 0;
+}
+.price-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.price-total-label {
   font-size: 14px;
   font-weight: 700;
   color: var(--sm-content-primary);
   letter-spacing: -0.01em;
 }
-.price-summary-value {
-  font-size: 24px;
+.price-total-value {
+  font-size: 22px;
   font-weight: 800;
   color: var(--sm-content-primary);
   letter-spacing: -0.025em;
   font-variant-numeric: tabular-nums;
 }
-.price-summary-value .won {
+.price-total-value .won {
   font-size: 13px;
   font-weight: 600;
   margin-left: 2px;
   color: var(--sm-content-secondary);
 }
-.price-summary-meta {
-  margin-top: 4px;
+.price-deposit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 8px;
   font-size: 13px;
-  font-weight: 500;
-  color: var(--sm-content-secondary);
-  letter-spacing: -0.005em;
+  font-weight: 600;
+  color: var(--sm-interactive-brand-default);
+  letter-spacing: -0.01em;
+}
+.price-deposit-value {
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.price-deposit-value .won {
+  font-size: 12px;
+  margin-left: 1px;
 }
 
 /* ────── Notice ────── */
