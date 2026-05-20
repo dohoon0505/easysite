@@ -72,11 +72,25 @@
 }
 
 @font-face {
-  font-family: "ChungjuKimSaeng";
+  font-family: "Jeongnimsaji";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 300;
   font-display: swap;
-  src: url("fonts/ChungjuKimSaeng.ttf") format("truetype");
+  src: url("fonts/Jeongnimsaji-L.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Jeongnimsaji";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/Jeongnimsaji-M.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Jeongnimsaji";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/Jeongnimsaji-B.ttf") format("truetype");
 }
 
 :root {
