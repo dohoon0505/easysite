@@ -819,7 +819,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   margin: 0;
 }
 .home-faq-section .accordion {
-  margin: 0 -20px;
+  margin: 0;
   padding: 0;
 }
 /* ────── Accordion (UIUX-DH v0.5.3) ────── */
@@ -842,8 +842,9 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 16px;
+  padding: 16px 0;
   text-align: left;
   background: transparent;
   border-radius: 0;
@@ -871,7 +872,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   color: var(--sm-content-primary);
 }
 .acc-panel {
-  padding: 0 16px 16px 16px;
+  padding: 0 0 16px 0;
   font-size: 14px;
   line-height: 1.65;
   color: var(--sm-content-secondary);
@@ -2254,7 +2255,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   color: var(--sm-content-inverse);
   border-color: var(--sm-content-primary);
 }
-.faq-list { padding: 20px 0; }
+.faq-list { padding: 20px; }
 .faq-empty {
   padding: 60px 24px; text-align: center; color: var(--sm-content-tertiary);
 }
