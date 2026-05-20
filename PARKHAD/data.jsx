@@ -20,7 +20,7 @@ const HAIR_CATEGORIES = [
   {
     id: "color",
     name: "염색",
-    blurb: "분위기를 바꾸는 한 끗",
+    blurb: "분위기를 바꾸고 싶다면",
     sub: "염색 디자인 둘러보기",
     icon: "color",
   },
