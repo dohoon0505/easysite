@@ -1,0 +1,91 @@
+# ──────────────────────────────────────────────────────────────
+# Secrets — NEVER commit these
+# ──────────────────────────────────────────────────────────────
+# Firebase Admin SDK service account keys
+*-firebase-adminsdk-*.json
+service-account*.json
+*.serviceaccount.json
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Local Firebase project overrides
+.firebaserc.local
+.runtimeconfig.json
+
+# ──────────────────────────────────────────────────────────────
+# Node / npm
+# ──────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ──────────────────────────────────────────────────────────────
+# Build / dist outputs
+# ──────────────────────────────────────────────────────────────
+admin/dist/
+admin/build/
+admin/.vite/
+functions/lib/
+functions/coverage/
+**/dist/
+**/build/
+**/coverage/
+.cache/
+.parcel-cache/
+
+# ──────────────────────────────────────────────────────────────
+# Firebase tooling
+# ──────────────────────────────────────────────────────────────
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+ui-debug.log
+firestore-debug.log
+database-debug.log
+pubsub-debug.log
+storage-debug.log
+emulator-data/
+.firebase-emulators/
+
+# ──────────────────────────────────────────────────────────────
+# Editor / IDE
+# ──────────────────────────────────────────────────────────────
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# ──────────────────────────────────────────────────────────────
+# OS
+# ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ──────────────────────────────────────────────────────────────
+# Test / log artifacts
+# ──────────────────────────────────────────────────────────────
+*.log
+logs/
+coverage/
+.nyc_output/
+
+# ──────────────────────────────────────────────────────────────
+# TypeScript build info
+# ──────────────────────────────────────────────────────────────
+*.tsbuildinfo
+
+# ──────────────────────────────────────────────────────────────
+# Nested git repos (clone로 가져온 외부 자산)
+# desgin_system 은 별도 GitHub 저장소(dohoon0505/desgin_system) 의 클론이므로
+# easysite 저장소에는 추적하지 않는다. 추후 git submodule 로 전환 검토.
+# ──────────────────────────────────────────────────────────────
+desgin_system/

@@ -1,0 +1,17 @@
+{
+  "name": "easysite-scripts",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "일회성 admin SDK 마이그레이션 스크립트 (data.jsx → Firestore, img/ → Storage)",
+  "scripts": {
+    "migrate:data": "node migrate-data.mjs",
+    "migrate:images": "node migrate-images.mjs",
+    "bootstrap:users": "node create-bootstrap-users.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.4.0",
+    "dotenv": "^16.4.0",
+    "mime-types": "^2.1.35"
+  }
+}
