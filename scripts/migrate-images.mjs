@@ -21,7 +21,7 @@ import { getStorage } from "firebase-admin/storage";
 import { readFileSync, existsSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import mime from "mime-types";
 
 import { SITES } from "./sites-config.mjs";
@@ -86,20 +86,38 @@ async function uploadIfNew(localPath, remotePath, contentType) {
   const [exists] = await file.exists();
   if (exists) {
     const [meta] = await file.getMetadata();
-    if (meta.md5Hash && Buffer.from(meta.md5Hash, "base64").toString("hex") === localMd5) {
+    const sameMd5 =
+      meta.md5Hash &&
+      Buffer.from(meta.md5Hash, "base64").toString("hex") === localMd5;
+    const existingToken = meta.metadata?.firebaseStorageDownloadTokens;
+    if (sameMd5 && existingToken) {
       return { skipped: true, reason: "same md5, already uploaded" };
+    }
+    // 동일 md5 이지만 토큰이 없는 경우 토큰만 부여
+    if (sameMd5 && !existingToken) {
+      const token = randomUUID();
+      await file.setMetadata({
+        metadata: { firebaseStorageDownloadTokens: token },
+      });
+      const downloadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(remotePath)}?alt=media&token=${token}`;
+      return { uploaded: true, downloadUrl, size: data.length, tokenOnly: true };
     }
   }
   if (opts.dryRun) {
     return { skipped: true, reason: "dry-run" };
   }
+  const token = randomUUID();
   await file.save(data, {
-    metadata: { contentType },
+    metadata: {
+      contentType,
+      metadata: {
+        // Firebase Storage 다운로드 토큰 — 브라우저가 인증 헤더 없이도 객체에 접근 가능
+        firebaseStorageDownloadTokens: token,
+      },
+    },
     resumable: false,
   });
-  // 공개 URL 대신 download URL (token 포함) 사용
-  // Admin SDK 는 직접 download URL 발급이 없으므로 signed URL 또는 file path 기반 URL 사용
-  const downloadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(remotePath)}?alt=media`;
+  const downloadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(remotePath)}?alt=media&token=${token}`;
   return { uploaded: true, downloadUrl, size: data.length };
 }
 
@@ -136,11 +154,10 @@ for (const site of sitesToProcess) {
         uploaded++;
       }
 
-      // product.image.originalUrl 갱신 (dry-run 도 일관성 위해 항상)
-      if (!opts.dryRun) {
-        const downloadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(remotePath)}?alt=media`;
+      // product.image.originalUrl 갱신 (skipped 도 토큰 검증 위해 매번 재설정)
+      if (!opts.dryRun && result.downloadUrl) {
         await db.doc(`sites/${site.siteId}/products/${product.productId}`).update({
-          "image.originalUrl": downloadUrl,
+          "image.originalUrl": result.downloadUrl,
           "image.storagePath": remotePath,
           updatedAt: FieldValue.serverTimestamp(),
         });
