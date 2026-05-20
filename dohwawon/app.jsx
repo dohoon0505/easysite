@@ -307,7 +307,6 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         </div>
       </FadeIn>
 
-      <FadeIn><FeaturedSlider title="가벼운 꽃다발 추천" list={FEATURED_STYLES} openStyle={openStyle} /></FadeIn>
       <FadeIn><FeaturedSlider title="풍성한 꽃다발 추천" list={BUSINESS_STYLES} openStyle={openStyle} /></FadeIn>
       <FadeIn><FeaturedSlider title="특별한 날, 꽃바구니 선물!" list={MZ_STYLES} openStyle={openStyle} /></FadeIn>
       <FadeIn><FeaturedSlider title="아름다운 효도, 용돈박스" list={STARTER_STYLES} openStyle={openStyle} /></FadeIn>
