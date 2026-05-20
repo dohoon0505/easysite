@@ -2,7 +2,7 @@
 // 도화원플라워 — 상품 카탈로그
 
 const HAIR_CATEGORIES = [
-  { id: "best",      name: "베스트",     blurb: "가장 많이 주문하는 인기 상품",       sub: "BEST PICK" },
+  { id: "best",      name: "베스트",     blurb: "도화원의 베스트 상품",               sub: "BEST PICK" },
   { id: "bouquet",   name: "꽃다발",     blurb: "마음을 전하는 아름다운 꽃다발",       sub: "BOUQUET" },
   { id: "basket",    name: "꽃바구니",   blurb: "풍성하고 화사한 꽃바구니",           sub: "BASKET" },
   { id: "moneybox",  name: "용돈박스",   blurb: "특별한 마음을 담은 용돈박스",         sub: "MONEY BOX" },
