@@ -56,7 +56,7 @@
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-html, body { margin: 0; padding: 0; overflow-x: hidden; }
+html, body { margin: 0; padding: 0; overflow-x: clip; }
 body {
   font-family: var(--font-sans), "Pretendard", system-ui, sans-serif;
   font-size: 14px;
@@ -95,7 +95,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   .app-frame {
     border-radius: 0;
     box-shadow: 0 0 0 1px var(--ph-line);
-    overflow: clip;
+    overflow-x: clip;
     min-height: 100vh;
   }
 }
@@ -105,25 +105,25 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   height: 64px;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 20;
   background: var(--ph-surface);
   display: flex;
   align-items: center;
   padding: 0 12px 0 16px;
-  border-bottom: 1px solid var(--ph-line);
-  transition: border-color 180ms, background 180ms, box-shadow 180ms;
+  border-bottom: 1px solid transparent;
+  transition: border-color 220ms ease, background 220ms ease, box-shadow 220ms ease, backdrop-filter 220ms ease;
 }
 .appbar.shadow {
-  background: rgba(255, 255, 255, 0.25);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border-bottom-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.65);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  backdrop-filter: saturate(180%) blur(14px);
+  border-bottom-color: rgba(0, 0, 0, 0.06);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 [data-theme="dark"] .appbar.shadow {
-  background: rgba(24, 24, 27, 0.25);
-  border-bottom-color: rgba(255, 255, 255, 0.18);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  background: rgba(24, 24, 27, 0.55);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 .appbar .iconbtn {
   width: 44px; height: 44px;
