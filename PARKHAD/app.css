@@ -755,8 +755,8 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .featured-section .section-head { padding-right: 20px; }
 .feat-card {
   flex: 0 0 auto;
-  width: 64%;
-  max-width: 240px;
+  width: 54%;
+  max-width: 204px;
   scroll-snap-align: start;
   background: var(--ph-surface);
   border: 1px solid var(--ph-line);
