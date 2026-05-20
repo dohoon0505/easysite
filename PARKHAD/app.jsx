@@ -301,7 +301,6 @@ function StylesScreen({ activeCat, setActiveCat, onPick }) {
               ) : (
                 <span className="style-thumb-no">{String(i + 1).padStart(2, "0")}</span>
               )}
-              {s.tag && <span className="style-tag">{s.tag}</span>}
             </div>
             <div className="style-body">
               <div className="style-name">{s.name}</div>
