@@ -1270,6 +1270,12 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
+.sheet-meta .price .won {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  margin-left: 0;
+}
 .dotsep { color: var(--ph-mute); }
 .sheet-desc {
   margin: 12px 0 0;
