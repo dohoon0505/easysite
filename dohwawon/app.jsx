@@ -325,6 +325,10 @@ function StylesScreen({ activeCat, setActiveCat, onPick }) {
             </div>
             <div className="style-body">
               <div className="style-name">{s.name}</div>
+              <div className="style-meta">
+                {s.size && <span className="style-size-badge">{s.size}</span>}
+                <span className="style-price">{s.price?.toLocaleString()}원</span>
+              </div>
             </div>
           </button>
         ))}
