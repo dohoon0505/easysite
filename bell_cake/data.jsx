@@ -2,13 +2,13 @@
 // 벨케이크 — 케이크 카탈로그
 
 const HAIR_CATEGORIES = [
-  { id: "best",      name: "베스트",   blurb: "가장 많이 주문하는 인기 케이크", sub: "BEST" },
+  { id: "best",      name: "베스트",   blurb: "인기 많은 베스트 케이크", sub: "Best Pick" },
   { id: "signature", name: "시그니처", blurb: "벨케이크만의 특별한 디자인",      sub: "SIGNATURE" },
   { id: "dosirak",   name: "도시락",   blurb: "귀여운 미니 도시락케이크",        sub: "LUNCHBOX" },
   { id: "size-1",    name: "1호",      blurb: "1호 케이크 (16cm, 3~5인)",       sub: "SIZE 1" },
   { id: "size-2",    name: "2호",      blurb: "2호 케이크 (18cm, 6~8인)",       sub: "SIZE 2" },
   { id: "size-3",    name: "3호",      blurb: "3호 케이크 (21cm, 7~10인)",      sub: "SIZE 3" },
-  { id: "double",    name: "2단",      blurb: "특별한 날을 위한 2단 케이크",     sub: "DOUBLE" },
+  { id: "double",    name: "2단",      blurb: "특별한 날을 위한 2단 케이크",     sub: "Double Size" },
 ];
 
 const HAIR_STYLES = {

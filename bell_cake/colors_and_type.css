@@ -71,6 +71,21 @@
   src: url("fonts/Pretendard-Black.woff") format("woff");
 }
 
+@font-face {
+  font-family: "YOnepick";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/YOnepick-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "YOnepick";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("fonts/YOnepick-Bold.ttf") format("truetype");
+}
+
 :root {
   /* ─────────── TYPOGRAPHY ───────────
      Pretendard Variable carries every weight. v0.4.1: --font-mono is also
