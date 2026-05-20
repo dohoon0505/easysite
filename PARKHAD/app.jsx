@@ -233,7 +233,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         <p className="info-banner-text">전화 또는 네이버 예약으로 간편예약이 가능해요!</p>
       </div>
 
-      <FeaturedSlider title="여름철 테토 스타일" meta="시즌 추천"   list={FEATURED_STYLES} openStyle={openStyle} />
+      <FeaturedSlider title="교동 감성 스타일링" meta="시즌 추천"   list={FEATURED_STYLES} openStyle={openStyle} />
       <FeaturedSlider title="면접·미팅을 준비한다면"      meta="단정하고 깔끔하게"   list={BUSINESS_STYLES} openStyle={openStyle} />
       <FeaturedSlider title="요즘 20대 스타일링"       meta="MZ 스타일" list={MZ_STYLES}       openStyle={openStyle} />
       <FeaturedSlider title="젊어보이는 마법을" meta="30대 이상 추천"   list={STARTER_STYLES}  openStyle={openStyle} />
