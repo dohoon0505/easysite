@@ -347,7 +347,6 @@ function StyleSheet({ item, onClose, onBook }) {
             ) : (
               <span className="style-thumb-no">{item.name}</span>
             )}
-            {item.tag && <span className="style-tag">{item.tag}</span>}
           </div>
           <div className="sheet-meta">
             <div className="name">{item.name}</div>
