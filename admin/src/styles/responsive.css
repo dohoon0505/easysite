@@ -1,0 +1,54 @@
+/* 반응형 — mobile-first 브레이크포인트
+   - mobile  : < 600px
+   - tablet  : 600px ~ 1023px
+   - desktop : >= 1024px
+*/
+
+:root {
+  --bp-mobile-max: 599.98px;
+  --bp-tablet-min: 600px;
+  --bp-tablet-max: 1023.98px;
+  --bp-desktop-min: 1024px;
+}
+
+/* 유틸리티 클래스 — 뷰포트별 display 제어 */
+.show-on-mobile {
+  display: initial;
+}
+.show-on-tablet,
+.show-on-desktop {
+  display: none;
+}
+
+@media (min-width: 600px) and (max-width: 1023.98px) {
+  .show-on-mobile,
+  .show-on-desktop {
+    display: none;
+  }
+  .show-on-tablet {
+    display: initial;
+  }
+}
+
+@media (min-width: 1024px) {
+  .show-on-mobile,
+  .show-on-tablet {
+    display: none;
+  }
+  .show-on-desktop {
+    display: initial;
+  }
+}
+
+/* 모바일 sticky 액션 바 패턴 */
+.sticky-action-bar {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--size-300, 12px) var(--size-400, 16px)
+    calc(var(--size-300, 12px) + var(--safe-bottom)) var(--size-400, 16px);
+  background: var(--sm-background-default, #fff);
+  border-top: 1px solid var(--sm-border-default, #e5e7eb);
+  z-index: 10;
+}

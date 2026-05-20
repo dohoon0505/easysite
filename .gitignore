@@ -15,6 +15,10 @@ service-account*.json
 .firebaserc.local
 .runtimeconfig.json
 
+# Bootstrap user definition (포함된 email 외 임시 비밀번호 보호)
+scripts/bootstrap-users.json
+scripts/bootstrap-users.result.json
+
 # ──────────────────────────────────────────────────────────────
 # Node / npm
 # ──────────────────────────────────────────────────────────────

@@ -1,0 +1,206 @@
+/* easysite 어드민 컴포넌트 스타일 (M2 핵심 5종)
+   모든 색·라디우스·모션은 desgin_system semantic 토큰만 사용. */
+
+/* ── Button ─────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: var(--radius-md);
+  font: var(--text-label-md);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--ease-standard),
+    border-color var(--motion-fast) var(--ease-standard),
+    opacity var(--motion-fast) var(--ease-standard);
+  user-select: none;
+  white-space: nowrap;
+}
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Sizes — 모바일 44pt 터치 타깃 요구사항 충족 (md 이상) */
+.btn-sm { padding: 6px 12px; min-height: 32px; font: var(--text-label-sm); }
+.btn-md { padding: 10px 16px; min-height: 44px; }
+.btn-lg { padding: 12px 20px; min-height: 48px; font: var(--text-label-lg); }
+.btn-xl { padding: 16px 24px; min-height: 56px; font: var(--text-label-lg); }
+
+/* Variants */
+.btn-primary {
+  background: var(--sm-interactive-brand-default);
+  color: var(--sm-content-onBrand);
+  border: 1px solid transparent;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--sm-interactive-brand-hover);
+}
+.btn-primary:active:not(:disabled) {
+  background: var(--sm-interactive-brand-active);
+}
+
+.btn-secondary {
+  background: var(--sm-background-subtle);
+  color: var(--sm-content-primary);
+  border: 1px solid var(--sm-border-default);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--sm-background-muted);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--sm-content-brand);
+  border: 1px solid var(--sm-border-brand);
+}
+.btn-outline:hover:not(:disabled) {
+  background: var(--sm-interactive-brand-subtle);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--sm-content-primary);
+  border: 1px solid transparent;
+}
+.btn-ghost:hover:not(:disabled) {
+  background: var(--sm-background-subtle);
+}
+
+.btn-danger {
+  background: var(--sm-status-error);
+  color: var(--sm-content-onBrand);
+  border: 1px solid transparent;
+}
+.btn-danger:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-full { width: 100%; }
+
+/* ── TextField ─────────────────────────────────────────── */
+.tf {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.tf-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--sm-border-default);
+  border-radius: var(--radius-md);
+  background: var(--sm-background-default);
+  color: var(--sm-content-primary);
+  font: var(--text-body-md);
+  transition:
+    border-color var(--motion-fast) var(--ease-standard),
+    box-shadow var(--motion-fast) var(--ease-standard);
+}
+.tf-input::placeholder {
+  color: var(--sm-content-tertiary);
+}
+.tf-input:focus-visible {
+  outline: none;
+  border-color: var(--sm-border-focus);
+  box-shadow: 0 0 0 3px var(--sm-interactive-brand-subtle);
+}
+.tf-input:disabled {
+  background: var(--sm-background-subtle);
+  color: var(--sm-content-disabled);
+  cursor: not-allowed;
+}
+.tf-input.tf-input--error {
+  border-color: var(--sm-status-error);
+}
+.tf-input.tf-input--error:focus-visible {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+/* ── FormField (label + control + help/error) ──────────── */
+.ff {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ff-label {
+  font: var(--text-label-md);
+  color: var(--sm-content-primary);
+}
+.ff-required {
+  color: var(--sm-status-error);
+  margin-left: 2px;
+}
+.ff-help {
+  font: var(--text-caption);
+  color: var(--sm-content-secondary);
+}
+.ff-error {
+  font: var(--text-caption);
+  color: var(--sm-status-error);
+}
+
+/* ── Card ──────────────────────────────────────────────── */
+.card {
+  background: var(--sm-surface-default);
+  border: 1px solid var(--sm-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+.card-tight { padding: 16px; }
+.card-loose { padding: 32px; }
+
+/* ── AlertToast ────────────────────────────────────────── */
+.toast-container {
+  position: fixed;
+  top: calc(16px + var(--safe-top));
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+  pointer-events: none;
+}
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: var(--sm-background-elevated);
+  border: 1px solid var(--sm-border-default);
+  max-width: 360px;
+  font: var(--text-body-md);
+  color: var(--sm-content-primary);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+.toast-info { border-left: 4px solid var(--sm-status-info); }
+.toast-success { border-left: 4px solid var(--sm-status-success); }
+.toast-warning { border-left: 4px solid var(--sm-status-warning); }
+.toast-danger { border-left: 4px solid var(--sm-status-error); }
+
+.toast-message { flex: 1; }
+.toast-close {
+  flex-shrink: 0;
+  background: transparent;
+  color: var(--sm-content-secondary);
+  font: var(--text-label-md);
+  padding: 0 4px;
+}
+
+/* 모바일에서는 화면 하단에 배치 */
+@media (max-width: 599.98px) {
+  .toast-container {
+    top: auto;
+    right: 8px;
+    left: 8px;
+    bottom: calc(16px + var(--safe-bottom));
+  }
+  .toast {
+    max-width: none;
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "_README": [
+    "이 파일을 bootstrap-users.json 로 복사한 뒤 email/displayName 을 실제 운영자 정보로 교체.",
+    "bootstrap-users.json 은 .gitignore 되어 있으니 저장소에 커밋되지 않습니다.",
+    "스크립트 실행: cd scripts && node create-bootstrap-users.mjs"
+  ],
+  "users": [
+    {
+      "email": "ehgns335@naver.com",
+      "displayName": "Cris (super admin)",
+      "role": "super"
+    },
+    {
+      "email": "dohwawon-op@example.com",
+      "displayName": "도화원 운영자",
+      "role": "editor",
+      "siteId": "dohwawon"
+    },
+    {
+      "email": "bellcake-op@example.com",
+      "displayName": "벨케이크 운영자",
+      "role": "editor",
+      "siteId": "bell_cake"
+    },
+    {
+      "email": "parkhad-op@example.com",
+      "displayName": "PARKHAD 운영자",
+      "role": "editor",
+      "siteId": "PARKHAD"
+    },
+    {
+      "email": "flowerexample-op@example.com",
+      "displayName": "flower_example 운영자",
+      "role": "editor",
+      "siteId": "flower_example"
+    },
+    {
+      "email": "greenlightart-op@example.com",
+      "displayName": "greenlight_art 운영자",
+      "role": "editor",
+      "siteId": "greenlight_art"
+    }
+  ]
+}
