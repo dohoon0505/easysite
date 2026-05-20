@@ -2,7 +2,7 @@
 // 도화원플라워 — 상품 카탈로그 (자동 생성: publishToGitHub)
 
 const HAIR_CATEGORIES = [
-  { id: "best", name: "테스트카테", blurb: "도화원의 베스트 상품", sub: "BEST PICK" },
+  { id: "best", name: "베스트", blurb: "도화원의 베스트 상품", sub: "BEST PICK" },
   { id: "bouquet", name: "꽃다발", blurb: "마음을 전하는 꽃다발", sub: "BOUQUET" },
   { id: "basket", name: "꽃바구니", blurb: "풍성하고 화사한 꽃바구니", sub: "BASKET" },
   { id: "moneybox", name: "용돈박스", blurb: "특별한 마음을! 용돈박스", sub: "MONEY BOX" },
@@ -12,11 +12,11 @@ const HAIR_CATEGORIES = [
 
 const HAIR_STYLES = {
   best: [
-    { name: "코랄 로즈 꽃다발 (S)", price: 55000, desc: "소형 · 코랄톤 장미 믹스", img: "img/bouquet-s-coral.jpg", categoryName: "테스트카테" },
-    { name: "파스텔 꽃바구니 (M)", price: 65000, desc: "중형 · 파스텔톤 믹스 플라워", img: "img/basket-m-pastel.jpg", categoryName: "테스트카테" },
-    { name: "럭셔리 용돈박스", price: 80000, desc: "프리미엄 장미 + 용돈봉투", img: "img/moneybox-luxury.jpg", categoryName: "테스트카테" },
-    { name: "핑크 로즈 꽃다발 (XL)", price: 120000, desc: "대형 · 핑크 장미 100송이", img: "img/bouquet-xl-pink.jpg", categoryName: "테스트카테" },
-    { name: "카네이션 아크릴백", price: 45000, desc: "아크릴백 · 카네이션 어레인지먼트", img: "img/acrylic-carnation.jpg", categoryName: "테스트카테" }
+    { name: "코랄 로즈 꽃다발 (S)", price: 55000, desc: "소형 · 코랄톤 장미 믹스", img: "img/bouquet-s-coral.jpg", categoryName: "베스트" },
+    { name: "파스텔 꽃바구니 (M)", price: 65000, desc: "중형 · 파스텔톤 믹스 플라워", img: "img/basket-m-pastel.jpg", categoryName: "베스트" },
+    { name: "럭셔리 용돈박스", price: 80000, desc: "프리미엄 장미 + 용돈봉투", img: "img/moneybox-luxury.jpg", categoryName: "베스트" },
+    { name: "핑크 로즈 꽃다발 (XL)", price: 120000, desc: "대형 · 핑크 장미 100송이", img: "img/bouquet-xl-pink.jpg", categoryName: "베스트" },
+    { name: "카네이션 아크릴백", price: 45000, desc: "아크릴백 · 카네이션 어레인지먼트", img: "img/acrylic-carnation.jpg", categoryName: "베스트" }
   ],
   bouquet: [
     { name: "카네이션 꽃다발 (S)", price: 35000, desc: "소형 · 감사의 마음을 담은 카네이션", img: "img/bouquet-s-carnation.jpg", categoryName: "꽃다발" },
