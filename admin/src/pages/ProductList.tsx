@@ -45,18 +45,23 @@ export function ProductList() {
       siteId ? subscribeCategories(siteId, onNext, onErr) : () => {},
     [siteId]
   );
-  const prods = useSubscribed<Product[]>(
+  // 항상 모든 상품을 구독하고 categoryId 는 클라이언트에서 필터.
+  // 이유: where(categoryId).orderBy(sortOrder) 복합 쿼리는 새 인덱스 빌드를 요구하고,
+  // 사이트당 상품이 30개 미만이라 클라이언트 필터로 충분하다.
+  const allProds = useSubscribed<Product[]>(
     (onNext, onErr) =>
-      siteId
-        ? subscribeProducts(
-            siteId,
-            activeCat === "all" ? {} : { categoryId: activeCat },
-            onNext,
-            onErr
-          )
-        : () => {},
-    [siteId, activeCat]
+      siteId ? subscribeProducts(siteId, {}, onNext, onErr) : () => {},
+    [siteId]
   );
+
+  const prods = useMemo(() => {
+    if (!allProds.data) return allProds;
+    const data =
+      activeCat === "all"
+        ? allProds.data
+        : allProds.data.filter((p) => p.categoryId === activeCat);
+    return { ...allProds, data };
+  }, [allProds, activeCat]);
 
   const categoryLabelById = useMemo(() => {
     const map: Record<string, string> = {};
