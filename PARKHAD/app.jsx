@@ -477,7 +477,7 @@ function StylingScreen() {
   return (
     <div>
       <div className="order-hero">
-        <span className="step-pill"><I.Sparkle size={12} strokeWidth={2.2} /> 스타일 추천</span>
+        <span className="step-pill"><I.Sparkle size={12} strokeWidth={2.2} /> 스타일링 추천</span>
         <h2>당신에게 어울리는<br />스타일을 찾아드려요</h2>
         <p>몇 가지 항목만 알려주시면 디자이너가 맞춤 스타일을 추천하고 문자로 답변드려요.</p>
       </div>
