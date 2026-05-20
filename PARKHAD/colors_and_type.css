@@ -71,6 +71,14 @@
   src: url("fonts/Pretendard-Black.woff") format("woff");
 }
 
+@font-face {
+  font-family: "ChungjuKimSaeng";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/ChungjuKimSaeng.ttf") format("truetype");
+}
+
 :root {
   /* ─────────── PRIMITIVE TOKENS — palette source of truth ───────────
      Never reference `--p-*` directly in UI. Only `--sm-*` and `--cm-*` may. */

@@ -340,9 +340,10 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   margin-bottom: 16px;
 }
 .section-head h3 {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.025em;
+  font-family: "ChungjuKimSaeng", var(--font-sans), "Pretendard", system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
   margin: 0;
   color: var(--ph-ink);
 }
@@ -1068,16 +1069,18 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   padding: 28px 20px 16px;
 }
 .styles-sub {
-  font-size: 13px;
-  font-weight: 800;
+  font-family: "ChungjuKimSaeng", var(--font-sans), "Pretendard", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
   color: var(--ph-mute);
   letter-spacing: -0.01em;
   margin-bottom: 6px;
 }
 .styles-head h2 {
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-family: "ChungjuKimSaeng", var(--font-sans), "Pretendard", system-ui, sans-serif;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
   color: var(--ph-ink);
   line-height: 1.25;
   margin: 0;
