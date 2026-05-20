@@ -2285,6 +2285,12 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   background: var(--sm-surface-raised);
   border: 1px solid var(--sm-border-subtle);
 }
+[data-theme="dark"] .faq-foot h4 {
+  color: var(--sm-content-primary);
+}
+[data-theme="dark"] .faq-foot p {
+  color: var(--sm-content-secondary);
+}
 
 /* ─── Interaction Animations ──────────────────────────────── */
 
