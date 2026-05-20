@@ -6,6 +6,36 @@ const KAKAO_HREF = "https://pf.kakao.com/_xleKLxj";
 // ─── Utilities ──────────────────────────────────────────────
 const fmt = (n) => n.toLocaleString("ko-KR");
 
+// Intersection-Observer hook — triggers once when element enters viewport
+function useInView(options = {}) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setInView(true); obs.disconnect(); }
+    }, { threshold: 0.1, ...options });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, inView];
+}
+
+// Wrapper that fades-up children when scrolled into view
+function FadeIn({ children, delay = 0, className = "" }) {
+  const [ref, inView] = useInView();
+  return (
+    <div
+      ref={ref}
+      className={"fade-in-section " + (inView ? "visible" : "") + " " + className}
+      style={{ transitionDelay: delay + "ms" }}
+    >
+      {children}
+    </div>
+  );
+}
+
 function useScrolled() {
   const [scrolled, set] = useState(false);
   useEffect(() => {
@@ -15,6 +45,13 @@ function useScrolled() {
     return () => window.removeEventListener("scroll", fn);
   }, []);
   return scrolled;
+}
+
+// Global: mark images as loaded for fade-in
+if (typeof document !== "undefined") {
+  document.addEventListener("load", (e) => {
+    if (e.target.tagName === "IMG") e.target.classList.add("loaded");
+  }, true);
 }
 
 // Lock body scroll while a sheet is open. Uses `position: fixed` so
@@ -213,73 +250,81 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         </div>
       </section>
 
-      <section className="intro">
-        <div className="intro-meta">대구광역시 | 달서구</div>
-        <h2 className="intro-name">도화원플라워</h2>
-        <p className="intro-desc">평범한 일상도 꽃 한 송이가 더해지면 특별한 순간이 됩니다.{"\n\n"}계절을 듬뿍 머금은 다채로운 꽃들로, 당신의 오늘을 가장 아름답게 피워내겠습니다.</p>
+      <FadeIn>
+        <section className="intro">
+          <div className="intro-meta">대구광역시 | 달서구</div>
+          <h2 className="intro-name">도화원플라워</h2>
+          <p className="intro-desc">평범한 일상도 꽃 한 송이가 더해지면 특별한 순간이 됩니다.{"\n\n"}계절을 듬뿍 머금은 다채로운 꽃들로, 당신의 오늘을 가장 아름답게 피워내겠습니다.</p>
 
-        <div className="intro-map" aria-label="매장 위치 지도">
-          <img src="img/map.png" alt="도화원플라워 매장 위치" className="intro-map-img" />
-          <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 달서구 당산로 99" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
-            <img src="img/naver_map.png" alt="" className="naver-map-icon" /> 네이버 지도
+          <div className="intro-map" aria-label="매장 위치 지도">
+            <img src="img/map.png" alt="도화원플라워 매장 위치" className="intro-map-img" />
+            <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 달서구 당산로 99" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
+              <img src="img/naver_map.png" alt="" className="naver-map-icon" /> 네이버 지도
+            </a>
+          </div>
+
+          <ul className="intro-list">
+            <li>
+              <span className="intro-list-icon"><I.Map size={18} /></span>
+              <span className="intro-list-text">대구 달서구 당산로 99 1층 도화원플라워</span>
+            </li>
+            <li>
+              <span className="intro-list-icon"><I.Calendar size={18} /></span>
+              <span className="intro-list-text">
+                11:00 ~ 19:00 · 매주 일요일 휴무
+                <span className="intro-open-status" data-open={isOpenNow()}>
+                  {isOpenNow() ? "현재 영업 중" : "현재 영업 종료"}
+                </span>
+              </span>
+            </li>
+          </ul>
+        </section>
+      </FadeIn>
+
+      <FadeIn delay={80}>
+        <div className="info-banner">
+          <span className="info-banner-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 8h.01M11 12h1v5h1" />
+            </svg>
+          </span>
+          <p className="info-banner-text">예약요청 탭을 통해 간편히 예약을 요청해보세요!</p>
+        </div>
+      </FadeIn>
+
+      <FadeIn><FeaturedSlider title="가벼운 꽃다발 추천" list={FEATURED_STYLES} openStyle={openStyle} /></FadeIn>
+      <FadeIn><FeaturedSlider title="풍성한 꽃다발 추천" list={BUSINESS_STYLES} openStyle={openStyle} /></FadeIn>
+      <FadeIn><FeaturedSlider title="특별한 날, 꽃바구니 선물!" list={MZ_STYLES} openStyle={openStyle} /></FadeIn>
+      <FadeIn><FeaturedSlider title="아름다운 효도, 용돈박스" list={STARTER_STYLES} openStyle={openStyle} /></FadeIn>
+      <FadeIn><FeaturedSlider title="특색있는 아크릴백" list={ACRYLIC_STYLES} openStyle={openStyle} /></FadeIn>
+
+      <FadeIn>
+        <section className="section home-faq-section">
+          <div className="section-head">
+            <h3>주문 전 자주하는 질문</h3>
+          </div>
+          <ul className="home-faq-list">
+            {FAQ_ITEMS.slice(0, 6).map((it, i) => (
+              <HomeFaqItem key={i} item={it} />
+            ))}
+          </ul>
+          <button className="home-faq-more" type="button" onClick={() => go("faq")}>
+            전체 질문 보기 <I.Arrow size={14} />
+          </button>
+        </section>
+      </FadeIn>
+
+      <FadeIn>
+        <div className="footer footer-cta">
+          <a href="https://www.instagram.com/parkhaddd/" target="_blank" rel="noreferrer" className="btn-secondary">
+            <I.Insta size={18} /> 인스타그램 둘러보기
+          </a>
+          <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao">
+            카톡 문의 <I.Send size={18} />
           </a>
         </div>
-
-        <ul className="intro-list">
-          <li>
-            <span className="intro-list-icon"><I.Map size={18} /></span>
-            <span className="intro-list-text">대구 달서구 당산로 99 1층 도화원플라워</span>
-          </li>
-          <li>
-            <span className="intro-list-icon"><I.Calendar size={18} /></span>
-            <span className="intro-list-text">
-              11:00 ~ 19:00 · 매주 일요일 휴무
-              <span className="intro-open-status" data-open={isOpenNow()}>
-                {isOpenNow() ? "현재 영업 중" : "현재 영업 종료"}
-              </span>
-            </span>
-          </li>
-        </ul>
-      </section>
-
-      <div className="info-banner">
-        <span className="info-banner-icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="9" />
-            <path d="M12 8h.01M11 12h1v5h1" />
-          </svg>
-        </span>
-        <p className="info-banner-text">예약요청 탭을 통해 간편히 예약을 요청해보세요!</p>
-      </div>
-
-      <FeaturedSlider title="가벼운 꽃다발 추천" list={FEATURED_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="풍성한 꽃다발 추천" list={BUSINESS_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="특별한 날, 꽃바구니 선물!" list={MZ_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="아름다운 효도, 용돈박스" list={STARTER_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="특색있는 아크릴백" list={ACRYLIC_STYLES} openStyle={openStyle} />
-
-      <section className="section home-faq-section">
-        <div className="section-head">
-          <h3>주문 전 자주하는 질문</h3>
-        </div>
-        <ul className="home-faq-list">
-          {FAQ_ITEMS.slice(0, 6).map((it, i) => (
-            <HomeFaqItem key={i} item={it} />
-          ))}
-        </ul>
-        <button className="home-faq-more" type="button" onClick={() => go("faq")}>
-          전체 질문 보기 <I.Arrow size={14} />
-        </button>
-      </section>
-
-      <div className="footer footer-cta">
-        <a href="https://www.instagram.com/parkhaddd/" target="_blank" rel="noreferrer" className="btn-secondary">
-          <I.Insta size={18} /> 인스타그램 둘러보기
-        </a>
-        <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao">
-          카톡 문의 <I.Send size={18} />
-        </a>
-      </div>
+      </FadeIn>
     </div>
   );
 }
@@ -307,14 +352,14 @@ function StylesScreen({ activeCat, setActiveCat, onPick }) {
         </div>
       </div>
 
-      <div className="styles-head">
+      <div className="styles-head anim-fade-in" key={cat.id + "-head"}>
         <div className="styles-sub">{cat.sub}</div>
         <h2>{cat.blurb}</h2>
       </div>
 
-      <div className="styles-grid">
+      <div className="styles-grid" key={cat.id + "-grid"}>
         {list.map((s, i) => (
-          <button className="style-card" key={i} onClick={() => onPick({ ...s, category: cat.name, categoryId: cat.id })}>
+          <button className="style-card anim-stagger" style={{ animationDelay: (i * 60) + "ms" }} key={cat.id + "-" + i} onClick={() => onPick({ ...s, category: cat.name, categoryId: cat.id })}>
             <div className="style-thumb" data-cat={cat.id}>
               {s.img ? (
                 <img src={s.img} alt={s.name} loading="lazy" />

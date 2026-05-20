@@ -2327,3 +2327,74 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   background: var(--sm-surface-raised);
   border: 1px solid var(--sm-border-subtle);
 }
+
+/* ─── Interaction Animations ──────────────────────────────── */
+
+/* Scroll reveal — fade up on enter viewport */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 520ms var(--ease-emphasized), transform 520ms var(--ease-emphasized);
+  will-change: opacity, transform;
+}
+.fade-in-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Category switch — heading fade */
+.anim-fade-in {
+  animation: animFadeIn 360ms var(--ease-emphasized) both;
+}
+@keyframes animFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Card stagger — pop up one by one */
+.anim-stagger {
+  animation: animStagger 400ms var(--ease-emphasized) both;
+}
+@keyframes animStagger {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Card press feedback */
+.style-card:active,
+.feat-card:active {
+  transform: scale(0.97);
+  transition: transform 80ms ease;
+}
+
+/* Image load fade-in */
+.style-thumb img,
+.feat-thumb img {
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+.style-thumb img[complete],
+.feat-thumb img[complete],
+.style-thumb img.loaded,
+.feat-thumb img.loaded {
+  opacity: 1;
+}
+
+/* FAQ accordion expand */
+.home-faq-a {
+  animation: faqExpand 280ms var(--ease-emphasized);
+}
+@keyframes faqExpand {
+  from { opacity: 0; max-height: 0; transform: translateY(-6px); }
+  to   { opacity: 1; max-height: 200px; transform: translateY(0); }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-section { opacity: 1; transform: none; transition: none; }
+  .anim-fade-in,
+  .anim-stagger,
+  .home-faq-a { animation: none; }
+  .style-thumb img,
+  .feat-thumb img { opacity: 1; transition: none; }
+}
