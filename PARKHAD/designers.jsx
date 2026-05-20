@@ -82,8 +82,8 @@ const STARTER_STYLES = [
   { id: "s1", name: "댄디 컷",       price: 35000, time: 40, desc: "해당 디자인은 단정하고 정직한 인상을 원하시는 분께 추천드립니다. 베이직 커트+옆선·뒷선 정리 작업으로 옆머리와 뒷머리를 깔끔하게 다듬어, 면접·미팅·소개팅 어디서나 잘 어울리는 무난하고 신뢰감 있는 스타일을 완성합니다.", img: "img/style_4.jpg", categoryId: "cut",  categoryName: "커트" },
   { id: "s2", name: "투블럭 컷",     price: 38000, time: 45, desc: "해당 디자인은 윗머리에 볼륨을 살리고 싶거나 가장 인기 있는 남성 스타일을 원하시는 분께 추천드립니다. 사이드 투블럭+윗머리 레이어 컷 조합으로 옆선은 시원하게, 윗머리는 풍성하게 연출해 멋스럽고 트렌디한 인상을 만듭니다.", img: "img/style_2.jpg", categoryId: "cut",  categoryName: "커트" },
   { id: "s3", name: "다운 펌",       price: 90000, time: 100, desc: "해당 디자인은 뜨는 머리·뻗치는 옆머리로 매일 아침 스타일링이 어려운 분께 추천드립니다. 옆다운펌+윗머리 정돈 작업으로 머리를 차분하게 잡아줘 손질 시간을 크게 줄이고, 단정한 인상을 매일 유지할 수 있습니다.", img: "img/style_7.png", categoryId: "perm", categoryName: "펌" },
-  { id: "s4", name: "두피 클리닉",   price: 50000, time: 50, desc: "해당 디자인은 두피 트러블·가려움·민감성이 있거나 시술 전 두피를 정돈하고 싶으신 분께 추천드립니다. 두피 진단+딥 클렌징+마사지 작업으로 두피 상태를 리셋해, 다른 시술 전 베이스를 잡아주는 케어입니다.", img: "img/style_8.png", categoryId: "care", categoryName: "케어" },
-  { id: "s5", name: "모발 트리트먼트", price: 45000, time: 40, desc: "해당 디자인은 모발이 푸석하고 윤기가 부족하거나 손상모로 고민이신 분께 추천드립니다. 영양 트리트먼트+큐티클 케어 작업으로 모발에 수분과 영양을 채워, 부드러운 결과 자연스러운 광택을 회복시켜 드립니다.", img: "img/style_4.jpg", categoryId: "care", categoryName: "케어" },
+  { id: "s4", name: "베이직 스파",   price: 60000, time: 50, desc: "해당 케어는 두피·모발 컨디션을 가볍게 관리하고 싶으신 분께 추천드립니다. 두피 클렌징+영양 트리트먼트+릴렉싱 마사지 조합으로 두피 노폐물을 정돈하고 모발에 수분과 영양을 채워, 시술 후 부드럽고 가벼운 두피·모발 상태로 회복시켜 드립니다.", img: "img/style_8.png", categoryId: "care", categoryName: "케어" },
+  { id: "s5", name: "프리미엄 스파", price: 80000, time: 80, desc: "해당 케어는 두피 컨디션을 본격적으로 관리하고 싶으시거나 손상모 회복이 필요한 분께 추천드립니다. 딥 클렌징+스케일링+고영양 앰플+두피·어깨 마사지 조합으로 두피 환경을 깊이 정돈해, 모발 건강과 두피 컨디션을 함께 끌어올리는 프리미엄 케어입니다.", img: "img/style_7.png", categoryId: "care", categoryName: "케어" },
 ];
 
 window.FEATURED_STYLES = FEATURED_STYLES;
