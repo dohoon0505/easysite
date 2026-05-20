@@ -7,7 +7,7 @@ const HAIR_CATEGORIES = [
   { id: "basket",    name: "꽃바구니",   blurb: "풍성하고 화사한 꽃바구니",           sub: "BASKET" },
   { id: "moneybox",  name: "용돈박스",   blurb: "특별한 마음을 담은 용돈박스",         sub: "MONEY BOX" },
   { id: "acrylic",   name: "아크릴백",   blurb: "세련된 아크릴백 플라워",             sub: "ACRYLIC" },
-  { id: "bridal",    name: "부케",       blurb: "인생에서 가장 아름다운 순간을 위한 부케", sub: "BRIDAL" },
+  { id: "bridal",    name: "부케",       blurb: "아름다운 날을 위한 부케",             sub: "BRIDAL" },
 ];
 
 const HAIR_STYLES = {
