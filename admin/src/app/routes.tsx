@@ -1,10 +1,17 @@
 /**
- * 라우트 테이블 — lazy load 는 M3 에서 도입. M2 는 직접 import.
+ * 라우트 테이블 — M3 확장.
  */
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthBoundary } from "./AuthBoundary";
+import { AppShell } from "./AppShell";
 import { Login } from "@/pages/Login";
 import { Dashboard } from "@/pages/Dashboard";
+import { ProductList } from "@/pages/ProductList";
+import { ProductEdit } from "@/pages/ProductEdit";
+import { CategoryManage } from "@/pages/CategoryManage";
+import { MediaLibrary } from "@/pages/MediaLibrary";
+import { PublishCenter } from "@/pages/PublishCenter";
+import { AccountSettings } from "@/pages/AccountSettings";
 import { UsersAdmin } from "@/pages/super/UsersAdmin";
 
 export function AppRoutes() {
@@ -13,22 +20,30 @@ export function AppRoutes() {
       <Route path="/login" element={<Login />} />
 
       <Route
-        path="/"
         element={
           <AuthBoundary>
-            <Dashboard />
+            <AppShell />
           </AuthBoundary>
         }
-      />
+      >
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/products" element={<ProductList />} />
+        <Route path="/products/new" element={<ProductEdit />} />
+        <Route path="/products/:productId" element={<ProductEdit />} />
+        <Route path="/categories" element={<CategoryManage />} />
+        <Route path="/media" element={<MediaLibrary />} />
+        <Route path="/publish" element={<PublishCenter />} />
+        <Route path="/account" element={<AccountSettings />} />
 
-      <Route
-        path="/super/users"
-        element={
-          <AuthBoundary requireRole="super">
-            <UsersAdmin />
-          </AuthBoundary>
-        }
-      />
+        <Route
+          path="/super/users"
+          element={
+            <AuthBoundary requireRole="super">
+              <UsersAdmin />
+            </AuthBoundary>
+          }
+        />
+      </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
