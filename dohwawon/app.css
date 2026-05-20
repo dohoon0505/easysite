@@ -2339,6 +2339,77 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 
 
+/* ────── Screen-reader only ────── */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ────── Skeleton Loader (UIUX-DH v0.5.3) ────── */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--sm-background-muted, #E6E9F0);
+  border-radius: var(--radius-sm, 6px);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Skeleton inside thumb containers — exact aspect-ratio match */
+.style-thumb .skeleton,
+.feat-thumb .skeleton,
+.hero-img .skeleton,
+.intro-map .skeleton {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+  z-index: 2;
+  transition: opacity 300ms ease;
+}
+.style-thumb .skeleton.hidden,
+.feat-thumb .skeleton.hidden,
+.hero-img .skeleton.hidden,
+.intro-map .skeleton.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Skeleton text lines for card body */
+.skeleton-text {
+  height: 14px;
+  width: 70%;
+  margin: 4px 0;
+}
+.skeleton-text.short {
+  width: 40%;
+}
+
+/* Skeleton card — matches style-card structure */
+.skeleton-card .style-thumb,
+.skeleton-card .feat-thumb {
+  background: var(--sm-background-muted, #E6E9F0);
+}
+.skeleton-card .style-body,
+.skeleton-card .feat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 /* Reduce motion */
 @media (prefers-reduced-motion: reduce) {
   .fade-in-section { opacity: 1; transform: none; transition: none; }
@@ -2347,4 +2418,5 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   .acc-panel { animation: none; }
   .style-thumb img,
   .feat-thumb img { opacity: 1; transition: none; }
+  .skeleton::after { animation: none; }
 }

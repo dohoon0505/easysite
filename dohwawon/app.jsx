@@ -54,6 +54,32 @@ if (typeof document !== "undefined") {
   }, true);
 }
 
+// Skeleton-aware image: shows shimmer overlay until image loads
+function SkeletonImg({ src, alt, loading, className }) {
+  const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef(null);
+  useEffect(() => {
+    const img = imgRef.current;
+    if (img && img.complete && img.naturalWidth > 0) setLoaded(true);
+  }, [src]);
+  return React.createElement(React.Fragment, null,
+    React.createElement("div", {
+      className: "skeleton" + (loaded ? " hidden" : ""),
+      role: "status",
+      "aria-busy": !loaded,
+      "aria-live": "polite",
+    }, !loaded && React.createElement("span", { className: "sr-only" }, "로딩 중")),
+    React.createElement("img", {
+      ref: imgRef,
+      src: src,
+      alt: alt || "",
+      loading: loading || "lazy",
+      className: className || "",
+      onLoad: () => setLoaded(true),
+    })
+  );
+}
+
 // Lock body scroll while a sheet is open. Uses `position: fixed` so
 // Chrome mobile pull-to-refresh can't trigger and touch scroll inside
 // the sheet doesn't bleed through to the page behind.
@@ -126,7 +152,7 @@ function FeaturedSlider({ title, meta, list, openStyle }) {
           {list.map((s) => (
             <button key={s.id} className="feat-card" onClick={() => openStyle({ ...s, category: s.categoryName, categoryId: s.categoryId })}>
               <div className="feat-thumb">
-                <img src={s.img} alt={s.name} />
+                <SkeletonImg src={s.img} alt={s.name} />
               </div>
               <div className="feat-info">
                 <div className="feat-headline">{s.name}</div>
@@ -260,7 +286,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
     <div>
       <section className="hero" aria-label="도화원플라워">
         <div className="hero-img">
-          <img src="img/hero.jpg" alt="도화원플라워 매장" />
+          <SkeletonImg src="img/hero.jpg" alt="도화원플라워 매장" loading="eager" />
         </div>
       </section>
 
@@ -271,7 +297,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
           <p className="intro-desc">평범한 일상도 꽃 한 송이가 더해지면 특별한 순간이 됩니다.{"\n\n"}계절을 듬뿍 머금은 다채로운 꽃들로, 당신의 오늘을 가장 아름답게 피워내겠습니다.</p>
 
           <div className="intro-map" aria-label="매장 위치 지도">
-            <img src="img/map.png" alt="도화원플라워 매장 위치" className="intro-map-img" />
+            <SkeletonImg src="img/map.png" alt="도화원플라워 매장 위치" className="intro-map-img" />
             <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 달서구 당산로 99" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
               <img src="img/naver_map.png" alt="" className="naver-map-icon" /> 네이버 지도
             </a>
@@ -375,7 +401,7 @@ function StylesScreen({ activeCat, setActiveCat, onPick }) {
           <button className="style-card anim-stagger" style={{ animationDelay: (i * 60) + "ms" }} key={cat.id + "-" + i} onClick={() => onPick({ ...s, category: cat.name, categoryId: cat.id })}>
             <div className="style-thumb" data-cat={cat.id}>
               {s.img ? (
-                <img src={s.img} alt={s.name} loading="lazy" />
+                <SkeletonImg src={s.img} alt={s.name} loading="lazy" />
               ) : (
                 <span className="style-thumb-no">{String(i + 1).padStart(2, "0")}</span>
               )}
@@ -412,7 +438,7 @@ function StyleSheet({ item, onClose, onBook }) {
         <div className="sheet-body">
           <div className="style-thumb large" data-cat={item.categoryId}>
             {item.img ? (
-              <img src={item.img} alt={item.name} />
+              <SkeletonImg src={item.img} alt={item.name} loading="eager" />
             ) : (
               <span className="style-thumb-no">{item.name}</span>
             )}
