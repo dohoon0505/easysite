@@ -806,7 +806,7 @@ function BookingScreen({ initial }) {
 
       {totalPrice > 0 && (
         <div className="price-summary">
-          <h5>ORDER SUMMARY</h5>
+          <h5>SUMMARY</h5>
           <h6>주문 금액 안내</h6>
           <ul className="price-lines">
             <li className="price-line">
