@@ -826,18 +826,17 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .accordion {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
 }
 .acc-item {
-  border-radius: var(--radius-md);
+  border-radius: 0;
   background: var(--sm-background-default);
-  border: 1px solid var(--sm-border-subtle);
-  transition: background 200ms var(--ease-standard), border-color 200ms var(--ease-standard);
+  border: none;
+  border-bottom: 1px solid var(--sm-border-subtle);
   overflow: hidden;
 }
-.acc-item.open {
-  background: var(--sm-background-subtle);
-  border-color: var(--sm-interactive-brand-default);
+.acc-item:last-child {
+  border-bottom: none;
 }
 .acc-trigger {
   width: 100%;
@@ -847,22 +846,8 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   padding: 16px;
   text-align: left;
   background: transparent;
-  border-radius: var(--radius-md);
+  border-radius: 0;
   cursor: pointer;
-}
-.acc-badge {
-  flex-shrink: 0;
-  width: 24px; height: 24px;
-  display: grid; place-items: center;
-  border-radius: 6px;
-  background: var(--sm-interactive-brand-subtle);
-  color: var(--sm-interactive-brand-default);
-  font-size: 13px; font-weight: 700;
-  transition: background 200ms, color 200ms;
-}
-.acc-item.open .acc-badge {
-  background: var(--sm-interactive-brand-default);
-  color: var(--sm-content-inverse);
 }
 .acc-label {
   font-size: 15px;
@@ -886,7 +871,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   color: var(--sm-content-primary);
 }
 .acc-panel {
-  padding: 0 16px 16px 52px;
+  padding: 0 16px 16px 16px;
   font-size: 14px;
   line-height: 1.65;
   color: var(--sm-content-secondary);
