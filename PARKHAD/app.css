@@ -91,12 +91,12 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   overflow-x: clip;
 }
 @media (min-width: 520px) {
-  .app { padding: 24px 0; align-items: flex-start; }
+  .app { padding: 0; align-items: flex-start; }
   .app-frame {
-    border-radius: 28px;
-    box-shadow: 0 24px 80px -16px rgba(17,17,17,0.18), 0 0 0 1px var(--ph-line);
-    overflow: hidden;
-    min-height: 880px;
+    border-radius: 0;
+    box-shadow: 0 0 0 1px var(--ph-line);
+    overflow: clip;
+    min-height: 100vh;
   }
 }
 
@@ -110,10 +110,21 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   display: flex;
   align-items: center;
   padding: 0 12px 0 16px;
-  border-bottom: 1px solid transparent;
-  transition: border-color 180ms, background 180ms;
+  border-bottom: 1px solid var(--ph-line);
+  transition: border-color 180ms, background 180ms, box-shadow 180ms;
 }
-.appbar.shadow { border-bottom-color: var(--ph-line); }
+.appbar.shadow {
+  background: rgba(255, 255, 255, 0.25);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+[data-theme="dark"] .appbar.shadow {
+  background: rgba(24, 24, 27, 0.25);
+  border-bottom-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
 .appbar .iconbtn {
   width: 44px; height: 44px;
   display: grid; place-items: center;
@@ -391,9 +402,9 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   color: var(--ph-ink);
 }
 .link-card:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   border-color: var(--ph-ink-3);
-  box-shadow: var(--ph-shadow-md);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 }
 .link-card[data-disabled="true"] {
   opacity: 0.6;
@@ -450,9 +461,9 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   transition: transform 180ms, box-shadow 180ms, border-color 180ms;
 }
 .cat:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   border-color: var(--ph-ink-3);
-  box-shadow: var(--ph-shadow-md);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 }
 .cat-glyph {
   width: 52px; height: 52px;
@@ -535,7 +546,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .designer-card:hover {
   transform: translateY(-2px);
   border-color: var(--ph-ink-3);
-  box-shadow: var(--ph-shadow-md);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 }
 .designer-avatar {
   aspect-ratio: 1 / 1;
@@ -715,6 +726,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   line-height: 1.6;
   color: var(--ph-mute);
   letter-spacing: -0.01em;
+  animation: accExpand 280ms cubic-bezier(0.16, 1, 0.3, 1);
   white-space: pre-line;
 }
 .home-faq-more {
@@ -757,7 +769,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .feat-card:hover {
   transform: translateY(-2px);
   border-color: var(--ph-ink-3);
-  box-shadow: var(--ph-shadow-md);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 }
 .feat-thumb {
   aspect-ratio: 1 / 1;
@@ -959,7 +971,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   padding-bottom: env(safe-area-inset-bottom);
 }
 @media (min-width: 520px) {
-  .bottomnav { border-radius: 0 0 0 28px; }
+  .bottomnav { border-radius: 0; }
 }
 .bottomnav button {
   height: 64px;
@@ -1082,7 +1094,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 .style-card:hover {
   transform: translateY(-2px);
   border-color: var(--ph-ink-3);
-  box-shadow: var(--ph-shadow-md);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
 }
 .style-thumb {
   aspect-ratio: 4 / 5;
@@ -1111,6 +1123,11 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .style-card:hover .style-thumb img { transform: scale(1.04); }
+.style-card:active,
+.feat-card:active {
+  transform: scale(0.97);
+  transition: transform 80ms ease;
+}
 .style-thumb-no {
   position: relative; z-index: 1;
   color: rgba(255,255,255,0.85);
@@ -1189,6 +1206,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   animation: fadein 160ms;
 }
 @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+@keyframes accExpand { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 .sheet {
   position: fixed;
   left: 50%; bottom: 0;
@@ -1872,6 +1890,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   line-height: 1.65;
   color: var(--ph-mute);
   letter-spacing: -0.005em;
+  animation: accExpand 280ms cubic-bezier(0.16, 1, 0.3, 1);
   white-space: pre-line;
   border-top: 1px solid var(--ph-line);
   padding-top: 14px;
