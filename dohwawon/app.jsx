@@ -581,7 +581,7 @@ function BookingScreen({ initial }) {
   const optionObjs = form.options.map((id) => FLOWER_OPTIONS.find((o) => o.id === id)).filter(Boolean);
   const optionTotal = optionObjs.reduce((sum, o) => sum + o.price, 0);
   const totalPrice = (productObj?.price || 0) + optionTotal;
-  const deposit = totalPrice > 0 ? Math.round(totalPrice * 0.3) : 0;
+  const deposit = totalPrice > 0 ? Math.round(totalPrice * 0.3 / 10000) * 10000 : 0;
 
   const dateTimeDone = isPickup
     ? !!(form.pickupDate.trim() && form.pickupTime.trim())
