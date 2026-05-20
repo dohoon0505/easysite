@@ -81,6 +81,13 @@
 @font-face {
   font-family: "DNFForgedBlade";
   font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/DNFForgedBlade-Medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "DNFForgedBlade";
+  font-style: normal;
   font-weight: 700;
   font-display: swap;
   src: url("fonts/DNFForgedBlade-Bold.ttf") format("truetype");
