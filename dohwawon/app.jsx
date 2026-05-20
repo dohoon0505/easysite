@@ -76,83 +76,30 @@ function isOpenNow() {
   return mins >= 11 * 60 && mins < 19 * 60;
 }
 
-// ─── Skeleton Loader ────────────────────────────────────────
-function SkeletonCard() {
-  return (
-    <div className="skeleton-card">
-      <div className="skeleton skeleton-thumb" />
-      <div className="skeleton-card-body">
-        <div className="skeleton skeleton-text" />
-        <div className="skeleton skeleton-text short" />
-      </div>
-    </div>
-  );
-}
-
-function SkeletonGrid({ count = 4 }) {
-  return (
-    <div className="skeleton-container" role="status" aria-busy="true" aria-live="polite">
-      <span className="sr-only">로딩 중</span>
-      <div className="skeleton-grid">
-        {Array.from({ length: count }, (_, i) => <SkeletonCard key={i} />)}
-      </div>
-    </div>
-  );
-}
-
-function SkeletonSlider({ count = 4 }) {
-  return (
-    <div className="skeleton-container" role="status" aria-busy="true" aria-live="polite">
-      <span className="sr-only">로딩 중</span>
-      <div className="skeleton-slider">
-        {Array.from({ length: count }, (_, i) => (
-          <div className="skeleton-feat" key={i}>
-            <div className="skeleton skeleton-thumb" />
-            <div className="skeleton-feat-body">
-              <div className="skeleton skeleton-text" />
-              <div className="skeleton skeleton-text short" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ─── Featured Slider ────────────────────────────────────────
 function FeaturedSlider({ title, meta, list, openStyle }) {
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setLoaded(true), 500);
-    return () => clearTimeout(t);
-  }, []);
-
   return (
     <section className="section featured-section">
       <div className="section-head">
         <h3>{title}</h3>
         {meta && <span className="meta">{meta}</span>}
       </div>
-      {!loaded ? (
-        <SkeletonSlider count={4} />
-      ) : (
-        <div className="designer-scroll-wrap">
-          <div className="designer-scroll">
-            {list.map((s) => (
-              <button key={s.id} className="feat-card" onClick={() => openStyle({ ...s, category: s.categoryName, categoryId: s.categoryId })}>
-                <div className="feat-thumb">
-                  <img src={s.img} alt={s.name} />
-                </div>
-                <div className="feat-info">
-                  <div className="feat-headline">{s.name}</div>
-                  <div className="feat-price">{fmt(s.price)}<span className="won">원</span></div>
-                </div>
-              </button>
-            ))}
-            <div className="designer-scroll-end" />
-          </div>
+      <div className="designer-scroll-wrap">
+        <div className="designer-scroll">
+          {list.map((s) => (
+            <button key={s.id} className="feat-card" onClick={() => openStyle({ ...s, category: s.categoryName, categoryId: s.categoryId })}>
+              <div className="feat-thumb">
+                <img src={s.img} alt={s.name} />
+              </div>
+              <div className="feat-info">
+                <div className="feat-headline">{s.name}</div>
+                <div className="feat-price">{fmt(s.price)}<span className="won">원</span></div>
+              </div>
+            </button>
+          ))}
+          <div className="designer-scroll-end" />
         </div>
-      )}
+      </div>
     </section>
   );
 }
@@ -340,21 +287,9 @@ function HomeScreen({ go, openStyle, openDesigner }) {
 // ─── STYLES (카탈로그) ───────────────────────────────────────
 function StylesScreen({ activeCat, setActiveCat, onPick }) {
   const tabRef = useRef(null);
-  const [loading, setLoading] = useState(false);
-  const prevCat = useRef(activeCat);
-
   useEffect(() => {
     const el = tabRef.current?.querySelector(`[data-tab='${activeCat}']`);
     if (el) el.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
-  }, [activeCat]);
-
-  useEffect(() => {
-    if (prevCat.current !== activeCat) {
-      setLoading(true);
-      const t = setTimeout(() => setLoading(false), 500);
-      prevCat.current = activeCat;
-      return () => clearTimeout(t);
-    }
   }, [activeCat]);
 
   const cat = HAIR_CATEGORIES.find((c) => c.id === activeCat) || HAIR_CATEGORIES[0];
@@ -377,27 +312,23 @@ function StylesScreen({ activeCat, setActiveCat, onPick }) {
         <h2>{cat.blurb}</h2>
       </div>
 
-      {loading ? (
-        <SkeletonGrid count={list.length || 4} />
-      ) : (
-        <div className="styles-grid">
-          {list.map((s, i) => (
-            <button className="style-card" key={i} onClick={() => onPick({ ...s, category: cat.name, categoryId: cat.id })}>
-              <div className="style-thumb" data-cat={cat.id}>
-                {s.img ? (
-                  <img src={s.img} alt={s.name} loading="lazy" />
-                ) : (
-                  <span className="style-thumb-no">{String(i + 1).padStart(2, "0")}</span>
-                )}
-                {s.tag && <span className="style-tag">{s.tag}</span>}
-              </div>
-              <div className="style-body">
-                <div className="style-name">{s.name}</div>
-              </div>
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="styles-grid">
+        {list.map((s, i) => (
+          <button className="style-card" key={i} onClick={() => onPick({ ...s, category: cat.name, categoryId: cat.id })}>
+            <div className="style-thumb" data-cat={cat.id}>
+              {s.img ? (
+                <img src={s.img} alt={s.name} loading="lazy" />
+              ) : (
+                <span className="style-thumb-no">{String(i + 1).padStart(2, "0")}</span>
+              )}
+              {s.tag && <span className="style-tag">{s.tag}</span>}
+            </div>
+            <div className="style-body">
+              <div className="style-name">{s.name}</div>
+            </div>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
