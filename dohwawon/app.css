@@ -830,7 +830,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 .acc-item {
   border-radius: 0;
-  background: var(--sm-background-default);
+  background: transparent;
   border: none;
   border-bottom: 1px solid var(--sm-border-subtle);
   overflow: hidden;
