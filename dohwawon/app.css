@@ -204,12 +204,12 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   overflow-x: clip;
 }
 @media (min-width: 520px) {
-  .app { padding: 24px 0; align-items: flex-start; }
+  .app { padding: 0; align-items: flex-start; }
   .app-frame {
-    border-radius: 28px;
-    box-shadow: var(--elevation-4), 0 0 0 1px var(--sm-border-subtle);
+    border-radius: 0;
+    box-shadow: 0 0 0 1px var(--sm-border-subtle);
     overflow: clip;
-    min-height: 880px;
+    min-height: 100vh;
   }
 }
 
@@ -1113,7 +1113,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   padding-bottom: env(safe-area-inset-bottom);
 }
 @media (min-width: 520px) {
-  .bottomnav { border-radius: 0 0 0 28px; }
+  .bottomnav { border-radius: 0; }
 }
 .bottomnav button {
   height: 64px;
