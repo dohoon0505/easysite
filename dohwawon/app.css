@@ -873,7 +873,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 }
 .acc-panel {
   padding: 0 5px 16px 5px;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.65;
   color: var(--sm-content-secondary);
   letter-spacing: -0.01em;
