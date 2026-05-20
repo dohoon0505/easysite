@@ -819,7 +819,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   margin: 0;
 }
 .home-faq-section .accordion {
-  margin: 0;
+  margin: 0 -20px;
   padding: 0;
 }
 /* ────── Accordion (UIUX-DH v0.5.3) ────── */
@@ -2254,7 +2254,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   color: var(--sm-content-inverse);
   border-color: var(--sm-content-primary);
 }
-.faq-list { padding: 20px; }
+.faq-list { padding: 20px 0; }
 .faq-empty {
   padding: 60px 24px; text-align: center; color: var(--sm-content-tertiary);
 }
