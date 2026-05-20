@@ -357,7 +357,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
       <FadeIn>
         <div className="footer footer-cta">
           <a href="https://www.instagram.com/parkhaddd/" target="_blank" rel="noreferrer" className="btn-secondary">
-            <I.Insta size={18} /> 인스타그램 둘러보기
+            <I.Insta size={18} /> 인스타그램
           </a>
           <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao">
             카톡 문의 <I.Send size={18} />
