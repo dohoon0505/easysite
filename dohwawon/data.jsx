@@ -45,10 +45,7 @@ const HAIR_STYLES = {
     { name: "엘레강스 아크릴백",     price: 55000,  desc: "아크릴백 · 고급스러운 파스텔톤",           img: "img/acrylic-elegant.jpg",      categoryName: "아크릴백" },
     { name: "디즈니 아크릴백",       price: 55000,  desc: "아크릴백 · 디즈니 캐릭터 포인트",          img: "img/acrylic-disney.jpg",       categoryName: "아크릴백" },
   ],
-  bridal: [
-    { name: "클래식 로즈 부케",      price: 150000, desc: "웨딩 · 화이트 & 핑크 로즈",              img: "img/bouquet-s-pink-rose.jpg",  categoryName: "부케" },
-    { name: "내추럴 부케",           price: 180000, desc: "웨딩 · 자연스러운 가든 스타일",            img: "img/bouquet-m-rose.jpg",       categoryName: "부케" },
-  ],
+  bridal: [],
 };
 
 Object.assign(window, { HAIR_CATEGORIES, HAIR_STYLES });
