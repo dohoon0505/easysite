@@ -141,23 +141,38 @@ function FeaturedSlider({ title, meta, list, openStyle }) {
   );
 }
 
-// ─── Home FAQ item ──────────────────────────────────────────
-function HomeFaqItem({ item }) {
-  const [open, setOpen] = useState(false);
+// ─── Accordion Item (UIUX-DH v0.5.3) ──────────────────────
+function AccordionItem({ item, id, open, onToggle }) {
+  const triggerId = "acc-trigger-" + id;
+  const panelId = "acc-panel-" + id;
   return (
-    <li className={"home-faq-item " + (open ? "open" : "")}>
-      <button className="home-faq-q" onClick={() => setOpen(!open)} aria-expanded={open}>
-        <span className="home-faq-q-badge">Q</span>
-        <span className="home-faq-q-text">{item.q}</span>
-        <span className="home-faq-caret" aria-hidden="true">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
-        </span>
+    <div className={"acc-item " + (open ? "open" : "")}>
+      <button
+        className="acc-trigger"
+        id={triggerId}
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={onToggle}
+      >
+        <span className="acc-badge">Q</span>
+        <span className="acc-label">{item.q}</span>
+        <svg className="acc-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
       </button>
-      {open && <div className="home-faq-a">{item.a}</div>}
-    </li>
+      {open && (
+        <div className="acc-panel" id={panelId} role="region" aria-labelledby={triggerId}>
+          {item.a}
+        </div>
+      )}
+    </div>
   );
+}
+
+// Home uses multi-open accordion
+function HomeFaqItem({ item, id }) {
+  const [open, setOpen] = useState(false);
+  return <AccordionItem item={item} id={"home-" + id} open={open} onToggle={() => setOpen(!open)} />;
 }
 
 // ─── App bar ────────────────────────────────────────────────
@@ -304,11 +319,11 @@ function HomeScreen({ go, openStyle, openDesigner }) {
           <div className="section-head">
             <h3>주문 전 자주하는 질문</h3>
           </div>
-          <ul className="home-faq-list">
+          <div className="accordion" data-mode="multi">
             {FAQ_ITEMS.slice(0, 6).map((it, i) => (
-              <HomeFaqItem key={i} item={it} />
+              <HomeFaqItem key={i} item={it} id={i} />
             ))}
-          </ul>
+          </div>
           <button className="home-faq-more" type="button" onClick={() => go("faq")}>
             전체 질문 보기 <I.Arrow size={14} />
           </button>
@@ -1035,7 +1050,7 @@ function FaqScreen() {
           <button key={c.id} className={"faq-tab " + (c.id === activeCat ? "on" : "")} onClick={() => setActiveCat(c.id)}>{c.label}</button>
         ))}
       </div>
-      <div className="faq-list">
+      <div className="accordion faq-list" data-mode="single">
         {filtered.length === 0 ? (
           <div className="faq-empty">
             <I.Search size={28} strokeWidth={1.5} />
@@ -1046,18 +1061,7 @@ function FaqScreen() {
           const id = `${it.cat}-${i}`;
           const isOpen = openId === id;
           return (
-            <li key={id} className={"home-faq-item " + (isOpen ? "open" : "")}>
-              <button className="home-faq-q" onClick={() => setOpenId(isOpen ? null : id)} aria-expanded={isOpen}>
-                <span className="home-faq-q-badge">Q</span>
-                <span className="home-faq-q-text">{it.q}</span>
-                <span className="home-faq-caret" aria-hidden="true">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="6 9 12 15 18 9" />
-                  </svg>
-                </span>
-              </button>
-              {isOpen && <div className="home-faq-a">{it.a}</div>}
-            </li>
+            <AccordionItem key={id} item={it} id={"faq-" + id} open={isOpen} onToggle={() => setOpenId(isOpen ? null : id)} />
           );
         })}
       </div>
