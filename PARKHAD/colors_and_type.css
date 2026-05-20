@@ -72,25 +72,18 @@
 }
 
 @font-face {
-  font-family: "Jeongnimsaji";
+  font-family: "DNFForgedBlade";
   font-style: normal;
   font-weight: 300;
   font-display: swap;
-  src: url("fonts/Jeongnimsaji-L.ttf") format("truetype");
+  src: url("fonts/DNFForgedBlade-Light.ttf") format("truetype");
 }
 @font-face {
-  font-family: "Jeongnimsaji";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("fonts/Jeongnimsaji-M.ttf") format("truetype");
-}
-@font-face {
-  font-family: "Jeongnimsaji";
+  font-family: "DNFForgedBlade";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("fonts/Jeongnimsaji-B.ttf") format("truetype");
+  src: url("fonts/DNFForgedBlade-Bold.ttf") format("truetype");
 }
 
 :root {

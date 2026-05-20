@@ -340,7 +340,7 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   margin-bottom: 16px;
 }
 .section-head h3 {
-  font-family: "Jeongnimsaji", var(--font-sans), "Pretendard", system-ui, sans-serif;
+  font-family: "DNFForgedBlade", var(--font-sans), "Pretendard", system-ui, sans-serif;
   font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -1069,15 +1069,15 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   padding: 28px 20px 16px;
 }
 .styles-sub {
-  font-family: "Jeongnimsaji", var(--font-sans), "Pretendard", system-ui, sans-serif;
+  font-family: "DNFForgedBlade", var(--font-sans), "Pretendard", system-ui, sans-serif;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 300;
   color: var(--ph-mute);
   letter-spacing: -0.01em;
   margin-bottom: 6px;
 }
 .styles-head h2 {
-  font-family: "Jeongnimsaji", var(--font-sans), "Pretendard", system-ui, sans-serif;
+  font-family: "DNFForgedBlade", var(--font-sans), "Pretendard", system-ui, sans-serif;
   font-size: 28px;
   font-weight: 700;
   letter-spacing: -0.01em;
