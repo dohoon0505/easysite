@@ -12,7 +12,7 @@ const HAIR_CATEGORIES = [
 
 const HAIR_STYLES = {
   best: [
-    { name: "코랄 로즈 꽃다발",     price: 55000,  desc: "소형 · 코랄톤 장미 믹스",                img: "img/bouquet-s-coral.jpg",      categoryName: "꽃다발" },
+    { name: "코랄 로즈 꽃다발 (S)",  price: 55000,  desc: "소형 · 코랄톤 장미 믹스",                img: "img/bouquet-s-coral.jpg",      categoryName: "꽃다발" },
     { name: "파스텔 꽃바구니 (M)",   price: 65000,  desc: "중형 · 파스텔톤 믹스 플라워",             img: "img/basket-m-pastel.jpg",      categoryName: "꽃바구니" },
     { name: "럭셔리 용돈박스",       price: 80000,  desc: "프리미엄 장미 + 용돈봉투",               img: "img/moneybox-luxury.jpg",      categoryName: "용돈박스" },
     { name: "핑크 로즈 꽃다발 (XL)", price: 120000, desc: "대형 · 핑크 장미 100송이",               img: "img/bouquet-xl-pink.jpg",      categoryName: "꽃다발" },
