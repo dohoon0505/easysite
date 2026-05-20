@@ -28,7 +28,7 @@ const HAIR_CATEGORIES = [
     id: "care",
     name: "케어",
     blurb: "두피부터, 모발까지",
-    sub: "케어 디자인 둘러보기",
+    sub: "프리미엄 남성케어",
     icon: "care",
   },
 ];
