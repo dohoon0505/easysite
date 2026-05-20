@@ -1,13 +1,46 @@
 rules_version = '2';
 
 // ─────────────────────────────────────────────────────────────
-// M0 skeleton — deny-all default.
-// Real per-site rules land in M1 (see plan §4).
+// easysite Storage Security Rules — M1
+//
+// 이미지는 어드민 작업본. 발행 시 Cloud Function 이 Storage 에서
+// 다운로드하여 git repo 의 `{siteId}/img/` 로 복사 → GitHub Pages 가 서빙.
+// 즉, 일반 방문자는 Storage 에 절대 닿지 않는다.
 // ─────────────────────────────────────────────────────────────
 service firebase.storage {
   match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSuper() {
+      return isSignedIn() && request.auth.token.role == "super";
+    }
+
+    function memberOf(sid) {
+      return isSuper() ||
+             (isSignedIn() && request.auth.token.siteId == sid);
+    }
+
+    function isImage() {
+      return request.resource != null
+          && request.resource.size < 10 * 1024 * 1024
+          && (request.resource.contentType.matches('image/jpeg')
+           || request.resource.contentType.matches('image/png')
+           || request.resource.contentType.matches('image/webp'));
+    }
+
+    // 사이트별 제품 이미지 — 어드민 미리보기 전용
+    match /sites/{siteId}/products/{productId}/{filename} {
+      allow read:                if memberOf(siteId);
+      allow create, update:      if memberOf(siteId) && isImage();
+      allow delete:              if memberOf(siteId);
+    }
+
+    // 그 외 경로는 거부
     match /{allPaths=**} {
-      allow read, write: if false;
+      allow read, write:         if false;
     }
   }
 }

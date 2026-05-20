@@ -1,13 +1,83 @@
 rules_version = '2';
 
 // ─────────────────────────────────────────────────────────────
-// M0 skeleton — deny-all default.
-// Real per-site rules land in M1 (see plan §4).
+// easysite Firestore Security Rules — M1
+//
+// 사이트는 GitHub Pages 로만 서빙하므로 Firestore 는 어드민 전용.
+// 모든 컬렉션 공개 읽기 차단, claim 검증으로 사이트 격리.
 // ─────────────────────────────────────────────────────────────
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // ── helper functions ─────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSuper() {
+      return isSignedIn() && request.auth.token.role == "super";
+    }
+
+    function memberOf(sid) {
+      return isSuper() ||
+             (isSignedIn() && request.auth.token.siteId == sid);
+    }
+
+    // ── sites/{siteId} ───────────────────────────────────────
+    match /sites/{siteId} {
+      allow read:                if memberOf(siteId);
+      allow create, delete:      if isSuper();
+      allow update:              if memberOf(siteId);
+
+      match /categories/{categoryId} {
+        allow read, write:       if memberOf(siteId);
+      }
+
+      match /products/{productId} {
+        allow read, write:       if memberOf(siteId);
+      }
+
+      match /sections/{sectionId} {
+        allow read, write:       if memberOf(siteId);
+      }
+
+      match /tech/{techId} {
+        allow read, write:       if memberOf(siteId);
+      }
+
+      // publishes는 발행 이력 — 읽기는 멤버, 쓰기는 Functions 전용
+      match /publishes/{publishId} {
+        allow read:              if memberOf(siteId);
+        allow write:             if false;
+      }
+
+      // 발행 동시성 방지용 락 — Functions 가 transaction 으로만 쓰기
+      match /locks/{lockId} {
+        allow read:              if memberOf(siteId);
+        allow write:             if false;
+      }
+    }
+
+    // ── users/{uid} ──────────────────────────────────────────
+    // 본인 + super 만 읽기. 쓰기는 Functions 전용 (setSiteClaim, onUserCreate).
+    match /users/{uid} {
+      allow read:                if isSignedIn() &&
+                                    (request.auth.uid == uid || isSuper());
+      allow write:               if false;
+    }
+
+    // ── auditLogs/{logId} ────────────────────────────────────
+    // super 는 전체, editor 는 본인 사이트 것만. 쓰기는 Functions 전용.
+    match /auditLogs/{logId} {
+      allow read:                if isSuper() ||
+                                    (isSignedIn() &&
+                                     resource.data.siteId == request.auth.token.siteId);
+      allow write:               if false;
+    }
+
+    // ── 그 외 경로는 모두 거부 ───────────────────────────────
     match /{document=**} {
-      allow read, write: if false;
+      allow read, write:         if false;
     }
   }
 }
