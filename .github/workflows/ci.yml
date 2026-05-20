@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  # ────────────────────────────────────────────────────────
+  # admin SPA — TypeScript + Vite + ESLint
+  # ────────────────────────────────────────────────────────
+  admin:
+    name: admin build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: easysite
+
+      - name: Checkout desgin_system (token CSS 의존)
+        uses: actions/checkout@v4
+        with:
+          repository: dohoon0505/desgin_system
+          path: desgin_system
+          # private repo 일 경우 토큰 필요:
+          # token: ${{ secrets.DSG_REPO_TOKEN }}
+        continue-on-error: true
+
+      - name: Place desgin_system alongside easysite
+        run: |
+          if [ -d desgin_system ]; then
+            cp -r desgin_system easysite/desgin_system
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: easysite/admin/package-lock.json
+
+      - name: Install
+        working-directory: easysite/admin
+        run: npm ci
+
+      - name: Build
+        working-directory: easysite/admin
+        run: npm run build
+
+  # ────────────────────────────────────────────────────────
+  # functions — TypeScript + ESLint
+  # ────────────────────────────────────────────────────────
+  functions:
+    name: functions build · lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: functions/package-lock.json
+
+      - name: Install
+        working-directory: functions
+        run: npm ci
+
+      - name: Lint
+        working-directory: functions
+        run: npm run lint
+
+      - name: Build
+        working-directory: functions
+        run: npm run build
+
+  # ────────────────────────────────────────────────────────
+  # Firestore + Storage Security Rules — 21 access-isolation scenarios
+  # ────────────────────────────────────────────────────────
+  rules-tests:
+    name: rules tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: easysite
+
+      - name: Checkout desgin_system (admin tsconfig path 의존)
+        uses: actions/checkout@v4
+        with:
+          repository: dohoon0505/desgin_system
+          path: desgin_system
+        continue-on-error: true
+
+      - name: Place desgin_system
+        run: |
+          if [ -d desgin_system ]; then
+            cp -r desgin_system easysite/desgin_system
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: easysite/admin/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: temurin
+
+      - name: Install admin deps
+        working-directory: easysite/admin
+        run: npm ci
+
+      - name: Install firebase-tools
+        run: npm install -g firebase-tools
+
+      - name: Run rules tests against emulator
+        working-directory: easysite
+        run: firebase emulators:exec --only firestore,storage "npm --prefix admin run test:rules"

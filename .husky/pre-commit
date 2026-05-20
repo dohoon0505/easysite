@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# easysite pre-commit hook.
+#
+# 활성화 (저장소 클론 후 1회):
+#   git config core.hooksPath .husky
+#
+# 체크 항목:
+#   1) 서비스 계정 키 / GitHub PAT 같은 시크릿 파일 차단
+#   2) functions/ 변경 시 TypeScript 빌드 + ESLint 통과 확인
+#   3) desgin_system/ 있으면 validate.mjs 통과 확인
+
+set -e
+
+# ── 1) 시크릿 파일 차단 ────────────────────────────────────
+STAGED=$(git diff --cached --name-only)
+if echo "$STAGED" | grep -qE '(adminsdk.*\.json$|\.env(\.[^.]+)?$|bootstrap-users\.json$|bootstrap-users\.result\.json$|GITHUB_PAT)'; then
+  echo "✗ pre-commit: 시크릿으로 의심되는 파일이 staged 됨."
+  echo "$STAGED" | grep -E '(adminsdk.*\.json$|\.env(\.[^.]+)?$|bootstrap-users\.json$|bootstrap-users\.result\.json$|GITHUB_PAT)'
+  echo "  .gitignore 를 확인하고 git reset HEAD <file> 로 unstage 하세요."
+  exit 1
+fi
+
+# ── 2) functions/ 변경 시 빌드 + lint ──────────────────────
+if echo "$STAGED" | grep -q '^functions/src/'; then
+  echo "▶ functions/ TypeScript 빌드..."
+  ( cd functions && npm run build > /dev/null )
+  echo "▶ functions/ ESLint..."
+  ( cd functions && npm run lint )
+fi
+
+# ── 3) 디자인시스템 무결성 ─────────────────────────────────
+if [ -f "desgin_system/scripts/validate.mjs" ]; then
+  echo "▶ desgin_system validate.mjs..."
+  node desgin_system/scripts/validate.mjs > /dev/null
+fi
+
+echo "✓ pre-commit checks passed."
