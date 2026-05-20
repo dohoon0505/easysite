@@ -254,7 +254,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
 
       <div className="footer footer-cta">
         <a href="https://www.instagram.com/parkhaddd/" target="_blank" rel="noreferrer" className="btn-secondary">
-          <I.Insta size={18} /> 인스타그램 둘러보기
+          <I.Insta size={18} /> 인스타그램
         </a>
         <a href={PHONE_HREF} className="btn">
           <I.Phone size={18} /> 전화로 예약하기
