@@ -20,14 +20,15 @@ import {
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
-// 공개 가능한 클라이언트 키 — Firebase 보안은 Rules + Auth 로 강제됨
+// 공개 가능한 클라이언트 키 — Firebase 보안은 Rules + Auth + App Check 로 강제됨.
+// 이 값들은 Firebase 콘솔의 Web 앱 설정에서 가져온 것.
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY ?? "",
+  apiKey: "AIzaSyC3zHZ3CUe8if32xSea5hhwKiNFIOFeDJ4",
   authDomain: "easysite-5a560.firebaseapp.com",
   projectId: "easysite-5a560",
-  storageBucket: "easysite-5a560.appspot.com",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID ?? "",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID ?? "",
+  storageBucket: "easysite-5a560.firebasestorage.app",
+  messagingSenderId: "445003258288",
+  appId: "1:445003258288:web:bb579ee474a4454df21e75",
 };
 
 export const firebaseApp =
