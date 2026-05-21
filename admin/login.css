@@ -207,40 +207,84 @@
   letter-spacing: -0.015em;
 }
 
-/* "No Code" — 글자별 stagger wave + 네온 글로우 + 미세한 hue cycle */
+/* "No Code" — 홀로그래픽 conic-gradient 회전 + RGB glitch 분리 + breathing pulse */
 .login-logo-emph {
-  display: inline-flex;
+  position: relative;
+  display: inline-block;
   font-weight: 800;
   letter-spacing: -0.02em;
-  white-space: pre;
-}
-.login-logo-char {
-  display: inline-block;
-  color: #7df9ff;
-  text-shadow:
-    0 0 6px rgba(125, 249, 255, 0.75),
-    0 0 14px rgba(125, 249, 255, 0.35),
-    0 0 28px rgba(125, 249, 255, 0.18);
+  color: #fff;
+  background: conic-gradient(
+    from 0deg,
+    #ff6ec7,
+    #7df9ff,
+    #b8a4ff,
+    #5eead4,
+    #ffd166,
+    #ff6ec7
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   animation:
-    char-wave 2.4s ease-in-out infinite,
-    char-hue 6s linear infinite;
-  will-change: transform, filter;
+    logo-hue 5s linear infinite,
+    logo-pulse 2.4s ease-in-out infinite;
 }
 
-@keyframes char-wave {
-  0%, 60%, 100% { transform: translateY(0); }
-  30%           { transform: translateY(-5px); }
+/* RGB glitch split — pseudo-element 로 같은 텍스트를 빨강·시안으로 겹쳐 미세하게 어긋남 */
+.login-logo-emph::before,
+.login-logo-emph::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: initial;
+  background: none;
+  mix-blend-mode: screen;
+}
+.login-logo-emph::before {
+  color: #ff3d77;
+  animation: glitch-x 3.6s steps(1) infinite;
+}
+.login-logo-emph::after {
+  color: #00e1ff;
+  animation: glitch-x2 3.6s steps(1) infinite;
 }
 
-@keyframes char-hue {
-  0%   { filter: hue-rotate(0deg); }
-  50%  { filter: hue-rotate(45deg); }
-  100% { filter: hue-rotate(0deg); }
+@keyframes logo-hue {
+  to { filter: hue-rotate(360deg); }
+}
+
+@keyframes logo-pulse {
+  0%, 100% { text-shadow: 0 0 8px rgba(125, 249, 255, 0.35), 0 0 22px rgba(184, 168, 255, 0.18); }
+  50%      { text-shadow: 0 0 14px rgba(125, 249, 255, 0.7), 0 0 36px rgba(184, 168, 255, 0.4); }
+}
+
+@keyframes glitch-x {
+  0%, 88%, 100% { transform: translate(0, 0); opacity: 0.55; }
+  90%           { transform: translate(-2px, -1px); opacity: 0.85; }
+  92%           { transform: translate(2px, 1px); opacity: 0.85; }
+  94%           { transform: translate(-1px, 0); opacity: 0.85; }
+  96%           { transform: translate(0, 0); opacity: 0.55; }
+}
+
+@keyframes glitch-x2 {
+  0%, 88%, 100% { transform: translate(0, 0); opacity: 0.55; }
+  90%           { transform: translate(2px, 1px); opacity: 0.85; }
+  92%           { transform: translate(-2px, -1px); opacity: 0.85; }
+  94%           { transform: translate(1px, 0); opacity: 0.85; }
+  96%           { transform: translate(0, 0); opacity: 0.55; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .login-logo-char {
-    animation: none;
+  .login-logo-emph,
+  .login-logo-emph::before,
+  .login-logo-emph::after {
+    animation: none !important;
     transform: none !important;
   }
 }
