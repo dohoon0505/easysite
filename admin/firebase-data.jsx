@@ -818,6 +818,7 @@ const seedGalleryWorks = async (siteId) => {
 };
 
 // ── 사이트 기본 정보 (전화/플친/OG) — sites/{siteId}/settings/info ─────
+// 처음 페이지 진입 시 도큐먼트가 없으면 SITE_INFO_DEFAULTS 로 자동 시드한다.
 const useLiveSiteInfo = (siteId) => {
   const [info, setInfoLocal] = React.useState({
     phone: "",
@@ -834,26 +835,57 @@ const useLiveSiteInfo = (siteId) => {
       setLoading(false);
       return;
     }
-    const unsub = window.fbDb
-      .collection("sites").doc(siteId).collection("settings").doc("info")
-      .onSnapshot(
-        (snap) => {
-          const d = snap.exists ? snap.data() : {};
-          setInfoLocal({
-            phone: d.phone || "",
-            kakaoChannel: d.kakaoChannel || "",
-            ogTitle: d.ogTitle || "",
-            ogDescription: d.ogDescription || "",
-            ogImage: d.ogImage || "",
-            ogImageStoragePath: d.ogImageStoragePath || "",
-          });
-          setLoading(false);
-        },
-        (err) => {
-          console.error("useLiveSiteInfo", err);
-          setLoading(false);
+    let seeded = false;
+    const ref = window.fbDb.collection("sites").doc(siteId).collection("settings").doc("info");
+    const unsub = ref.onSnapshot(
+      async (snap) => {
+        if (!snap.exists && !seeded) {
+          // 자동 시드 — SITE_INFO_DEFAULTS 에 정의된 코드 베이스 기본값
+          seeded = true;
+          const defaults = window.SITE_INFO_DEFAULTS && window.SITE_INFO_DEFAULTS[siteId];
+          if (defaults) {
+            try {
+              const uid = (window.fbAuth && window.fbAuth.currentUser && window.fbAuth.currentUser.uid) || "admin-ui";
+              await ref.set({
+                ...defaults,
+                ogImageStoragePath: "",
+                autoSeeded: true,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedBy: uid,
+              }, { merge: true });
+              return; // 다음 snapshot 에서 처리됨
+            } catch (e) {
+              console.error("useLiveSiteInfo auto-seed failed", e);
+              // 시드 실패해도 defaults 로 표시만 채워둠
+              setInfoLocal({
+                phone: defaults.phone || "",
+                kakaoChannel: defaults.kakaoChannel || "",
+                ogTitle: defaults.ogTitle || "",
+                ogDescription: defaults.ogDescription || "",
+                ogImage: defaults.ogImage || "",
+                ogImageStoragePath: "",
+              });
+              setLoading(false);
+              return;
+            }
+          }
         }
-      );
+        const d = snap.exists ? snap.data() : {};
+        setInfoLocal({
+          phone: d.phone || "",
+          kakaoChannel: d.kakaoChannel || "",
+          ogTitle: d.ogTitle || "",
+          ogDescription: d.ogDescription || "",
+          ogImage: d.ogImage || "",
+          ogImageStoragePath: d.ogImageStoragePath || "",
+        });
+        setLoading(false);
+      },
+      (err) => {
+        console.error("useLiveSiteInfo", err);
+        setLoading(false);
+      }
+    );
     return unsub;
   }, [siteId]);
 
