@@ -4,8 +4,35 @@
 
 const HomeSectionsPage = ({ sections, setSections, products, onNav, site }) => {
   const [activeId, setActiveId] = React.useState(sections[0]?.id);
+  // sections 가 비동기로 로드되면 초기 activeId 가 undefined 일 수 있다.
+  // 사용자가 직접 고른 상태가 아니라면 첫 항목으로 자동 선택.
+  React.useEffect(() => {
+    if (sections.length > 0 && (!activeId || !sections.some((s) => s.id === activeId))) {
+      setActiveId(sections[0].id);
+    }
+  }, [sections, activeId]);
   const active = sections.find((s) => s.id === activeId);
   const toast = useToast();
+
+  // 상품 슬라이더 (1), (2)… 처럼 동적 라벨을 만들기 위해 슬라이더 순번 매핑.
+  const sliderIdxById = React.useMemo(() => {
+    const m = {};
+    let n = 0;
+    sections.forEach((s) => {
+      if (s.type === "slider") {
+        n += 1;
+        m[s.id] = n;
+      }
+    });
+    return m;
+  }, [sections]);
+
+  const displayLabel = (s) => {
+    if (s.type === "slider") return `상품 슬라이더 (${sliderIdxById[s.id] || "?"})`;
+    if (s.type === "hero") return "히어로";
+    if (s.type === "faq") return "FAQ";
+    return s.title || s.type;
+  };
 
   const updateActive = (patch) => {
     setSections((all) =>
@@ -102,12 +129,15 @@ const HomeSectionsPage = ({ sections, setSections, products, onNav, site }) => {
                       fontSize: "var(--text-label-md)",
                       fontWeight: 600,
                       color: s.enabled ? "var(--sm-content-primary)" : "var(--sm-content-tertiary)",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
                     }}
                   >
-                    {s.title}
+                    {displayLabel(s)}
                   </div>
-                  <div style={{ fontSize: "var(--text-caption)", color: "var(--sm-content-tertiary)" }}>
-                    {i + 1}번째 · {s.enabled ? "사용 중" : "꺼짐"}
+                  <div style={{ fontSize: "var(--text-caption)", color: "var(--sm-content-tertiary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {s.type === "slider" || s.type === "faq" ? (s.data?.title || "—") : `${i + 1}번째 · ${s.enabled ? "사용 중" : "꺼짐"}`}
                   </div>
                 </div>
                 <div onClick={(e) => e.stopPropagation()}>
@@ -124,7 +154,13 @@ const HomeSectionsPage = ({ sections, setSections, products, onNav, site }) => {
         </Card>
 
         {/* Editor */}
-        <SectionEditor section={active} update={updateActive} products={products} onNav={onNav} />
+        <SectionEditor
+          section={active ? { ...active, title: displayLabel(active) } : null}
+          update={updateActive}
+          products={products}
+          onNav={onNav}
+          siteId={site && site.id}
+        />
 
         {/* Mobile-frame preview — 실제 사이트를 iframe 으로 표시 (라이브 100% 동일) */}
         <div style={{ position: "sticky", top: 100 }}>
