@@ -134,6 +134,10 @@ export const publishToGitHub = onCall<PublishRequest>(
         .get();
       const faqs = faqsSnap.docs.map((d) => d.data() as Record<string, unknown>);
 
+      // 사이트 기본 정보 (전화/플친/OG) — sites/{siteId}/settings/info
+      const settingsSnap = await db.doc(`sites/${siteId}/settings/info`).get();
+      const siteInfoRaw = settingsSnap.exists ? (settingsSnap.data() as Record<string, unknown>) : {};
+
       // 홈 섹션의 Storage 이미지 (hero.jpg, map.png, mosaic-N, award.jpg 등) 를 추출해
       // 1) commit 파일에 추가하고
       // 2) 섹션 데이터의 image 필드를 raw 경로(img/hero.jpg) 로 치환한다.
@@ -178,6 +182,14 @@ export const publishToGitHub = onCall<PublishRequest>(
         return { ...s, data };
       });
 
+      // 사이트 기본 정보 — OG 이미지를 Storage 에서 img/ 로 옮기고 raw 경로로 치환
+      const siteInfo: Record<string, unknown> = { ...siteInfoRaw };
+      const ogStorage = siteInfo.ogImageStoragePath as string | undefined;
+      if (ogStorage) siteInfo.ogImage = pushImageRef(ogStorage, "og-image.jpg");
+      delete siteInfo.ogImageStoragePath;
+      delete siteInfo.updatedAt;
+      delete siteInfo.updatedBy;
+
       logger.info("publishToGitHub: data loaded", {
         siteId,
         siteType: site.siteType,
@@ -201,6 +213,7 @@ export const publishToGitHub = onCall<PublishRequest>(
         homeSections,
         faqs,
         galleryWorks,
+        siteInfo,
       } as unknown as Parameters<typeof renderDataJsx>[1]);
 
       const dataJsxPath = `${site.github.sitePath}/data.jsx`;

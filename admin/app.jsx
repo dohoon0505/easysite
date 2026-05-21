@@ -217,6 +217,7 @@ const App = () => {
         )}
         {route === "categories" && <CategoriesRealPage siteId={siteId} products={products} />}
         {route === "faqs" && <FaqsPage siteId={siteId} />}
+        {route === "settings" && <SettingsPage siteId={siteId} site={site} />}
         {route === "publish" && (
           <PublishCenterPage
             products={products}

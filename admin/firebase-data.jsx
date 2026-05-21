@@ -817,6 +817,69 @@ const seedGalleryWorks = async (siteId) => {
   return GALLERY_WORKS_SEED.length;
 };
 
+// ── 사이트 기본 정보 (전화/플친/OG) — sites/{siteId}/settings/info ─────
+const useLiveSiteInfo = (siteId) => {
+  const [info, setInfoLocal] = React.useState({
+    phone: "",
+    kakaoChannel: "",
+    ogTitle: "",
+    ogDescription: "",
+    ogImage: "",
+    ogImageStoragePath: "",
+  });
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    if (!siteId || !window.fbDb) {
+      setLoading(false);
+      return;
+    }
+    const unsub = window.fbDb
+      .collection("sites").doc(siteId).collection("settings").doc("info")
+      .onSnapshot(
+        (snap) => {
+          const d = snap.exists ? snap.data() : {};
+          setInfoLocal({
+            phone: d.phone || "",
+            kakaoChannel: d.kakaoChannel || "",
+            ogTitle: d.ogTitle || "",
+            ogDescription: d.ogDescription || "",
+            ogImage: d.ogImage || "",
+            ogImageStoragePath: d.ogImageStoragePath || "",
+          });
+          setLoading(false);
+        },
+        (err) => {
+          console.error("useLiveSiteInfo", err);
+          setLoading(false);
+        }
+      );
+    return unsub;
+  }, [siteId]);
+
+  const setInfo = React.useCallback(
+    async (patch) => {
+      setInfoLocal((prev) => ({ ...prev, ...patch }));
+      if (!siteId || !window.fbDb) return;
+      const uid = (window.fbAuth && window.fbAuth.currentUser && window.fbAuth.currentUser.uid) || "admin-ui";
+      try {
+        await window.fbDb
+          .collection("sites").doc(siteId).collection("settings").doc("info")
+          .set({
+            ...patch,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedBy: uid,
+          }, { merge: true });
+      } catch (e) {
+        console.error("setSiteInfo failed", e);
+      }
+    },
+    [siteId]
+  );
+
+  return [info, setInfo, loading];
+};
+
 Object.assign(window, {
   useLiveProducts,
   useLiveSections,
@@ -826,6 +889,7 @@ Object.assign(window, {
   useLiveSites,
   useLiveFaqs,
   useLiveGalleryWorks,
+  useLiveSiteInfo,
   seedGalleryWorks,
   liveSiteUrl,
 });
