@@ -9,7 +9,6 @@ import { Dashboard } from "@/pages/Dashboard";
 import { ProductList } from "@/pages/ProductList";
 import { ProductEdit } from "@/pages/ProductEdit";
 import { CategoryManage } from "@/pages/CategoryManage";
-import { MediaLibrary } from "@/pages/MediaLibrary";
 import { PublishCenter } from "@/pages/PublishCenter";
 import { AccountSettings } from "@/pages/AccountSettings";
 import { UsersAdmin } from "@/pages/super/UsersAdmin";
@@ -31,7 +30,7 @@ export function AppRoutes() {
         <Route path="/products/new" element={<ProductEdit />} />
         <Route path="/products/:productId" element={<ProductEdit />} />
         <Route path="/categories" element={<CategoryManage />} />
-        <Route path="/media" element={<MediaLibrary />} />
+        <Route path="/media" element={<Navigate to="/products" replace />} />
         <Route path="/publish" element={<PublishCenter />} />
         <Route path="/account" element={<AccountSettings />} />
 

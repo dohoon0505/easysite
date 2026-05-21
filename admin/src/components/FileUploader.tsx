@@ -1,7 +1,7 @@
 /**
  * FileUploader — Spec: desgin_system/components/file-uploader.schema.json
  *
- * 사용처: ProductEdit (단일 이미지), MediaLibrary (다중 업로드).
+ * 사용처: ProductEdit (단일 이미지).
  * 모바일에서 카메라 직접 촬영 (capture=environment) + 사진 앨범 선택 지원.
  */
 import { useRef, type ReactNode } from "react";

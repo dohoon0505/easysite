@@ -16,7 +16,6 @@ import {
 import {
   FolderIcon,
   HomeIcon,
-  ImageIcon,
   LogoutIcon,
   PackageIcon,
   SendIcon,
@@ -47,7 +46,6 @@ export function AppShell() {
         { id: "home", label: "대시보드", icon: <HomeIcon size={18} />, active: isActive("/"), onClick: () => navigate("/") },
         { id: "products", label: "상품 목록", icon: <PackageIcon size={18} />, active: isActive("/products"), onClick: () => navigate("/products") },
         { id: "categories", label: "카테고리", icon: <FolderIcon size={18} />, active: isActive("/categories"), onClick: () => navigate("/categories") },
-        { id: "media", label: "미디어", icon: <ImageIcon size={18} />, active: isActive("/media"), onClick: () => navigate("/media") },
         { id: "publish", label: "발행", icon: <SendIcon size={18} />, active: isActive("/publish"), onClick: () => navigate("/publish") },
       ],
     },
@@ -67,12 +65,11 @@ export function AppShell() {
     });
   }
 
-  // ── 모바일 탭바 (5개 핵심) ───────────────────────
+  // ── 모바일 탭바 (4개 핵심) ───────────────────────
   const tabs: TabItem[] = [
     { id: "home", label: "홈", icon: <HomeIcon size={22} />, active: isActive("/"), onClick: () => navigate("/") },
     { id: "products", label: "상품", icon: <PackageIcon size={22} />, active: isActive("/products"), onClick: () => navigate("/products") },
     { id: "categories", label: "카테고리", icon: <FolderIcon size={22} />, active: isActive("/categories"), onClick: () => navigate("/categories") },
-    { id: "media", label: "미디어", icon: <ImageIcon size={22} />, active: isActive("/media"), onClick: () => navigate("/media") },
     { id: "publish", label: "발행", icon: <SendIcon size={22} />, active: isActive("/publish"), onClick: () => navigate("/publish") },
   ];
 
