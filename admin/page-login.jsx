@@ -139,7 +139,7 @@ const LoginPage = ({ onLogin }) => {
         <div className="login-visual" ref={visualRef}>
           <div className="login-visual-top">
             <div className="login-logo">
-              <span className="login-logo-name">EASYSITE</span>
+              <span className="login-logo-name">No Code Branding WebSite</span>
             </div>
           </div>
 
