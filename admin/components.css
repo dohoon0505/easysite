@@ -290,6 +290,8 @@
   cursor: pointer;
   transition: background var(--motion-fast), border var(--motion-fast);
   flex-shrink: 0;
+  padding: 0;
+  line-height: 0;
 }
 .checkbox:hover {
   border-color: var(--sm-interactive-brand-default);
@@ -305,10 +307,12 @@
   color: white;
 }
 .checkbox svg {
+  display: block;
   width: 12px;
   height: 12px;
   opacity: 0;
   transition: opacity var(--motion-fast);
+  overflow: visible;
 }
 .checkbox[aria-checked="true"] svg,
 .checkbox[aria-checked="mixed"] svg {
