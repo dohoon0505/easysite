@@ -69,21 +69,6 @@ const Sidebar = ({ route, onNav, site, onSwitchSite, draftCount }) => {
       </div>
     </div>
 
-    {/* 사이트 스위처 — 슈퍼만 (다중 사이트 관리) */}
-    {isSuper && (
-      <div className="site-switcher" onClick={onSwitchSite} role="button" tabIndex={0}>
-        <div className="site-thumb" style={{ background: site.gradient }} />
-        <div className="site-meta">
-          <div className="site-name">{site.name}</div>
-          <div className="site-status">
-            <span className="live-dot" />
-            {site.domain}
-          </div>
-        </div>
-        <Icon name="chevronDown" size={16} />
-      </div>
-    )}
-
     {visibleGroups.map((group) => (
       <div className="nav-group" key={group.group}>
         <div className="nav-label">{group.group}</div>
