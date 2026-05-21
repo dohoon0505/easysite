@@ -78,16 +78,46 @@ const Sidebar = ({ route, onNav, site, onSwitchSite, draftCount }) => (
       </div>
     ))}
 
-    <div className="sidebar-footer">
-      <div className="avatar">박</div>
-      <div className="user-info">
-        <div className="user-name">박소연</div>
-        <div className="user-role">오너 · 도화원플라워</div>
-      </div>
-      <IconButton icon="settings" />
-    </div>
+    <SidebarUserFooter site={site} />
   </aside>
 );
+
+// 사용자 정보 + 로그아웃. Firebase 인증 세션을 직접 읽어 표시.
+const SidebarUserFooter = ({ site }) => {
+  const session = (typeof useAuthSession === "function" ? useAuthSession() : null);
+  const user = session && session.user;
+  const claims = session && session.claims;
+
+  const displayName = (user && (user.displayName || (user.email ? user.email.split("@")[0] : ""))) || "운영자";
+  const initial = displayName.charAt(0) || "?";
+  const roleLabel = claims && claims.role === "super"
+    ? "슈퍼"
+    : claims && claims.role === "owner"
+      ? "오너"
+      : "에디터";
+  const siteName = (claims && claims.siteId) || (site && site.name) || "사이트 미지정";
+
+  const onLogout = async () => {
+    if (!window.signOutCurrent) return;
+    try {
+      await window.signOutCurrent();
+    } catch (e) {
+      console.error("logout failed", e);
+    }
+  };
+
+  return (
+    <div className="sidebar-footer">
+      <div className="avatar">{initial}</div>
+      <div className="user-info">
+        <div className="user-name">{displayName}</div>
+        <div className="user-role">{roleLabel}{siteName ? ` · ${siteName}` : ""}</div>
+      </div>
+      <IconButton icon="logout" onClick={onLogout} title="로그아웃" aria-label="로그아웃" />
+    </div>
+  );
+};
+Object.assign(window, { SidebarUserFooter });
 
 const Topbar = ({ crumbs = [], actions, site }) => (
   <header className="topbar">

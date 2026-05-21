@@ -124,8 +124,16 @@ const AccountPage = () => {
               <SettingRow
                 icon="monitor"
                 title="로그인 세션"
-                desc="현재 2개 기기에서 로그인 중 (macOS · iPhone)"
-                cta={<Button variant="ghost" size="sm">전체 로그아웃</Button>}
+                desc="이 브라우저에서 로그아웃합니다"
+                cta={
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => window.signOutCurrent && window.signOutCurrent()}
+                  >
+                    로그아웃
+                  </Button>
+                }
               />
             </div>
           </Card>
