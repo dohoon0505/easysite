@@ -6,7 +6,7 @@ const ROUTES = [
     group: "사이트 운영",
     items: [
       { id: "home", label: "홈 섹션 편집", icon: "home", page: "home" },
-      { id: "products", label: "상품", icon: "box", page: "products", count: 8 },
+      { id: "products", label: "상품 목록", icon: "box", page: "products", count: 8 },
       { id: "categories", label: "카테고리", icon: "tag", page: "categories", count: 5 },
       { id: "faqs", label: "질문/답변", icon: "help", page: "faqs" },
       { id: "publish", label: "발행 센터", icon: "rocket", page: "publish", badge: 2 },
