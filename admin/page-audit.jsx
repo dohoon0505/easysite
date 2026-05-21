@@ -92,7 +92,7 @@ const AUDIT_ENTRIES = [
     action: "publish.failed",
     actionLabel: "발행 실패",
     target: "어머니날 배너 임시 게재",
-    error: "GitHub 토큰 만료 — 슈퍼 어드민에게 갱신 요청",
+    error: "배포 권한 만료 — 슈퍼 어드민에게 갱신 요청",
     state: "failed",
   },
   {

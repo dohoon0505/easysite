@@ -5,7 +5,7 @@ const PUBLISH_STAGES = [
   { id: "validate", label: "변경사항 확인", duration: 800 },
   { id: "build", label: "코드 생성", duration: 1800 },
   { id: "images", label: "이미지 동기화", duration: 2400 },
-  { id: "push", label: "GitHub 푸시", duration: 1600 },
+  { id: "push", label: "사이트 배포", duration: 1600 },
   { id: "deploy", label: "사이트 재빌드", duration: 4500 },
 ];
 
@@ -66,7 +66,7 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
 
       // 2) Stage: build / images / push — publishToGitHub callable 호출
       setStageIdx(1);
-      log("코드 생성 + 이미지 동기화 + GitHub 푸시 호출 중...");
+      log("코드 생성 + 이미지 동기화 + 사이트 배포 호출 중...");
       const result = await window.callPublishToGitHub({
         siteId,
         note: note || undefined,
@@ -74,17 +74,17 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
 
       setStageIdx(3);
       if (result.noop) {
-        log("ℹ 변경된 파일이 없어 새 커밋이 생성되지 않았습니다 (noop)", "warning");
+        log("ℹ 변경된 파일이 없어 새 배포가 생성되지 않았습니다", "warning");
       } else {
         log(
-          `✓ GitHub 커밋 ${result.commitSha.slice(0, 7)} 푸시 완료 — ${result.filesChanged}개 파일 변경`,
-          "git"
+          `✓ 배포 #${result.commitSha.slice(0, 7)} 전송 완료 — ${result.filesChanged}개 파일 변경`,
+          "info"
         );
       }
 
-      // 3) Stage: deploy — GitHub Pages 재빌드 (대기만)
+      // 3) Stage: deploy — 사이트 재빌드 (대기만)
       setStageIdx(4);
-      log("GitHub Pages 가 1~3분 내 사이트에 반영합니다", "info");
+      log("1~3분 안에 사이트에 반영됩니다", "info");
 
       setStageIdx(PUBLISH_STAGES.length);
       setRunning(false);
@@ -95,8 +95,8 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
       toast({
         tone: "success",
         message: result.noop
-          ? "변경사항 없음 — 새 커밋 미생성"
-          : `발행 완료 — 커밋 ${result.commitSha.slice(0, 7)}`,
+          ? "변경사항 없음 — 새 배포 생략"
+          : `발행 완료 — #${result.commitSha.slice(0, 7)}`,
       });
     } catch (err) {
       setRunning(false);
@@ -439,7 +439,7 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
                 {running ? "발행 중…" : `${totalDrafts}건 발행`}
               </Button>
               <div className="text-tertiary" style={{ fontSize: "var(--text-caption)", textAlign: "center" }}>
-                평균 소요 시간 2분 · GitHub Pages 재빌드
+                평균 소요 시간 2분 · 사이트 재빌드
               </div>
             </div>
           </Card>
@@ -545,16 +545,15 @@ const STAGE_LOG_LINES = {
     { text: "✓ 18개 이미지 업로드 (340KB → 92KB, -73%)", tone: "success" },
   ],
   push: [
-    { text: "$ git add dist/", tone: "git" },
-    { text: "$ git commit -m \"publish: dohwawon — 박소연\"", tone: "git" },
-    { text: "$ git push origin gh-pages", tone: "git" },
-    { text: "✓ HEAD detached at a3f7b2c", tone: "success" },
+    { text: "사이트 빌드 결과를 배포 서버에 전송 중…", tone: "info" },
+    { text: "변경 사항 묶음 작성 중…", tone: "info" },
+    { text: "✓ 배포 서버 업로드 완료", tone: "success" },
   ],
   deploy: [
-    { text: "GitHub Pages 빌드 큐 대기 (3s)…", tone: "info" },
-    { text: "GitHub Pages 빌드 실행 중…", tone: "info" },
-    { text: "Page build successful · CDN 전파 중", tone: "info" },
-    { text: "✓ dohwawon.kr 새 콘텐츠 활성", tone: "success" },
+    { text: "사이트 빌드 큐 대기 (3s)…", tone: "info" },
+    { text: "사이트 빌드 실행 중…", tone: "info" },
+    { text: "✓ 빌드 성공 · CDN 전파 중", tone: "info" },
+    { text: "✓ 새 콘텐츠 활성 — 잠시 후 접속자에게 반영됩니다", tone: "success" },
   ],
 };
 

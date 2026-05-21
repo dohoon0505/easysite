@@ -307,7 +307,7 @@ const PUBLISH_HISTORY = [
     note: "어머니날 배너 임시 게재",
     items: { products: 0, categories: 0, home: 1 },
     status: "failed",
-    error: "GitHub 토큰 만료 — 슈퍼 어드민에게 갱신 요청 후 재시도",
+    error: "배포 권한 만료 — 슈퍼 어드민에게 갱신 요청 후 재시도",
     duration: "—",
   },
   {

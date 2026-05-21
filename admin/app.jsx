@@ -406,7 +406,7 @@ const ToastDemoButtons = () => {
   return (
     <>
       <TweakButton label="성공 — 발행 완료" onClick={() => toast({ tone: "success", message: "발행이 완료되었습니다 — 사이트에 곧 반영됩니다" })} />
-      <TweakButton label="실패 — GitHub 토큰" onClick={() => toast({ tone: "error", message: "발행에 실패했습니다 — GitHub 토큰이 만료되었습니다" })} />
+      <TweakButton label="실패 — 배포 권한" onClick={() => toast({ tone: "error", message: "발행에 실패했습니다 — 배포 권한을 확인해 주세요" })} />
       <TweakButton label="주의 — 드래프트 확인" onClick={() => toast({ tone: "warning", message: "발행되지 않은 변경사항 3건이 있습니다" })} />
       <TweakButton label="안내 — 시스템 알림" onClick={() => toast({ tone: "info", message: "5월 23일 자정 새 어드민 버전으로 업데이트됩니다" })} />
       <TweakButton label="4개 동시" onClick={() => {

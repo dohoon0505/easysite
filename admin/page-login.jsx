@@ -96,7 +96,7 @@ const LoginPage = ({ onLogin }) => {
               <span style={{ opacity: 0.7 }}>코드 없이 사이트를 운영합니다.</span>
             </div>
             <div style={{ fontSize: 15, lineHeight: 1.6, opacity: 0.85, maxWidth: 440 }}>
-              상품 등록 · 가격 변경 · 홈 화면 편집 — 한 번의 발행으로 GitHub에 자동 커밋되고, 1~3분 안에 사이트에 반영됩니다.
+              상품 등록 · 가격 변경 · 홈 화면 편집 — 한 번의 발행으로 1~3분 안에 사이트에 반영됩니다.
             </div>
             <div style={{ display: "flex", gap: 24, marginTop: 16, opacity: 0.9 }}>
               <LoginStat n="5" label="운영 중인 사이트" />

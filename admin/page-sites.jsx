@@ -2,11 +2,11 @@
 // S02 — 사이트 관리 (super admin)
 
 const SITE_META = {
-  dohwawon: { type: "꽃집", repo: "easysite/dohwawon", products: 8, users: 2, lastPub: "2일 전", traffic: "1.2k" },
-  "bell-cake": { type: "케이크 전문점", repo: "easysite/bellcake", products: 14, users: 1, lastPub: "5일 전", traffic: "840" },
-  parkhad: { type: "헤어샵", repo: "easysite/parkhad", products: 22, users: 2, lastPub: "1일 전", traffic: "2.1k" },
-  "flower-example": { type: "플라워 샘플", repo: "easysite/example", products: 4, users: 1, lastPub: "2주 전", traffic: "—" },
-  "greenlight-art": { type: "미술학원", repo: "easysite/greenlight-art", products: 12, users: 1, lastPub: "1주 전", traffic: "560" },
+  dohwawon: { type: "꽃집", products: 8, users: 2, lastPub: "2일 전", traffic: "1.2k" },
+  "bell-cake": { type: "케이크 전문점", products: 14, users: 1, lastPub: "5일 전", traffic: "840" },
+  parkhad: { type: "헤어샵", products: 22, users: 2, lastPub: "1일 전", traffic: "2.1k" },
+  "flower-example": { type: "플라워 샘플", products: 4, users: 1, lastPub: "2주 전", traffic: "—" },
+  "greenlight-art": { type: "미술학원", products: 12, users: 1, lastPub: "1주 전", traffic: "560" },
 };
 
 const SitesManagePage = () => {
@@ -18,11 +18,11 @@ const SitesManagePage = () => {
         <div>
           <h1 className="page-title">사이트 관리</h1>
           <div className="page-subtitle">
-            5개 사이트 운영 중 · GitHub Pages 호스팅 · 자동 발행 활성
+            5개 사이트 운영 중 · 자동 발행 활성
           </div>
         </div>
         <div className="page-actions">
-          <Button variant="outline" iconLeft="git">GitHub 연결 확인</Button>
+          <Button variant="outline" iconLeft="refresh">연결 상태 확인</Button>
           <Button variant="primary" iconLeft="plus" onClick={() => setAddOpen(true)}>
             사이트 추가
           </Button>
@@ -70,7 +70,7 @@ const SitesManagePage = () => {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "var(--size-300) 0", borderTop: "1px solid var(--sm-border-subtle)", fontSize: 12, color: "var(--sm-content-tertiary)" }}>
                   <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <Icon name="git" size={12} /> {meta.repo}
+                    <Icon name="link" size={12} /> {s.id}
                   </span>
                   <span>{meta.lastPub} 발행</span>
                 </div>
@@ -116,7 +116,7 @@ const SitesManagePage = () => {
           </div>
           <div style={{ fontWeight: 600 }}>새 사이트 추가</div>
           <div style={{ fontSize: 12, color: "var(--sm-content-tertiary)", textAlign: "center", maxWidth: 220 }}>
-            siteId · GitHub repo · 운영자를 정하면 같은 어드민에서 관리할 수 있어요
+            siteId · 운영자를 정하면 같은 어드민에서 관리할 수 있어요
           </div>
         </button>
       </div>
@@ -157,7 +157,7 @@ const AddSiteModal = ({ open, onClose }) => {
 
   const submit = () => {
     onClose();
-    toast({ tone: "success", message: `'${form.name}' 사이트가 추가되었습니다 — GitHub 연결 중` });
+    toast({ tone: "success", message: `'${form.name}' 사이트가 추가되었습니다 — 배포 채널 연결 중` });
   };
 
   return (
@@ -165,7 +165,7 @@ const AddSiteModal = ({ open, onClose }) => {
       open={open}
       onClose={onClose}
       title="새 사이트 추가"
-      desc={step === 1 ? "기본 정보를 입력하세요." : step === 2 ? "GitHub 저장소를 연결하세요." : "확인 후 활성화합니다."}
+      desc={step === 1 ? "기본 정보를 입력하세요." : step === 2 ? "배포 채널을 연결하세요." : "확인 후 활성화합니다."}
       size="md"
       footer={
         <>
@@ -261,20 +261,20 @@ const AddSiteModal = ({ open, onClose }) => {
               alignItems: "flex-start",
             }}
           >
-            <Icon name="git" size={18} style={{ color: "var(--sm-status-info)", flexShrink: 0, marginTop: 2 }} />
+            <Icon name="link" size={18} style={{ color: "var(--sm-status-info)", flexShrink: 0, marginTop: 2 }} />
             <div style={{ fontSize: 13, color: "var(--sm-content-secondary)", lineHeight: 1.55 }}>
-              GitHub Actions 권한이 활성화된 비공개 저장소가 필요합니다. <b>gh-pages</b> 브랜치에 자동 푸시됩니다.
+              사이트 코드 저장소를 연결합니다. 발행 시 자동으로 사이트가 갱신됩니다.
             </div>
           </div>
-          <Field label="GitHub 저장소" required helper="owner/repo 형식">
+          <Field label="저장소 식별자" required helper="발행 대상 저장소 (관리자만 보임)">
             <Input
               value={form.repo}
               onChange={(e) => setForm({ ...form, repo: e.target.value })}
               placeholder="easysite/dohwawon"
-              prefix={<Icon name="git" size={16} />}
+              prefix={<Icon name="link" size={16} />}
             />
           </Field>
-          <Field label="배포 도메인" helper="비워두면 GitHub Pages URL이 사용됩니다">
+          <Field label="배포 도메인" helper="비워두면 기본 도메인이 사용됩니다">
             <Input
               value={form.domain}
               onChange={(e) => setForm({ ...form, domain: e.target.value })}
@@ -291,7 +291,7 @@ const AddSiteModal = ({ open, onClose }) => {
           <Row k="siteId" v={form.siteId} />
           <Row k="타입" v={form.type} />
           <Row k="저장소" v={form.repo || "(미설정)"} />
-          <Row k="도메인" v={form.domain || `${form.siteId}.github.io`} />
+          <Row k="도메인" v={form.domain || `${form.siteId}.easysite.app`} />
           <div className="divider" style={{ margin: "8px 0" }} />
           <div
             style={{

@@ -146,7 +146,7 @@ const AccountPage = () => {
             </div>
             <div>
               {[
-                { k: "publishSuccess", title: "발행 성공 알림", desc: "GitHub Pages 배포가 완료될 때마다" },
+                { k: "publishSuccess", title: "발행 성공 알림", desc: "사이트 배포가 완료될 때마다" },
                 { k: "publishFailed", title: "발행 실패 알림", desc: "발행 도중 오류가 발생했을 때" },
                 { k: "weeklyDigest", title: "주간 요약 메일", desc: "매주 월요일, 지난 7일의 변경 사항 요약" },
                 { k: "invitation", title: "초대·권한 변경", desc: "다른 사이트의 오너가 초대했을 때" },
