@@ -170,11 +170,16 @@ function HomeScreen({ go, openWork }) {
   const hero = (HS.find((s) => s && s.type === "hero") || {}).data || {};
   const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
 
-  const heroImage = hero.image || "img/hero.jpg";
+  const unwrapUrl = (v) => {
+    if (!v) return null;
+    const m = String(v).match(/^url\(["']?([^"')]+)["']?\)$/);
+    return m ? m[1] : v;
+  };
+  const heroImage = unwrapUrl(hero.image) || "img/hero.jpg";
   const region = hero.region || "대구광역시 | 달서구";
   const storeName = hero.storeName || "풀빛그림아이미술학원";
   const storeDesc = hero.storeDesc || "아이들에게 미술학원은 '지루하게 그림만 그리는 곳'이 아니어야 합니다. 가장 발달이 활발한 시기에 맞춰 인지발달과 미적 감각을 일깨우고, 아이에게 '매일 가고 싶은 놀이터'가 될 수 있도록 하겠습니다.";
-  const mapImage = hero.mapImage || "img/map.png";
+  const mapImage = unwrapUrl(hero.mapImage) || "img/map.png";
   const mapAddress = hero.mapAddress || "대구 달서구 조암남로16길 19 풀빛그림아이";
   const address = hero.address || "대구 달서구 조암남로16길 19 하늘채 상가 2층";
   const hours = hero.hours || "월~토 13:00 - 19:00 · 일 휴무";

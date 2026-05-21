@@ -188,11 +188,16 @@ function HomeScreen({ go, openStyle, openDesigner }) {
   const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
   const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
 
-  const heroImage = hero.image || "img/hero.jpg";
+  const unwrapUrl = (v) => {
+    if (!v) return null;
+    const m = String(v).match(/^url\(["']?([^"')]+)["']?\)$/);
+    return m ? m[1] : v;
+  };
+  const heroImage = unwrapUrl(hero.image) || "img/hero.jpg";
   const region = hero.region || "대구광역시 | 달서구";
   const storeName = hero.storeName || "PARKHAD";
   const storeDesc = hero.storeDesc || "남자들에게 미용실은 '가기 귀찮은 곳'인 경우가 많죠. 고객님 한 분 한 분께 편안한 환경과 유쾌한 경험을 제공하여, '다음 만남이 기다려지는 곳'이 될 수 있도록 하겠습니다.";
-  const mapImage = hero.mapImage || "img/map.png";
+  const mapImage = unwrapUrl(hero.mapImage) || "img/map.png";
   const mapAddress = hero.mapAddress || "대구 달서구 와룡로 132 박하디";
   const address = hero.address || "대구 달서구 와룡로 132 2층 PARKHAD 박하디";
   const hours = hero.hours || "10:00 ~ 20:00 · 매주 목요일 휴무";

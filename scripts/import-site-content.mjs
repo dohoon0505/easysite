@@ -88,13 +88,17 @@ function readSiteFile(siteId, fname) {
 
 function decodeJsxText(s) {
   if (s == null) return "";
-  return s
+  const decoded = s
     .replace(/\{"\\n\\n"\}/g, "\n\n")
     .replace(/\{"\\n"\}/g, "\n")
     .replace(/\{"([^"]*)"\}/g, "$1")
     .replace(/<br\s*\/?>/g, "\n")
     .replace(/<\/?(?:em|strong|b|i|span|small|u|code)[^>]*>/g, "")
     .trim();
+  // `{storeName}` 같은 JSX 변수 참조는 데이터가 아니라 코드. 추출 무시.
+  // (Phase 2 이후 사이트 app.jsx 가 변수 기반이라 재실행 시 Firestore 가 오염되는 것을 방지)
+  if (/^\{[A-Za-z_]\w*\}$/.test(decoded)) return "";
+  return decoded;
 }
 
 function firstMatch(src, re) {

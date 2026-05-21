@@ -289,11 +289,17 @@ function HomeScreen({ go, openStyle, openDesigner }) {
   const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
   const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
 
-  const heroImage = hero.image || "img/hero.jpg";
+  // `url("…")` (구버전 발행) 와 raw path("img/hero.jpg") 둘 다 안전하게 처리
+  const unwrapUrl = (v) => {
+    if (!v) return null;
+    const m = String(v).match(/^url\(["']?([^"')]+)["']?\)$/);
+    return m ? m[1] : v;
+  };
+  const heroImage = unwrapUrl(hero.image) || "img/hero.jpg";
   const region = hero.region || "대구광역시 | 달서구";
   const storeName = hero.storeName || "도화원플라워";
   const storeDesc = hero.storeDesc || "평범한 일상도 꽃 한 송이가 더해지면 특별한 순간이 됩니다.\n\n계절을 듬뿍 머금은 다채로운 꽃들로, 당신의 오늘을 가장 아름답게 피워내겠습니다.";
-  const mapImage = hero.mapImage || "img/map.png";
+  const mapImage = unwrapUrl(hero.mapImage) || "img/map.png";
   const mapAddress = hero.mapAddress || "대구 달서구 당산로 99";
   const address = hero.address || "대구 달서구 당산로 99 1층 도화원플라워";
   const hours = hero.hours || "11:00 ~ 19:00 · 매주 일요일 휴무";

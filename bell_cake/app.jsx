@@ -243,11 +243,17 @@ function HomeScreen({ go, openStyle, openDesigner }) {
   const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
   const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
 
-  const heroImage = hero.image || "img/hero.jpg";
+  // `url("…")` (구버전 발행) 와 raw path 둘 다 안전 처리
+  const unwrapUrl = (v) => {
+    if (!v) return null;
+    const m = String(v).match(/^url\(["']?([^"')]+)["']?\)$/);
+    return m ? m[1] : v;
+  };
+  const heroImage = unwrapUrl(hero.image) || "img/hero.jpg";
   const region = hero.region || "대구광역시 | 수성구";
   const storeName = hero.storeName || "벨케이크";
   const storeDesc = hero.storeDesc || "No 밀가루, No 식물성크림. 100% 국내산 쌀가루로 만든 쌀케이크, 동물성 생크림케이크 전문점 벨케이크입니다:)\n\n1인운영매장이라, 전화를 못받을 수 있으니 부재시 카카오톡채널로 연락주세요^^";
-  const mapImage = hero.mapImage || "img/map.png";
+  const mapImage = unwrapUrl(hero.mapImage) || "img/map.png";
   const mapAddress = hero.mapAddress || "대구 수성구 범어로20길 68";
   const address = hero.address || "대구 수성구 범어로20길 68 1층 왼쪽상가";
   const hours = hero.hours || "11:00 ~ 19:00 · 매주 일요일 휴무";
