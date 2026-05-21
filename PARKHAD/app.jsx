@@ -1127,6 +1127,34 @@ function App() {
   const [designerSheet, setDesignerSheet] = useState(null);
   const [bookingSeed, setBookingSeed] = useState(null);
 
+  // 어드민 상품 편집기 미리보기 — ?preview=product 진입 시 postMessage(draftProduct) 를 받아 시트로 표시
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("preview") !== "product") return;
+    const handler = (e) => {
+      const d = e && e.data;
+      if (d && d.type === "draftProduct" && d.product) {
+        const p = d.product;
+        setStyleSheet({
+          id: p.id,
+          name: p.name || "(이름 없음)",
+          category: p.categoryName || p.category || "",
+          categoryId: p.category,
+          price: p.price,
+          img: p.img || p.image,
+          desc: p.desc || p.description || "",
+          time: p.time,
+          tag: p.tag,
+        });
+      }
+    };
+    window.addEventListener("message", handler);
+    if (window.parent && window.parent !== window) {
+      try { window.parent.postMessage({ type: "previewReady" }, "*"); } catch (_) {}
+    }
+    return () => window.removeEventListener("message", handler);
+  }, []);
+
   // styles:catId 경로 지원
   const styleCat = route.startsWith("styles") ? (route.split(":")[1] || activeCat) : activeCat;
   useEffect(() => { if (route.startsWith("styles") && route.includes(":")) setActiveCat(route.split(":")[1]); }, [route]);

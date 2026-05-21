@@ -711,6 +711,32 @@ function App() {
   const [sheet, setSheet] = useState(null);
   const [orderSeed, setOrderSeed] = useState(null);
 
+  // 어드민 상품 편집기 미리보기 — ?preview=product 진입 시 postMessage(draftProduct) 를 받아 시트로 표시
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("preview") !== "product") return;
+    const handler = (e) => {
+      const d = e && e.data;
+      if (d && d.type === "draftProduct" && d.product) {
+        const p = d.product;
+        setSheet({
+          id: p.id,
+          name: p.name || "(이름 없음)",
+          price: p.price,
+          img: p.img || p.image,
+          imgLg: p.img || p.image,
+          desc: p.desc || p.description || "",
+          tag: p.tag,
+        });
+      }
+    };
+    window.addEventListener("message", handler);
+    if (window.parent && window.parent !== window) {
+      try { window.parent.postMessage({ type: "previewReady" }, "*"); } catch (_) {}
+    }
+    return () => window.removeEventListener("message", handler);
+  }, []);
+
   const go = (r) => { setRoute(r); location.hash = r === "home" ? "" : r; window.scrollTo(0, 0); };
   const openCat = (tabId) => { setActiveTab(tabId); go("items"); };
   const orderProduct = (it) => {

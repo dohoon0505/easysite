@@ -2,7 +2,7 @@
 // P02/P03 — 상품 등록/수정
 // Two-column layout: form on left, live preview on right
 
-const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId }) => {
+const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId, site }) => {
   const existing = productId ? products.find((p) => p.id === productId) : null;
   const toast = useToast();
 
@@ -558,7 +558,7 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId })
           <div style={{ fontSize: "var(--text-label-md)", fontWeight: 600, color: "var(--sm-content-tertiary)", letterSpacing: "0.04em", textTransform: "uppercase" }}>
             사이트 미리보기
           </div>
-          <ProductPreview form={form} cats={selectableCats} />
+          <ProductPreview form={form} cats={selectableCats} siteId={siteId} productId={productId} />
           <Card>
             <div className="card-body" style={{ display: "flex", flexDirection: "column", gap: "var(--size-300)" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -605,122 +605,168 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId })
   );
 };
 
-const ProductPreview = ({ form, cats }) => (
-  <div
-    style={{
-      background: "var(--sm-surface-raised)",
-      border: "1px solid var(--sm-border-subtle)",
-      borderRadius: "var(--radius-lg)",
-      overflow: "hidden",
-    }}
-  >
-    <div
-      style={{
-        background: "var(--sm-background-subtle)",
-        padding: "8px 12px",
-        fontSize: "var(--text-caption)",
-        color: "var(--sm-content-tertiary)",
-        display: "flex",
-        alignItems: "center",
-        gap: 8,
-        borderBottom: "1px solid var(--sm-border-subtle)",
-      }}
-    >
-      <span style={{ display: "flex", gap: 4 }}>
-        <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f57" }} />
-        <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ffbd2e" }} />
-        <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#28c93f" }} />
-      </span>
-      <span>dohwawon.kr/products/{form.name || "…"}</span>
-    </div>
-    <div
-      style={{
-        aspectRatio: "1 / 1",
-        background: form.image || "var(--sm-background-muted)",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        position: "relative",
-      }}
-    >
-      {!form.image && (
+// ProductPreview — 라이브 사이트를 iframe 으로 띄우고 ?preview=product 모드로 진입.
+// form 변경 시 postMessage(draftProduct) 로 즉시 반영. 사이트는 바텀시트를 자동 열어 보여준다.
+const ProductPreview = ({ form, cats, siteId, productId }) => {
+  const baseUrl = (typeof window.liveSiteUrl === "function" ? window.liveSiteUrl(siteId) : "") || "about:blank";
+  const url = siteId ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}preview=product` : "about:blank";
+  const [reloadKey, setReloadKey] = React.useState(0);
+  const [ready, setReady] = React.useState(false);
+  const iframeRef = React.useRef(null);
+
+  const unwrapUrl = (v) => {
+    if (!v) return null;
+    const m = String(v).match(/^url\(["']?([^"')]+)["']?\)$/);
+    return m ? m[1] : v;
+  };
+
+  const buildDraft = React.useCallback(() => {
+    const catObj = (cats && cats.find((c) => c.id === form.category))
+      || (typeof CATEGORIES !== "undefined" && CATEGORIES.find((c) => c.id === form.category));
+    return {
+      id: productId || "__draft__",
+      name: form.name || "상품명",
+      category: form.category,
+      categoryName: catObj?.name || "",
+      price: Number(form.price) || 0,
+      description: form.description || "",
+      desc: form.description || "",
+      sizes: form.sizes || [],
+      tags: form.tags || [],
+      stock: form.stock,
+      img: unwrapUrl(form.image) || "",
+      image: unwrapUrl(form.image) || "",
+      visible: form.visible !== false,
+    };
+  }, [form, cats, productId]);
+
+  const sendDraft = React.useCallback(() => {
+    const iframe = iframeRef.current;
+    if (!iframe || !iframe.contentWindow) return;
+    try {
+      iframe.contentWindow.postMessage({ type: "draftProduct", product: buildDraft() }, "*");
+    } catch (_) { /* cross-origin 무시 */ }
+  }, [buildDraft]);
+
+  React.useEffect(() => {
+    const onMessage = (e) => {
+      if (e && e.data && e.data.type === "previewReady") setReady(true);
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, []);
+
+  React.useEffect(() => {
+    if (ready) sendDraft();
+  }, [ready, sendDraft]);
+
+  return (
+    <div style={{ position: "relative" }}>
+      <div
+        style={{
+          background: "#1a1d24",
+          padding: 14,
+          borderRadius: 55,
+          boxShadow: "var(--shadow-lg)",
+          width: "100%",
+          maxWidth: 460,
+          margin: "0 auto",
+          position: "relative",
+        }}
+      >
         <div
           style={{
             position: "absolute",
-            inset: 0,
-            display: "grid",
-            placeItems: "center",
-            color: "var(--sm-content-tertiary)",
-            fontSize: "var(--text-body-sm)",
-            background: "repeating-linear-gradient(45deg, transparent 0 12px, rgba(0,0,0,0.02) 12px 13px)",
+            top: 11,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 104,
+            height: 25,
+            background: "#1a1d24",
+            borderRadius: "0 0 16px 16px",
+            zIndex: 2,
+          }}
+        />
+        <div
+          style={{
+            background: "var(--sm-background-default)",
+            borderRadius: 41,
+            overflow: "hidden",
+            position: "relative",
+            height: 874,
           }}
         >
-          대표 사진을 추가하면 여기에 보여요
-        </div>
-      )}
-    </div>
-    <div style={{ padding: "var(--size-400)" }}>
-      <div style={{ fontSize: "var(--text-caption)", color: "var(--sm-content-tertiary)", marginBottom: 4 }}>
-        {((cats && cats.find((c) => c.id === form.category)) || CATEGORIES.find((c) => c.id === form.category))?.name || ""}
-      </div>
-      <div
-        style={{
-          fontSize: "var(--text-heading-sm)",
-          fontWeight: 700,
-          letterSpacing: "-0.015em",
-          marginBottom: 8,
-          minHeight: 28,
-          color: form.name ? "var(--sm-content-primary)" : "var(--sm-content-disabled)",
-        }}
-      >
-        {form.name || "상품명을 입력해 주세요"}
-      </div>
-      <div
-        className="mono"
-        style={{
-          fontSize: "var(--text-heading-md)",
-          fontWeight: 700,
-          color: form.price ? "var(--sm-content-primary)" : "var(--sm-content-disabled)",
-        }}
-      >
-        {form.price ? `${Number(form.price).toLocaleString()}원` : "0원"}
-      </div>
-      <div
-        style={{
-          marginTop: 12,
-          fontSize: "var(--text-body-sm)",
-          color: "var(--sm-content-secondary)",
-          lineHeight: 1.55,
-          minHeight: 60,
-          textWrap: "pretty",
-        }}
-      >
-        {form.description || (
-          <span style={{ color: "var(--sm-content-disabled)" }}>설명을 입력하면 여기 보여요…</span>
-        )}
-      </div>
-      {form.sizes.length > 0 && (
-        <div style={{ display: "flex", gap: 6, marginTop: 14 }}>
-          {form.sizes.map((s) => (
-            <span
-              key={s}
-              style={{
-                width: 36,
-                height: 36,
-                display: "grid",
-                placeItems: "center",
-                border: "1px solid var(--sm-border-default)",
-                borderRadius: "var(--radius-sm)",
-                fontSize: "var(--text-label-md)",
-                fontWeight: 600,
-              }}
-            >
-              {s}
+          <div
+            style={{
+              padding: "8px 18px 6px",
+              display: "flex",
+              justifyContent: "space-between",
+              fontSize: 11,
+              fontWeight: 600,
+              color: "var(--sm-content-primary)",
+              background: "var(--sm-background-default)",
+              zIndex: 2,
+              position: "relative",
+            }}
+          >
+            <span>9:41</span>
+            <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <span>●●● </span>
             </span>
-          ))}
+          </div>
+          {siteId ? (
+            <iframe
+              ref={iframeRef}
+              key={reloadKey}
+              title={`${siteId} 상품 미리보기`}
+              src={url}
+              loading="lazy"
+              referrerPolicy="no-referrer"
+              sandbox="allow-scripts allow-same-origin"
+              onLoad={() => setTimeout(() => sendDraft(), 400)}
+              style={{
+                width: "100%",
+                height: "calc(100% - 30px)",
+                border: 0,
+                display: "block",
+                background: "white",
+              }}
+            />
+          ) : (
+            <div style={{ padding: 24, textAlign: "center", color: "var(--sm-content-tertiary)", fontSize: 13 }}>
+              사이트가 선택되지 않았습니다
+            </div>
+          )}
         </div>
-      )}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 8,
+          marginTop: 14,
+        }}
+      >
+        <div style={{ fontSize: "var(--text-caption)", color: "var(--sm-content-tertiary)" }}>
+          {ready ? "편집 중 — 실시간 반영됩니다 · 저장 후 발행해야 사이트에 저장됩니다" : "라이브 사이트를 불러오는 중…"}
+        </div>
+        <button
+          type="button"
+          onClick={() => { setReady(false); setReloadKey((k) => k + 1); }}
+          style={{
+            fontSize: 12,
+            color: "var(--sm-content-tertiary)",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
+          <Icon name="refresh" size={12} /> 새로고침
+        </button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 Object.assign(window, { ProductEditorPage });

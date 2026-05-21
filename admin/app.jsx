@@ -212,6 +212,7 @@ const App = () => {
             setProducts={setProducts}
             onBack={backToProducts}
             siteId={siteId}
+            site={site}
           />
         )}
         {route === "categories" && <CategoriesRealPage siteId={siteId} products={products} />}
