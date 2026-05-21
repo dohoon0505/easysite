@@ -50,11 +50,11 @@ const HomePreview = ({ siteId, sections }) => {
       <div
         style={{
           background: "#1a1d24",
-          padding: 12,
-          borderRadius: 48,
+          padding: 14,
+          borderRadius: 55,
           boxShadow: "var(--shadow-lg)",
           width: "100%",
-          maxWidth: 400,
+          maxWidth: 460,
           margin: "0 auto",
           position: "relative",
         }}
@@ -62,23 +62,23 @@ const HomePreview = ({ siteId, sections }) => {
         <div
           style={{
             position: "absolute",
-            top: 10,
+            top: 11,
             left: "50%",
             transform: "translateX(-50%)",
-            width: 90,
-            height: 22,
+            width: 104,
+            height: 25,
             background: "#1a1d24",
-            borderRadius: "0 0 14px 14px",
+            borderRadius: "0 0 16px 16px",
             zIndex: 2,
           }}
         />
         <div
           style={{
             background: "var(--sm-background-default)",
-            borderRadius: 36,
+            borderRadius: 41,
             overflow: "hidden",
             position: "relative",
-            height: 760,
+            height: 874,
           }}
         >
           <div

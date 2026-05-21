@@ -72,7 +72,7 @@ const HomeSectionsPage = ({ sections, setSections, products, onNav, site }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "280px 1fr 440px",
+          gridTemplateColumns: "280px 1fr 506px",
           gap: "var(--size-400)",
           alignItems: "flex-start",
         }}
