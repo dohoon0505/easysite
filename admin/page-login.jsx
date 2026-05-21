@@ -148,7 +148,6 @@ const LoginPage = ({ onLogin }) => {
           <div className="login-visual-spot" />
           <div className="login-visual-top">
             <div className="login-logo">
-              <div className="login-logo-mark">e</div>
               <span className="login-logo-name">EASYSITE</span>
             </div>
           </div>
