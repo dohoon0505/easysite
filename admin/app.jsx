@@ -32,6 +32,29 @@ const App = () => {
   const [creating, setCreating] = React.useState(false);
   const [showSwitcher, setShowSwitcher] = React.useState(false);
 
+  // 로그인 시 role 에 맞춰 기본 라우트로 이동.
+  //  - 슈퍼: 사용자 관리 (다른 사이트 운영 메뉴는 사이드바에 안 보임)
+  //  - 에디터: 상품 (슈퍼 메뉴는 사이드바에 안 보임)
+  const lastSnappedRef = React.useRef(false);
+  React.useEffect(() => {
+    if (session.status !== "signedIn" || !session.claims) return;
+    const isSuper = session.claims.role === "super";
+    const editorOnlyRoutes = ["home", "products", "editor", "categories", "publish"];
+    const superOnlyRoutes = ["users", "sites"];
+    if (isSuper && editorOnlyRoutes.includes(route)) {
+      setRoute("users");
+      lastSnappedRef.current = true;
+    } else if (!isSuper && superOnlyRoutes.includes(route)) {
+      setRoute("products");
+      lastSnappedRef.current = true;
+    } else if (!lastSnappedRef.current && isSuper && route === "products") {
+      // 최초 로그인 직후 기본 products 였다면 슈퍼는 users 로
+      setRoute("users");
+      lastSnappedRef.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session.status, session.claims && session.claims.role]);
+
   // 사용자 claim 의 siteId 가 있으면 자동 선택, 없으면 t.site 또는 dohwawon.
   const initialSiteId = React.useMemo(
     () => (session.claims && session.claims.siteId) || t.site || "dohwawon",

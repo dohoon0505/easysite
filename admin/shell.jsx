@@ -30,29 +30,59 @@ const ROUTES = [
 const AppContext = React.createContext(null);
 const useApp = () => React.useContext(AppContext);
 
-const Sidebar = ({ route, onNav, site, onSwitchSite, draftCount }) => (
+const Sidebar = ({ route, onNav, site, onSwitchSite, draftCount }) => {
+  const session = typeof useAuthSession === "function" ? useAuthSession() : null;
+  const claims = session && session.claims;
+  const isSuper = !!(claims && claims.role === "super");
+
+  // 브랜드 — 슈퍼: easysite (다중 사이트 관리), 에디터: 본인 사이트명
+  const brandName = isSuper ? "easysite" : (site && site.name) || "easysite";
+  const brandSub = isSuper ? "admin console" : "운영 관리";
+  const brandMark = (brandName || "e").charAt(0);
+  const brandColor = isSuper
+    ? null
+    : (site && site.gradient) || null;
+
+  // 메뉴 그룹 필터:
+  //  - 슈퍼: 슈퍼 그룹만
+  //  - 에디터: 사이트 운영 그룹만 (내 계정 / 슈퍼 모두 숨김)
+  const visibleGroups = ROUTES.filter((g) => {
+    if (g.group === "사이트 운영") return !isSuper;
+    if (g.group === "슈퍼") return isSuper;
+    return false; // 내 계정 그룹은 모두 비공개 (로그아웃은 사이드바 footer 에 있음)
+  });
+
+  return (
   <aside className="sidebar" aria-label="네비게이션">
     <div className="brand">
-      <div className="brand-mark">e</div>
+      <div
+        className="brand-mark"
+        style={brandColor ? { background: brandColor, color: "white" } : undefined}
+      >
+        {brandMark}
+      </div>
       <div>
-        <div className="brand-name">easysite</div>
-        <div className="brand-sub">admin console</div>
+        <div className="brand-name">{brandName}</div>
+        <div className="brand-sub">{brandSub}</div>
       </div>
     </div>
 
-    <div className="site-switcher" onClick={onSwitchSite} role="button" tabIndex={0}>
-      <div className="site-thumb" style={{ background: site.gradient }} />
-      <div className="site-meta">
-        <div className="site-name">{site.name}</div>
-        <div className="site-status">
-          <span className="live-dot" />
-          {site.domain}
+    {/* 사이트 스위처 — 슈퍼만 (다중 사이트 관리) */}
+    {isSuper && (
+      <div className="site-switcher" onClick={onSwitchSite} role="button" tabIndex={0}>
+        <div className="site-thumb" style={{ background: site.gradient }} />
+        <div className="site-meta">
+          <div className="site-name">{site.name}</div>
+          <div className="site-status">
+            <span className="live-dot" />
+            {site.domain}
+          </div>
         </div>
+        <Icon name="chevronDown" size={16} />
       </div>
-      <Icon name="chevronDown" size={16} />
-    </div>
+    )}
 
-    {ROUTES.map((group) => (
+    {visibleGroups.map((group) => (
       <div className="nav-group" key={group.group}>
         <div className="nav-label">{group.group}</div>
         {group.items.map((item) => (
@@ -80,7 +110,8 @@ const Sidebar = ({ route, onNav, site, onSwitchSite, draftCount }) => (
 
     <SidebarUserFooter site={site} />
   </aside>
-);
+  );
+};
 
 // 사용자 정보 + 로그아웃. Firebase 인증 세션을 직접 읽어 표시.
 const SidebarUserFooter = ({ site }) => {
