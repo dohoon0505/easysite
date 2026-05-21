@@ -156,7 +156,7 @@ const LoginPage = ({ onLogin }) => {
           <div className="login-visual-bottom">
             <h2 className="login-headline">
               코드 없이 운영하는<br />
-              나만의 사이트.
+              브랜딩 홈페이지
             </h2>
             <p className="login-subhead">
               고객을 이탈시키는 양산형 사이트는 이제 그만, 우리 브랜드에 딱 맞는 디자인의
