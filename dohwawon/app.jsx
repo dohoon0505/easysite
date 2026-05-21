@@ -282,23 +282,66 @@ function BottomNav({ route, go }) {
 
 // ─── HOME ────────────────────────────────────────────────────
 function HomeScreen({ go, openStyle, openDesigner }) {
+  // 어드민(easysite admin) 에서 발행된 HOME_SECTIONS / FAQS 를 우선 사용.
+  // 데이터가 비어 있으면 기존 하드코딩으로 폴백 (점진 마이그레이션 안전망).
+  const HS = window.HOME_SECTIONS || [];
+  const hero = (HS.find((s) => s && s.type === "hero") || {}).data || {};
+  const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
+  const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
+
+  const heroImage = hero.image || "img/hero.jpg";
+  const region = hero.region || "대구광역시 | 달서구";
+  const storeName = hero.storeName || "도화원플라워";
+  const storeDesc = hero.storeDesc || "평범한 일상도 꽃 한 송이가 더해지면 특별한 순간이 됩니다.\n\n계절을 듬뿍 머금은 다채로운 꽃들로, 당신의 오늘을 가장 아름답게 피워내겠습니다.";
+  const mapImage = hero.mapImage || "img/map.png";
+  const mapAddress = hero.mapAddress || "대구 달서구 당산로 99";
+  const address = hero.address || "대구 달서구 당산로 99 1층 도화원플라워";
+  const hours = hero.hours || "11:00 ~ 19:00 · 매주 일요일 휴무";
+  const bannerText = hero.bannerText || "예약요청 탭을 통해 간편히 예약을 요청해보세요!";
+
+  // 슬라이더 — HOME_SECTIONS 가 비어 있으면 designers.jsx 의 큐레이션을 그대로 사용.
+  const allProducts = [].concat(...Object.values(window.HAIR_STYLES || {}));
+  const productById = {};
+  allProducts.forEach((p) => {
+    if (p && p.productId) productById[p.productId] = p;
+    if (p && p.id) productById[p.id] = p;
+  });
+  const resolvedSliders = sliderSections.length > 0
+    ? sliderSections.map((s) => ({
+        title: s.title || "",
+        list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
+      })).filter((s) => s.list.length > 0)
+    : [
+        { title: "풍성한 꽃다발 추천", list: BUSINESS_STYLES },
+        { title: "특별한 날, 꽃바구니 선물!", list: MZ_STYLES },
+        { title: "아름다운 효도, 용돈박스", list: STARTER_STYLES },
+        { title: "특색있는 아크릴백", list: ACRYLIC_STYLES },
+      ];
+
+  // 홈 FAQ — pickedIds 가 있으면 그에 해당하는 FAQS 만, 없으면 첫 6개 폴백.
+  const allFaqs = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
+  const homeFaqItems = (faqHome.pickedIds && faqHome.pickedIds.length > 0 && window.FAQS)
+    ? faqHome.pickedIds.map((id) => window.FAQS.find((f) => f.id === id)).filter(Boolean)
+    : allFaqs.slice(0, 6);
+  const homeFaqTitle = faqHome.title || "주문 전 자주하는 질문";
+
   return (
     <div>
-      <section className="hero" aria-label="도화원플라워">
+      <section className="hero" aria-label={storeName}>
         <div className="hero-img">
-          <SkeletonImg src="img/hero.jpg" alt="도화원플라워 매장" loading="eager" />
+          <SkeletonImg src={heroImage} alt={`${storeName} 매장`} loading="eager" />
         </div>
       </section>
 
       <FadeIn>
         <section className="intro">
-          <div className="intro-meta">대구광역시 | 달서구</div>
-          <h2 className="intro-name">도화원플라워</h2>
-          <p className="intro-desc">평범한 일상도 꽃 한 송이가 더해지면 특별한 순간이 됩니다.{"\n\n"}계절을 듬뿍 머금은 다채로운 꽃들로, 당신의 오늘을 가장 아름답게 피워내겠습니다.</p>
+          <div className="intro-meta">{region}</div>
+          <h2 className="intro-name">{storeName}</h2>
+          <p className="intro-desc">{storeDesc}</p>
 
           <div className="intro-map" aria-label="매장 위치 지도">
-            <SkeletonImg src="img/map.png" alt="도화원플라워 매장 위치" className="intro-map-img" />
-            <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 달서구 당산로 99" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
+            <SkeletonImg src={mapImage} alt={`${storeName} 매장 위치`} className="intro-map-img" />
+            <a className="intro-map-cta" href={`https://map.naver.com/p/search/${encodeURIComponent(mapAddress)}`} target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
               <img src="img/naver_map.png" alt="" className="naver-map-icon" /> 네이버 지도
             </a>
           </div>
@@ -306,12 +349,12 @@ function HomeScreen({ go, openStyle, openDesigner }) {
           <ul className="intro-list">
             <li>
               <span className="intro-list-icon"><I.Map size={18} /></span>
-              <span className="intro-list-text">대구 달서구 당산로 99 1층 도화원플라워</span>
+              <span className="intro-list-text">{address}</span>
             </li>
             <li>
               <span className="intro-list-icon"><I.Calendar size={18} /></span>
               <span className="intro-list-text">
-                11:00 ~ 19:00 · 매주 일요일 휴무
+                {hours}
                 <span className="intro-open-status" data-open={isOpenNow()}>
                   {isOpenNow() ? "현재 영업 중" : "현재 영업 종료"}
                 </span>
@@ -329,22 +372,21 @@ function HomeScreen({ go, openStyle, openDesigner }) {
               <path d="M12 8h.01M11 12h1v5h1" />
             </svg>
           </span>
-          <p className="info-banner-text">예약요청 탭을 통해 간편히 예약을 요청해보세요!</p>
+          <p className="info-banner-text">{bannerText}</p>
         </div>
       </FadeIn>
 
-      <FadeIn><FeaturedSlider title="풍성한 꽃다발 추천" list={BUSINESS_STYLES} openStyle={openStyle} /></FadeIn>
-      <FadeIn><FeaturedSlider title="특별한 날, 꽃바구니 선물!" list={MZ_STYLES} openStyle={openStyle} /></FadeIn>
-      <FadeIn><FeaturedSlider title="아름다운 효도, 용돈박스" list={STARTER_STYLES} openStyle={openStyle} /></FadeIn>
-      <FadeIn><FeaturedSlider title="특색있는 아크릴백" list={ACRYLIC_STYLES} openStyle={openStyle} /></FadeIn>
+      {resolvedSliders.map((s, i) => (
+        <FadeIn key={i}><FeaturedSlider title={s.title} list={s.list} openStyle={openStyle} /></FadeIn>
+      ))}
 
       <FadeIn>
         <section className="section home-faq-section">
           <div className="section-head">
-            <h3>주문 전 자주하는 질문</h3>
+            <h3>{homeFaqTitle}</h3>
           </div>
           <div className="accordion" data-mode="multi">
-            {FAQ_ITEMS.slice(0, 6).map((it, i) => (
+            {homeFaqItems.map((it, i) => (
               <HomeFaqItem key={i} item={it} id={i} />
             ))}
           </div>
@@ -1060,8 +1102,10 @@ function FaqScreen() {
   const [openId, setOpenId] = useState(null);
   const [query, setQuery] = useState("");
 
+  // 어드민에서 발행된 FAQS 가 있으면 그것을 우선 사용, 없으면 정적 FAQ_ITEMS 폴백.
+  const FAQS_LIVE = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
   const cats = [{ id: "all", label: "전체" }, ...FAQ_CATEGORIES];
-  const filtered = FAQ_ITEMS.filter((it) => {
+  const filtered = FAQS_LIVE.filter((it) => {
     if (activeCat !== "all" && it.cat !== activeCat) return false;
     if (query.trim()) {
       const q = query.toLowerCase();

@@ -52,6 +52,15 @@ export interface RenderTypeBInput {
     sortOrder: number;
     data?: Record<string, unknown>;
   }>;
+  faqs?: Array<{
+    faqId: string;
+    question: string;
+    answer: string;
+    categoryId?: string;
+    sortOrder?: number;
+    visible?: boolean;
+  }>;
+  faqCategories?: Array<{ id: string; label: string }>;
 }
 
 export function renderTypeB(input: RenderTypeBInput): string {
@@ -116,6 +125,9 @@ export function renderTypeB(input: RenderTypeBInput): string {
     .join(",\n");
 
   const homeBlock = renderHomeBlockB(input.homeSections);
+  const faqBlock = renderFaqBlockB(input.faqs, input.faqCategories);
+
+  const assigns = ["CATEGORIES", "SECTIONS", "HOME_SECTIONS", "FAQS", "FAQ_CATEGORIES"].join(", ");
 
   return [
     "/* eslint-disable */",
@@ -130,13 +142,16 @@ export function renderTypeB(input: RenderTypeBInput): string {
     ",",
     "};",
     "",
-    homeBlock.declaration,
-    homeBlock.assign,
+    homeBlock,
+    "",
+    faqBlock,
+    "",
+    `Object.assign(window, { ${assigns} });`,
     "",
   ].filter((s) => s !== "").join("\n");
 }
 
-function renderHomeBlockB(homeSections?: RenderTypeBInput["homeSections"]) {
+function renderHomeBlockB(homeSections?: RenderTypeBInput["homeSections"]): string {
   const enabled = (homeSections ?? [])
     .filter((s) => s.enabled !== false)
     .sort((a, b) => a.sortOrder - b.sortOrder)
@@ -147,13 +162,34 @@ function renderHomeBlockB(homeSections?: RenderTypeBInput["homeSections"]) {
       icon: s.icon ?? null,
       data: s.data ?? {},
     }));
-  const arrayBody = enabled.map((s) => "  " + formatValue(s)).join(",\n");
-  const declaration =
-    enabled.length === 0
-      ? "const HOME_SECTIONS = [];"
-      : `const HOME_SECTIONS = [\n${arrayBody}\n];`;
-  const assign = "Object.assign(window, { CATEGORIES, SECTIONS, HOME_SECTIONS });";
-  return { declaration, assign };
+  if (enabled.length === 0) return "const HOME_SECTIONS = [];";
+  const body = enabled.map((s) => "  " + formatValue(s)).join(",\n");
+  return `const HOME_SECTIONS = [\n${body}\n];`;
+}
+
+function renderFaqBlockB(
+  faqs?: RenderTypeBInput["faqs"],
+  cats?: RenderTypeBInput["faqCategories"]
+): string {
+  const items = (faqs ?? [])
+    .filter((f) => f.visible !== false)
+    .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
+    .map((f) => ({
+      id: f.faqId,
+      cat: f.categoryId ?? "",
+      q: f.question,
+      a: f.answer,
+    }));
+  const faqsBlock =
+    items.length === 0
+      ? "const FAQS = [];"
+      : `const FAQS = [\n${items.map((x) => "  " + formatValue(x)).join(",\n")}\n];`;
+  const catItems = (cats ?? []).map((c) => ({ id: c.id, label: c.label }));
+  const catsBlock =
+    catItems.length === 0
+      ? "const FAQ_CATEGORIES = [];"
+      : `const FAQ_CATEGORIES = [\n${catItems.map((x) => "  " + formatValue(x)).join(",\n")}\n];`;
+  return `${faqsBlock}\n${catsBlock}`;
 }
 
 const SIMPLE_KEY = /^[A-Za-z_][A-Za-z0-9_]*$/;

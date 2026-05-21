@@ -165,22 +165,49 @@ function FeaturedSlider({ title, sub, list, openWork }) {
 
 // ─── HOME ───────────────────────────────────────────────────
 function HomeScreen({ go, openWork }) {
+  // 어드민(easysite admin) 에서 발행된 HOME_SECTIONS / FAQS 우선 사용.
+  const HS = window.HOME_SECTIONS || [];
+  const hero = (HS.find((s) => s && s.type === "hero") || {}).data || {};
+  const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
+
+  const heroImage = hero.image || "img/hero.jpg";
+  const region = hero.region || "대구광역시 | 달서구";
+  const storeName = hero.storeName || "풀빛그림아이미술학원";
+  const storeDesc = hero.storeDesc || "아이들에게 미술학원은 '지루하게 그림만 그리는 곳'이 아니어야 합니다. 가장 발달이 활발한 시기에 맞춰 인지발달과 미적 감각을 일깨우고, 아이에게 '매일 가고 싶은 놀이터'가 될 수 있도록 하겠습니다.";
+  const mapImage = hero.mapImage || "img/map.png";
+  const mapAddress = hero.mapAddress || "대구 달서구 조암남로16길 19 풀빛그림아이";
+  const address = hero.address || "대구 달서구 조암남로16길 19 하늘채 상가 2층";
+  const hours = hero.hours || "월~토 13:00 - 19:00 · 일 휴무";
+  const bannerText = hero.bannerText || "1회 무료 체험 수업이 가능합니다!!";
+
+  // typeC 슬라이더 — 갤러리(작품) 큐레이션은 COURSES 와 별개라 폴백을 유지한다.
+  // 어드민이 작품 목록을 별도 컬렉션으로 관리하기 전까지는 1개 슬라이더 + 정적 GALLERY_BEST 사용.
+  const slider = sliderSections[0] || {};
+
+  // 홈 FAQ — 어드민에서 고른 항목 우선, 없으면 첫 6개 폴백.
+  const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
+  const allFaqs = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
+  const homeFaqItems = (faqHome.pickedIds && faqHome.pickedIds.length > 0 && window.FAQS)
+    ? faqHome.pickedIds.map((id) => window.FAQS.find((f) => f.id === id)).filter(Boolean)
+    : allFaqs.slice(0, 6);
+  const homeFaqTitle = faqHome.title || "학원 등록 전 자주하는 질문";
+
   return (
     <div>
-      <section className="hero" aria-label="풀빛그림아이 미술학원">
+      <section className="hero" aria-label={storeName}>
         <div className="hero-img">
-          <img src="img/hero.jpg" alt="풀빛그림아이 미술학원 입구" />
+          <img src={heroImage} alt={`${storeName} 입구`} />
         </div>
       </section>
 
       <section className="intro">
-        <div className="intro-meta">대구광역시 | 달서구</div>
-        <h2 className="intro-name">풀빛그림아이미술학원</h2>
-        <p className="intro-desc">아이들에게 미술학원은 '지루하게 그림만 그리는 곳'이 아니어야 합니다. 가장 발달이 활발한 시기에 맞춰 인지발달과 미적 감각을 일깨우고, 아이에게 '매일 가고 싶은 놀이터'가 될 수 있도록 하겠습니다.</p>
+        <div className="intro-meta">{region}</div>
+        <h2 className="intro-name">{storeName}</h2>
+        <p className="intro-desc">{storeDesc}</p>
 
         <div className="intro-map" aria-label="매장 위치 지도">
-          <img src="img/map.png" alt="풀빛그림아이 미술학원 위치" className="intro-map-img" />
-          <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 달서구 조암남로16길 19 풀빛그림아이" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
+          <img src={mapImage} alt={`${storeName} 위치`} className="intro-map-img" />
+          <a className="intro-map-cta" href={`https://map.naver.com/p/search/${encodeURIComponent(mapAddress)}`} target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
             <img src="img/naver_map.png" alt="" className="naver-map-icon" /> 네이버 지도
           </a>
         </div>
@@ -188,12 +215,12 @@ function HomeScreen({ go, openWork }) {
         <ul className="intro-list">
           <li>
             <span className="intro-list-icon"><I.Map size={18} /></span>
-            <span className="intro-list-text">대구 달서구 조암남로16길 19 하늘채 상가 2층</span>
+            <span className="intro-list-text">{address}</span>
           </li>
           <li>
             <span className="intro-list-icon"><I.Calendar size={18} /></span>
             <span className="intro-list-text">
-              월~토 13:00 - 19:00 · 일 휴무
+              {hours}
               <span className="intro-open-status" data-open={isOpenNow()}>
                 {isOpenNow() ? "현재 영업 중" : "현재 영업 종료"}
               </span>
@@ -209,10 +236,10 @@ function HomeScreen({ go, openWork }) {
             <path d="M12 8h.01M11 12h1v5h1" />
           </svg>
         </span>
-        <p className="info-banner-text">1회 무료 체험 수업이 가능합니다!!</p>
+        <p className="info-banner-text">{bannerText}</p>
       </div>
 
-      <FeaturedSlider title="아이들 작품 둘러보기" sub="아이들이 완성한 작품들을 소개해요." list={GALLERY_BEST} openWork={openWork} />
+      <FeaturedSlider title={slider.title || "아이들 작품 둘러보기"} sub={slider.subtitle || "아이들이 완성한 작품들을 소개해요."} list={GALLERY_BEST} openWork={openWork} />
 
       <section className="section dev-section">
         <div className="section-head dev-head">
@@ -295,11 +322,11 @@ function HomeScreen({ go, openWork }) {
 
       <section className="section home-faq-section">
         <div className="section-head home-faq-head">
-          <h3>학원 등록 전 자주하는 질문</h3>
+          <h3>{homeFaqTitle}</h3>
           <p className="home-faq-sub">가장 많이 받는 질문 6가지를 모았어요.</p>
         </div>
         <ul className="home-faq-list">
-          {FAQ_ITEMS.slice(0, 6).map((it, i) => (
+          {homeFaqItems.map((it, i) => (
             <HomeFaqItem key={i} item={it} idx={i + 1} />
           ))}
         </ul>
@@ -666,8 +693,9 @@ function FaqScreen() {
   const [openId, setOpenId] = useState(null);
   const [query, setQuery] = useState("");
 
+  const FAQS_LIVE = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
   const cats = [{ id: "all", label: "전체" }, ...FAQ_CATEGORIES];
-  const filtered = FAQ_ITEMS.filter((it) => {
+  const filtered = FAQS_LIVE.filter((it) => {
     if (activeCat !== "all" && it.cat !== activeCat) return false;
     if (query.trim()) {
       const q = query.toLowerCase();

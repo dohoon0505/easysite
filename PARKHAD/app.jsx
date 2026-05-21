@@ -182,22 +182,63 @@ function BottomNav({ route, go }) {
 
 // ─── HOME ────────────────────────────────────────────────────
 function HomeScreen({ go, openStyle, openDesigner }) {
+  // 어드민(easysite admin) 에서 발행된 HOME_SECTIONS / FAQS 우선 사용. 비어 있으면 폴백.
+  const HS = window.HOME_SECTIONS || [];
+  const hero = (HS.find((s) => s && s.type === "hero") || {}).data || {};
+  const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
+  const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
+
+  const heroImage = hero.image || "img/hero.jpg";
+  const region = hero.region || "대구광역시 | 달서구";
+  const storeName = hero.storeName || "PARKHAD";
+  const storeDesc = hero.storeDesc || "남자들에게 미용실은 '가기 귀찮은 곳'인 경우가 많죠. 고객님 한 분 한 분께 편안한 환경과 유쾌한 경험을 제공하여, '다음 만남이 기다려지는 곳'이 될 수 있도록 하겠습니다.";
+  const mapImage = hero.mapImage || "img/map.png";
+  const mapAddress = hero.mapAddress || "대구 달서구 와룡로 132 박하디";
+  const address = hero.address || "대구 달서구 와룡로 132 2층 PARKHAD 박하디";
+  const hours = hero.hours || "10:00 ~ 20:00 · 매주 목요일 휴무";
+  const bannerText = hero.bannerText || "전화 또는 네이버 예약으로 간편예약이 가능해요!";
+
+  const allProducts = [].concat(...Object.values(window.HAIR_STYLES || {}));
+  const productById = {};
+  allProducts.forEach((p) => {
+    if (p && p.productId) productById[p.productId] = p;
+    if (p && p.id) productById[p.id] = p;
+  });
+  const resolvedSliders = sliderSections.length > 0
+    ? sliderSections.map((s) => ({
+        title: s.title || "",
+        meta: s.subtitle || "",
+        list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
+      })).filter((s) => s.list.length > 0)
+    : [
+        { title: "교동 감성 스타일링", meta: "시즌 추천", list: FEATURED_STYLES },
+        { title: "면접·미팅을 준비한다면", meta: "단정하고 깔끔하게", list: BUSINESS_STYLES },
+        { title: "요즘 20대 스타일링", meta: "MZ 스타일", list: MZ_STYLES },
+        { title: "젊어보이는 마법을", meta: "30대 이상 추천", list: STARTER_STYLES },
+      ];
+
+  const allFaqs = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
+  const homeFaqItems = (faqHome.pickedIds && faqHome.pickedIds.length > 0 && window.FAQS)
+    ? faqHome.pickedIds.map((id) => window.FAQS.find((f) => f.id === id)).filter(Boolean)
+    : allFaqs.slice(0, 6);
+  const homeFaqTitle = faqHome.title || "미용실 방문 전 자주하는 질문";
+
   return (
     <div>
-      <section className="hero" aria-label="PARKHAD">
+      <section className="hero" aria-label={storeName}>
         <div className="hero-img">
-          <img src="img/hero.jpg" alt="PARKHAD 매장" />
+          <img src={heroImage} alt={`${storeName} 매장`} />
         </div>
       </section>
 
       <section className="intro">
-        <div className="intro-meta">대구광역시 | 달서구</div>
-        <h2 className="intro-name">PARKHAD</h2>
-        <p className="intro-desc">남자들에게 미용실은 '가기 귀찮은 곳'인 경우가 많죠. 고객님 한 분 한 분께 편안한 환경과 유쾌한 경험을 제공하여, '다음 만남이 기다려지는 곳'이 될 수 있도록 하겠습니다.</p>
+        <div className="intro-meta">{region}</div>
+        <h2 className="intro-name">{storeName}</h2>
+        <p className="intro-desc">{storeDesc}</p>
 
         <div className="intro-map" aria-label="매장 위치 지도">
-          <img src="img/map.png" alt="박하디 매장 위치" className="intro-map-img" />
-          <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 달서구 와룡로 132 박하디" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
+          <img src={mapImage} alt={`${storeName} 매장 위치`} className="intro-map-img" />
+          <a className="intro-map-cta" href={`https://map.naver.com/p/search/${encodeURIComponent(mapAddress)}`} target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
             <img src="img/naver_map.png" alt="" className="naver-map-icon" /> 네이버 지도
           </a>
         </div>
@@ -205,12 +246,12 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         <ul className="intro-list">
           <li>
             <span className="intro-list-icon"><I.Map size={18} /></span>
-            <span className="intro-list-text">대구 달서구 와룡로 132 2층 PARKHAD 박하디</span>
+            <span className="intro-list-text">{address}</span>
           </li>
           <li>
             <span className="intro-list-icon"><I.Calendar size={18} /></span>
             <span className="intro-list-text">
-              10:00 ~ 20:00 · 매주 목요일 휴무
+              {hours}
               <span className="intro-open-status" data-open={isOpenNow()}>
                 {isOpenNow() ? "현재 영업 중" : "현재 영업 종료"}
               </span>
@@ -230,20 +271,19 @@ function HomeScreen({ go, openStyle, openDesigner }) {
             <path d="M12 8h.01M11 12h1v5h1" />
           </svg>
         </span>
-        <p className="info-banner-text">전화 또는 네이버 예약으로 간편예약이 가능해요!</p>
+        <p className="info-banner-text">{bannerText}</p>
       </div>
 
-      <FeaturedSlider title="교동 감성 스타일링" meta="시즌 추천"   list={FEATURED_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="면접·미팅을 준비한다면"      meta="단정하고 깔끔하게"   list={BUSINESS_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="요즘 20대 스타일링"       meta="MZ 스타일" list={MZ_STYLES}       openStyle={openStyle} />
-      <FeaturedSlider title="젊어보이는 마법을" meta="30대 이상 추천"   list={STARTER_STYLES}  openStyle={openStyle} />
+      {resolvedSliders.map((s, i) => (
+        <FeaturedSlider key={i} title={s.title} meta={s.meta} list={s.list} openStyle={openStyle} />
+      ))}
 
       <section className="section home-faq-section">
         <div className="section-head">
-          <h3>미용실 방문 전 자주하는 질문</h3>
+          <h3>{homeFaqTitle}</h3>
         </div>
         <ul className="home-faq-list">
-          {FAQ_ITEMS.slice(0, 6).map((it, i) => (
+          {homeFaqItems.map((it, i) => (
             <HomeFaqItem key={i} item={it} />
           ))}
         </ul>
@@ -955,8 +995,9 @@ function FaqScreen() {
   const [openId, setOpenId] = useState(null);
   const [query, setQuery] = useState("");
 
+  const FAQS_LIVE = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
   const cats = [{ id: "all", label: "전체" }, ...FAQ_CATEGORIES];
-  const filtered = FAQ_ITEMS.filter((it) => {
+  const filtered = FAQS_LIVE.filter((it) => {
     if (activeCat !== "all" && it.cat !== activeCat) return false;
     if (query.trim()) {
       const q = query.toLowerCase();

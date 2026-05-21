@@ -111,15 +111,53 @@ export const publishToGitHub = onCall<PublishRequest>(
         tech = techSnap.docs.map((d) => d.data() as Record<string, unknown>);
       }
 
-      // 홈 섹션 (hero / greeting / featured / info / notice) — 모든 사이트 타입 공통.
-      // 디자이너 어드민이 sites/{siteId}/homeSections 서브컬렉션에 저장.
+      // 홈 섹션 (hero / slider / faq) — 모든 사이트 타입 공통.
+      // 어드민이 sites/{siteId}/homeSections 서브컬렉션에 저장한다.
       const homeSnap = await db
         .collection(`sites/${siteId}/homeSections`)
         .orderBy("sortOrder", "asc")
         .get();
-      const homeSections = homeSnap.docs
+      const homeSectionsRaw = homeSnap.docs
         .map((d) => d.data() as Record<string, unknown>)
         .filter((s) => s.enabled !== false);
+
+      // FAQ 마스터 — 홈 섹션 FAQ 영역이 ID 로 참조한다.
+      const faqsSnap = await db
+        .collection(`sites/${siteId}/faqs`)
+        .orderBy("sortOrder", "asc")
+        .get();
+      const faqs = faqsSnap.docs.map((d) => d.data() as Record<string, unknown>);
+
+      // 홈 섹션의 Storage 이미지 (hero.jpg, map.png) 를 추출해
+      // 1) commit 파일에 추가하고
+      // 2) 섹션 데이터의 image 필드를 raw 경로(img/hero.jpg) 로 치환한다.
+      const sitePath = site.github.sitePath;
+      const homeImageRefs: Array<{ storagePath: string; repoPath: string }> = [];
+      const homeSections = homeSectionsRaw.map((s) => {
+        const data = { ...(s.data as Record<string, unknown> | undefined ?? {}) };
+        // 히어로 이미지
+        const heroStorage = data.imageStoragePath as string | undefined;
+        if (heroStorage) {
+          const base = heroStorage.split("/").pop() ?? "hero.jpg";
+          const repoPath = `${sitePath}/img/${base}`;
+          homeImageRefs.push({ storagePath: heroStorage, repoPath });
+          data.image = `img/${base}`;
+        }
+        // 지도 이미지
+        const mapStorage = data.mapImageStoragePath as string | undefined;
+        if (mapStorage) {
+          const base = mapStorage.split("/").pop() ?? "map.png";
+          const repoPath = `${sitePath}/img/${base}`;
+          homeImageRefs.push({ storagePath: mapStorage, repoPath });
+          data.mapImage = `img/${base}`;
+        }
+        // Firestore 내부 필드 제거 (live site 가 알 필요 없음)
+        delete data.imageUrl;
+        delete data.imageStoragePath;
+        delete data.mapImageUrl;
+        delete data.mapImageStoragePath;
+        return { ...s, data };
+      });
 
       logger.info("publishToGitHub: data loaded", {
         siteId,
@@ -129,6 +167,8 @@ export const publishToGitHub = onCall<PublishRequest>(
         sections: sections?.length,
         tech: tech?.length,
         homeSections: homeSections.length,
+        faqs: faqs.length,
+        homeImages: homeImageRefs.length,
       });
 
       // ─── 5. data.jsx 생성 ───────────────────────────
@@ -140,18 +180,20 @@ export const publishToGitHub = onCall<PublishRequest>(
         sections,
         tech,
         homeSections,
+        faqs,
       } as unknown as Parameters<typeof renderDataJsx>[1]);
 
       const dataJsxPath = `${site.github.sitePath}/data.jsx`;
 
-      // ─── 6. 이미지 다운로드 ─────────────────────────
-      const imageRefs = products
+      // ─── 6. 이미지 다운로드 (상품 이미지 + 홈 섹션 이미지) ─
+      const productImageRefs = products
         .map((p) => {
           const img = (p as { image?: { storagePath?: string; repoPath?: string } }).image;
           if (!img?.storagePath || !img?.repoPath) return null;
           return { storagePath: img.storagePath, repoPath: img.repoPath };
         })
         .filter((x): x is { storagePath: string; repoPath: string } => x !== null);
+      const imageRefs = [...productImageRefs, ...homeImageRefs];
       const imageFiles = await collectImageFiles(imageRefs);
       logger.info("publishToGitHub: images collected", {
         siteId,

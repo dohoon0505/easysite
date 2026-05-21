@@ -237,22 +237,62 @@ function BottomNav({ route, go }) {
 
 // ─── HOME ────────────────────────────────────────────────────
 function HomeScreen({ go, openStyle, openDesigner }) {
+  // 어드민(easysite admin) 에서 발행된 HOME_SECTIONS / FAQS 우선 사용. 비어 있으면 폴백.
+  const HS = window.HOME_SECTIONS || [];
+  const hero = (HS.find((s) => s && s.type === "hero") || {}).data || {};
+  const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
+  const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
+
+  const heroImage = hero.image || "img/hero.jpg";
+  const region = hero.region || "대구광역시 | 수성구";
+  const storeName = hero.storeName || "벨케이크";
+  const storeDesc = hero.storeDesc || "No 밀가루, No 식물성크림. 100% 국내산 쌀가루로 만든 쌀케이크, 동물성 생크림케이크 전문점 벨케이크입니다:)\n\n1인운영매장이라, 전화를 못받을 수 있으니 부재시 카카오톡채널로 연락주세요^^";
+  const mapImage = hero.mapImage || "img/map.png";
+  const mapAddress = hero.mapAddress || "대구 수성구 범어로20길 68";
+  const address = hero.address || "대구 수성구 범어로20길 68 1층 왼쪽상가";
+  const hours = hero.hours || "11:00 ~ 19:00 · 매주 일요일 휴무";
+  const bannerText = hero.bannerText || "예약요청 탭을 통해 간편히 예약을 요청해보세요!";
+
+  const allProducts = [].concat(...Object.values(window.HAIR_STYLES || {}));
+  const productById = {};
+  allProducts.forEach((p) => {
+    if (p && p.productId) productById[p.productId] = p;
+    if (p && p.id) productById[p.id] = p;
+  });
+  const resolvedSliders = sliderSections.length > 0
+    ? sliderSections.map((s) => ({
+        title: s.title || "",
+        list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
+      })).filter((s) => s.list.length > 0)
+    : [
+        { title: "귀여운 도시락케이크", list: FEATURED_STYLES },
+        { title: "이달의 베스트 케이크", list: BUSINESS_STYLES },
+        { title: "여심저격 베스트 디자인", list: MZ_STYLES },
+        { title: "부모님 베스트픽 디자인", list: STARTER_STYLES },
+      ];
+
+  const allFaqs = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
+  const homeFaqItems = (faqHome.pickedIds && faqHome.pickedIds.length > 0 && window.FAQS)
+    ? faqHome.pickedIds.map((id) => window.FAQS.find((f) => f.id === id)).filter(Boolean)
+    : allFaqs.slice(0, 6);
+  const homeFaqTitle = faqHome.title || "주문 전 자주하는 질문";
+
   return (
     <div>
-      <section className="hero" aria-label="벨케이크">
+      <section className="hero" aria-label={storeName}>
         <div className="hero-img">
-          <img src="img/hero.jpg" alt="벨케이크 매장" />
+          <img src={heroImage} alt={`${storeName} 매장`} />
         </div>
       </section>
 
       <section className="intro">
-        <div className="intro-meta">대구광역시 | 수성구</div>
-        <h2 className="intro-name">벨케이크</h2>
-        <p className="intro-desc">No 밀가루, No 식물성크림. 100% 국내산 쌀가루로 만든 쌀케이크, 동물성 생크림케이크 전문점 벨케이크입니다:){"\n\n"}1인운영매장이라, 전화를 못받을 수 있으니 부재시 카카오톡채널로 연락주세요^^</p>
+        <div className="intro-meta">{region}</div>
+        <h2 className="intro-name">{storeName}</h2>
+        <p className="intro-desc">{storeDesc}</p>
 
         <div className="intro-map" aria-label="매장 위치 지도">
-          <img src="img/map.png" alt="벨케이크 매장 위치" className="intro-map-img" />
-          <a className="intro-map-cta" href="https://map.naver.com/p/search/대구 수성구 범어로20길 68" target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
+          <img src={mapImage} alt={`${storeName} 매장 위치`} className="intro-map-img" />
+          <a className="intro-map-cta" href={`https://map.naver.com/p/search/${encodeURIComponent(mapAddress)}`} target="_blank" rel="noreferrer" aria-label="네이버 지도에서 열기">
             <img src="img/naver_map.png" alt="" className="naver-map-icon" /> 네이버 지도
           </a>
         </div>
@@ -260,12 +300,12 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         <ul className="intro-list">
           <li>
             <span className="intro-list-icon"><I.Map size={18} /></span>
-            <span className="intro-list-text">대구 수성구 범어로20길 68 1층 왼쪽상가</span>
+            <span className="intro-list-text">{address}</span>
           </li>
           <li>
             <span className="intro-list-icon"><I.Calendar size={18} /></span>
             <span className="intro-list-text">
-              11:00 ~ 19:00 · 매주 일요일 휴무
+              {hours}
               <span className="intro-open-status" data-open={isOpenNow()}>
                 {isOpenNow() ? "현재 영업 중" : "현재 영업 종료"}
               </span>
@@ -282,22 +322,21 @@ function HomeScreen({ go, openStyle, openDesigner }) {
               <path d="M12 8h.01M11 12h1v5h1" />
             </svg>
           </span>
-          <p className="info-banner-text">예약요청 탭을 통해 간편히 예약을 요청해보세요!</p>
+          <p className="info-banner-text">{bannerText}</p>
         </div>
       </FadeIn>
 
-      <FadeIn><FeaturedSlider title="귀여운 도시락케이크" list={FEATURED_STYLES} openStyle={openStyle} /></FadeIn>
-      <FadeIn delay={60}><FeaturedSlider title="이달의 베스트 케이크" list={BUSINESS_STYLES} openStyle={openStyle} /></FadeIn>
-      <FadeIn delay={120}><FeaturedSlider title="여심저격 베스트 디자인" list={MZ_STYLES} openStyle={openStyle} /></FadeIn>
-      <FadeIn delay={180}><FeaturedSlider title="부모님 베스트픽 디자인" list={STARTER_STYLES} openStyle={openStyle} /></FadeIn>
+      {resolvedSliders.map((s, i) => (
+        <FadeIn key={i} delay={i * 60}><FeaturedSlider title={s.title} list={s.list} openStyle={openStyle} /></FadeIn>
+      ))}
 
       <FadeIn>
         <section className="section home-faq-section">
           <div className="section-head">
-            <h3>주문 전 자주하는 질문</h3>
+            <h3>{homeFaqTitle}</h3>
           </div>
           <ul className="home-faq-list">
-            {FAQ_ITEMS.slice(0, 6).map((it, i) => (
+            {homeFaqItems.map((it, i) => (
               <HomeFaqItem key={i} item={it} />
             ))}
           </ul>
@@ -936,8 +975,9 @@ function FaqScreen() {
   const [openId, setOpenId] = useState(null);
   const [query, setQuery] = useState("");
 
+  const FAQS_LIVE = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
   const cats = [{ id: "all", label: "전체" }, ...FAQ_CATEGORIES];
-  const filtered = FAQ_ITEMS.filter((it) => {
+  const filtered = FAQS_LIVE.filter((it) => {
     if (activeCat !== "all" && it.cat !== activeCat) return false;
     if (query.trim()) {
       const q = query.toLowerCase();
