@@ -126,9 +126,9 @@ const SidebarUserFooter = () => {
   };
 
   return (
-    <button type="button" className="sidebar-logout" onClick={onLogout} aria-label="로그아웃">
-      <Icon name="logout" size={16} />
-      로그아웃
+    <button type="button" className="sidebar-logout" onClick={onLogout} aria-label="서비스 로그아웃">
+      <Icon name="logout" size={18} />
+      서비스 로그아웃
     </button>
   );
 };
