@@ -366,6 +366,7 @@ const ProductCard = ({ product, selected, onToggleSelect, onEdit, onToggleVisibi
           fontWeight: 600,
           color: "var(--sm-content-primary)",
           marginBottom: "var(--size-200)",
+          padding: 0,
           textAlign: "left",
           width: "100%",
           display: "block",
