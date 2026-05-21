@@ -33,6 +33,7 @@ import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash, randomUUID } from "node:crypto";
+import vm from "node:vm";
 
 import { SITES } from "./sites-config.mjs";
 
@@ -345,8 +346,96 @@ for (const site of sitesToProcess) {
     });
   }
 
+  // 6) FAQ — {siteId}/faq-data.jsx 를 vm 으로 실행해 FAQ_ITEMS 를 추출,
+  //    sites/{siteId}/faqs 컬렉션을 멱등적으로 채운다.
+  try {
+    const faqResult = await importFaqsForSite(site.siteId);
+    if (faqResult.imported) console.log(`  ✓ FAQ ${faqResult.imported}개 동기화 (스킵 ${faqResult.skipped})`);
+    else if (faqResult.skipped) console.log(`  - FAQ 스킵 — ${faqResult.skipped}개 이미 존재`);
+    else console.log(`  - FAQ 건너뜀 — ${faqResult.reason}`);
+  } catch (e) {
+    console.error(`  ✗ FAQ 임포트 실패: ${e.message}`);
+  }
+
   console.log(`  ✓ ${site.siteId} 임포트 완료`);
+}
+
+// ── FAQ 임포트 ────────────────────────────────────────
+function loadFaqData(siteId) {
+  const p = path.join(REPO_ROOT, siteId, "faq-data.jsx");
+  if (!existsSync(p)) return null;
+  const src = readFileSync(p, "utf8");
+  const sandbox = { window: {}, console };
+  vm.createContext(sandbox);
+  try {
+    vm.runInContext(src, sandbox, { filename: p, timeout: 5000 });
+  } catch (e) {
+    throw new Error(`faq-data.jsx 파싱 실패 (${siteId}): ${e.message}`);
+  }
+  return {
+    items: Array.isArray(sandbox.window.FAQ_ITEMS) ? sandbox.window.FAQ_ITEMS : [],
+    categories: Array.isArray(sandbox.window.FAQ_CATEGORIES) ? sandbox.window.FAQ_CATEGORIES : [],
+  };
+}
+
+async function importFaqsForSite(siteId) {
+  const faqData = loadFaqData(siteId);
+  if (!faqData || faqData.items.length === 0) {
+    return { reason: "faq-data.jsx 없음 또는 비어 있음" };
+  }
+  const col = db.collection(`sites/${siteId}/faqs`);
+
+  // 기존 faqs 가 있고 이미 import-script 로 채워졌으면 건너뛴다.
+  // (사용자 수정값 보호 + 멱등성)
+  if (!opts.force) {
+    const existing = await col.limit(1).get();
+    if (!existing.empty) {
+      const sampleFirst = existing.docs[0].data();
+      // 사용자가 손댄 경우(updatedBy != import-script) 스킵
+      if (sampleFirst.updatedBy && sampleFirst.updatedBy !== "import-script") {
+        return { skipped: 0, reason: "사용자 수정 흔적 있음 (--force 로 덮어쓰기)" };
+      }
+    }
+  }
+
+  // 카테고리별로 안정적인 faqId 생성: faq-{cat}-{idx}
+  const counters = {};
+  let imported = 0;
+  let skipped = 0;
+
+  for (const item of faqData.items) {
+    const cat = item.cat || "etc";
+    counters[cat] = (counters[cat] || 0) + 1;
+    const faqId = `faq-${cat}-${counters[cat]}`;
+    const ref = col.doc(faqId);
+
+    if (opts.dryRun) {
+      console.log(`    [dry-run] ${faqId} ← Q: ${(item.q || "").slice(0, 30)}…`);
+      imported++;
+      continue;
+    }
+    // 이미 존재하고 동일 질문이면 스킵
+    const existing = await ref.get();
+    if (existing.exists && existing.data().question === item.q && !opts.force) {
+      skipped++;
+      continue;
+    }
+    await ref.set({
+      faqId,
+      categoryId: item.cat || "etc",
+      question: item.q || "",
+      answer: item.a || "",
+      sortOrder: imported * 10,
+      visible: true,
+      createdAt: existing.exists ? existing.data().createdAt : FieldValue.serverTimestamp(),
+      updatedAt: FieldValue.serverTimestamp(),
+      updatedBy: "import-script",
+    }, { merge: true });
+    imported++;
+  }
+  return { imported, skipped };
 }
 
 console.log("\n=== 완료 ===");
 console.log("어드민 '홈 섹션 편집' 페이지에서 실제 사이트 내용이 반영됐는지 확인하세요.");
+console.log("'질문/답변' 페이지에서 FAQ 가 동기화 됐는지 확인하세요.");

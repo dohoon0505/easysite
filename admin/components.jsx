@@ -39,6 +39,7 @@ const Icon = ({ name, size = 18, ...rest }) => {
     filter: <><polyline points="22 3 2 3 10 12.5 10 19 14 21 14 12.5 22 3"/></>,
     sort: <><polyline points="3 6 7 2 11 6"/><line x1="7" y1="2" x2="7" y2="14"/><polyline points="13 14 17 18 21 14"/><line x1="17" y1="6" x2="17" y2="18"/></>,
     info: <><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="8" r="0.5" fill="currentColor" stroke="none"/></>,
+    help: <><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 115 0c0 1.5-2.5 1.5-2.5 3.5"/><circle cx="12" cy="17" r="0.5" fill="currentColor" stroke="none"/></>,
     alert: <><path d="M12 2L2 20h20L12 2z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r="0.5" fill="currentColor" stroke="none"/></>,
     bell: <><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M10 21a2 2 0 004 0"/></>,
     star: <><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 21.5 12 18 5.5 21.5 7 14.5 2 9.5 9 9 12 2"/></>,

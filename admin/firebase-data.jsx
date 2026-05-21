@@ -488,6 +488,109 @@ const useLiveSites = (claims) => {
 const liveSiteUrl = (siteId) =>
   siteId ? `https://easysite.kr/${siteId}/` : "https://easysite.kr/";
 
+// ── FAQ ──────────────────────────────────────────────────
+// sites/{siteId}/faqs/{faqId} = { faqId, question, answer, sortOrder, visible }
+const useLiveFaqs = (siteId) => {
+  const [items, setItemsLocal] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    if (!siteId || !window.fbDb) {
+      setLoading(false);
+      return;
+    }
+    const unsub = window.fbDb
+      .collection("sites").doc(siteId).collection("faqs")
+      .orderBy("sortOrder", "asc")
+      .onSnapshot(
+        (snap) => {
+          setItemsLocal(
+            snap.docs.map((d) => {
+              const fs = d.data();
+              return {
+                id: fs.faqId,
+                question: fs.question || "",
+                answer: fs.answer || "",
+                sortOrder: fs.sortOrder || 0,
+                visible: fs.visible !== false,
+              };
+            })
+          );
+          setLoading(false);
+        },
+        (err) => {
+          console.error("useLiveFaqs", err);
+          setLoading(false);
+        }
+      );
+    return unsub;
+  }, [siteId]);
+
+  const setItems = React.useCallback(
+    (updater) => {
+      setItemsLocal((prev) => {
+        const next = typeof updater === "function" ? updater(prev) : updater;
+        if (siteId && window.fbDb) {
+          diffWriteFaqs(siteId, prev, next).catch((e) => console.error("diffWriteFaqs", e));
+        }
+        return next;
+      });
+    },
+    [siteId]
+  );
+
+  return [items, setItems, loading];
+};
+
+async function diffWriteFaqs(siteId, prev, next) {
+  if (!window.fbDb) return;
+  const prevById = new Map(prev.map((x) => [x.id, x]));
+  const nextById = new Map(next.map((x) => [x.id, x]));
+  const batch = window.fbDb.batch();
+  const col = window.fbDb.collection("sites").doc(siteId).collection("faqs");
+  const uid = (window.fbAuth && window.fbAuth.currentUser && window.fbAuth.currentUser.uid) || "admin-ui";
+  let ops = 0;
+
+  next.forEach((x, idx) => {
+    const old = prevById.get(x.id);
+    const sortOrder = idx * 10;
+    if (!old) {
+      batch.set(col.doc(x.id), {
+        faqId: x.id,
+        question: x.question || "",
+        answer: x.answer || "",
+        sortOrder,
+        visible: x.visible !== false,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedBy: uid,
+      });
+      ops++;
+      return;
+    }
+    const patch = {};
+    if (old.question !== x.question) patch.question = x.question;
+    if (old.answer !== x.answer) patch.answer = x.answer;
+    if ((old.visible !== false) !== (x.visible !== false)) patch.visible = x.visible !== false;
+    if (old.sortOrder !== sortOrder) patch.sortOrder = sortOrder;
+    if (Object.keys(patch).length) {
+      patch.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+      patch.updatedBy = uid;
+      batch.update(col.doc(x.id), patch);
+      ops++;
+    }
+  });
+
+  prev.forEach((x) => {
+    if (!nextById.has(x.id)) {
+      batch.delete(col.doc(x.id));
+      ops++;
+    }
+  });
+
+  if (ops > 0) await batch.commit();
+}
+
 Object.assign(window, {
   useLiveProducts,
   useLiveSections,
@@ -495,5 +598,6 @@ Object.assign(window, {
   useLivePublishes,
   useLiveUsers,
   useLiveSites,
+  useLiveFaqs,
   liveSiteUrl,
 });

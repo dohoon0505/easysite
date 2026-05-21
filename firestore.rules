@@ -50,6 +50,11 @@ service cloud.firestore {
         allow read, write:       if memberOf(siteId);
       }
 
+      // 자주묻는질문(FAQ) 마스터 — 홈 섹션 FAQ 가 여기서 항목을 골라 노출.
+      match /faqs/{faqId} {
+        allow read, write:       if memberOf(siteId);
+      }
+
       // publishes는 발행 이력 — 읽기는 멤버, 쓰기는 Functions 전용
       match /publishes/{publishId} {
         allow read:              if memberOf(siteId);
