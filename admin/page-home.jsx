@@ -2,7 +2,7 @@
 // H01 — 홈 섹션 편집
 // Left rail: list of sections (drag-reorder, toggle enable). Right: editor + preview.
 
-const HomeSectionsPage = ({ sections, setSections, products }) => {
+const HomeSectionsPage = ({ sections, setSections, products, onNav }) => {
   const [activeId, setActiveId] = React.useState(sections[0]?.id);
   const active = sections.find((s) => s.id === activeId);
   const toast = useToast();
@@ -37,19 +37,15 @@ const HomeSectionsPage = ({ sections, setSections, products }) => {
         <div>
           <h1 className="page-title">홈 섹션 편집</h1>
           <div className="page-subtitle">
-            도화원플라워 홈페이지의 첫 화면 — 섹션을 켜고/끄고, 순서를 바꾸고, 내용을 편집하세요.
+            홈페이지의 첫 화면 — 섹션을 켜고/끄고, 순서를 바꾸고, 내용을 편집하세요.
           </div>
-        </div>
-        <div className="page-actions">
-          <Button variant="outline" iconLeft="eye">미리보기 열기</Button>
-          <Button variant="primary" iconLeft="rocket">발행 센터로</Button>
         </div>
       </div>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "280px 1fr 360px",
+          gridTemplateColumns: "280px 1fr 440px",
           gap: "var(--size-400)",
           alignItems: "flex-start",
         }}
@@ -120,16 +116,15 @@ const HomeSectionsPage = ({ sections, setSections, products }) => {
               </div>
             ))}
           </div>
-          <div className="card-footer" style={{ justifyContent: "space-between" }}>
+          <div className="card-footer" style={{ justifyContent: "center", alignItems: "center", padding: "var(--size-400) var(--size-400)" }}>
             <span className="text-tertiary" style={{ fontSize: "var(--text-caption)" }}>
               ↑↓ 드래그로 순서 변경
             </span>
-            <Button variant="ghost" size="sm" iconLeft="plus">섹션 추가</Button>
           </div>
         </Card>
 
         {/* Editor */}
-        <SectionEditor section={active} update={updateActive} products={products} />
+        <SectionEditor section={active} update={updateActive} products={products} onNav={onNav} />
 
         {/* Mobile-frame preview */}
         <div style={{ position: "sticky", top: 100 }}>

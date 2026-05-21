@@ -8,11 +8,11 @@ const HomePreview = ({ sections, products, activeId }) => {
       <div
         style={{
           background: "#1a1d24",
-          padding: 10,
-          borderRadius: 40,
+          padding: 12,
+          borderRadius: 48,
           boxShadow: "var(--shadow-lg)",
           width: "100%",
-          maxWidth: 320,
+          maxWidth: 400,
           margin: "0 auto",
           position: "relative",
         }}
@@ -34,10 +34,10 @@ const HomePreview = ({ sections, products, activeId }) => {
         <div
           style={{
             background: "var(--sm-background-default)",
-            borderRadius: 30,
+            borderRadius: 36,
             overflow: "hidden",
             position: "relative",
-            height: 600,
+            height: 760,
           }}
         >
           {/* status bar */}
@@ -56,7 +56,7 @@ const HomePreview = ({ sections, products, activeId }) => {
               <span>●●● </span>
             </span>
           </div>
-          <div style={{ height: 540, overflowY: "auto", paddingBottom: 24 }}>
+          <div style={{ height: 700, overflowY: "auto", paddingBottom: 24 }}>
             {sections
               .filter((s) => s.enabled)
               .map((s) => (

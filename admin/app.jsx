@@ -181,7 +181,7 @@ const App = () => {
           }
         />
         {route === "home" && (
-          <HomeSectionsPage sections={sections} setSections={setSections} products={products} />
+          <HomeSectionsPage sections={sections} setSections={setSections} products={products} onNav={setRoute} />
         )}
         {route === "products" && (
           <ProductsPage

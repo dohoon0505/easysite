@@ -1,7 +1,7 @@
 /* eslint-disable */
 // Editor + preview for H01 home sections
 
-const SectionEditor = ({ section, update, products }) => {
+const SectionEditor = ({ section, update, products, onNav }) => {
   if (!section) return null;
 
   return (
@@ -11,7 +11,13 @@ const SectionEditor = ({ section, update, products }) => {
           <h2 className="card-title">{section.title}</h2>
           <div className="card-subtitle">홈페이지 {section.type} 섹션의 내용을 편집합니다</div>
         </div>
-        {!section.enabled && <Badge tone="neutral" dot>꺼져 있음</Badge>}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          {!section.enabled && <Badge tone="neutral" dot>꺼져 있음</Badge>}
+          <Button variant="outline" size="sm" iconLeft="eye">미리보기 열기</Button>
+          <Button variant="primary" size="sm" iconLeft="rocket" onClick={() => onNav && onNav("publish")}>
+            발행 센터로
+          </Button>
+        </div>
       </div>
       <div className="card-body" style={{ display: "grid", gap: "var(--size-500)" }}>
         {section.type === "hero" && <HeroEditor data={section.data} update={update} />}
