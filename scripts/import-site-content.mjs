@@ -300,25 +300,22 @@ for (const site of sitesToProcess) {
     console.error(`  ✗ hero.jpg 업로드 실패: ${e.message}`);
   }
 
-  // 2) hero 섹션 — 이미지 + 헤드라인(사이트명) + 서브헤드(요약)
-  //    data.image 는 CSS background 값으로 그대로 들어가므로 url("…") 로 감싼다.
-  const heroSubhead = parsed.desc ? parsed.desc.split(/\n+/)[0].slice(0, 80) : null;
+  // 2) hero 섹션 — 실제 사이트는 이미지만 노출하므로 이미지 필드만 채운다.
+  //    data.image 는 CSS background 값이라 url("…") 로 감싼다.
   const heroImageCss = heroResult?.downloadUrl ? `url("${heroResult.downloadUrl}")` : null;
   await mergeSection(site.siteId, "hero", {
-    headline: parsed.name || site.name,
-    subhead: heroSubhead,
     image: heroImageCss,
     imageUrl: heroResult?.downloadUrl || null,
     imageStoragePath: heroResult?.storagePath || null,
   }, PRESETS.hero);
 
-  // 3) greeting — 사이트명 + 본문
+  // 3) greeting — 사이트명(intro-name) + 설명(intro-desc)
   await mergeSection(site.siteId, "greeting", {
     title: parsed.name || site.name,
     body: parsed.desc || null,
   }, PRESETS.greeting);
 
-  // 4) info — 주소 + 영업시간
+  // 4) info — 실제 사이트는 주소·영업시간만 노출 (전화·인스타 없음).
   await mergeSection(site.siteId, "info", {
     address: parsed.address || null,
     hours: parsed.hours || null,

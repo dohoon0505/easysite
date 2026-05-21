@@ -30,23 +30,13 @@ const SectionEditor = ({ section, update, products, onNav }) => {
   );
 };
 
-const HeroEditor = ({ data, update }) => (
-  <>
-    <Field label="헤드라인" required helper="홈페이지에 가장 크게 보여지는 한 줄">
-      <Input value={data.headline} onChange={(e) => update({ headline: e.target.value })} />
-    </Field>
-    <Field label="서브카피" helper="헤드라인 아래 한 두 줄">
-      <Textarea value={data.subhead} onChange={(e) => update({ subhead: e.target.value })} rows={3} />
-    </Field>
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--size-400)" }}>
-      <Field label="주요 버튼 텍스트">
-        <Input value={data.ctaPrimary} onChange={(e) => update({ ctaPrimary: e.target.value })} />
-      </Field>
-      <Field label="보조 버튼 텍스트">
-        <Input value={data.ctaSecondary} onChange={(e) => update({ ctaSecondary: e.target.value })} />
-      </Field>
-    </div>
-    <Field label="배경 이미지">
+// 실제 사이트의 hero 는 이미지만 표시 (text overlay / CTA 버튼 없음).
+// 그래서 어드민 편집기도 이미지 하나만 노출한다.
+const HeroEditor = ({ data, update }) => {
+  const imageUrl = data.imageUrl || null;
+  const filename = imageUrl ? imageUrl.split("/").pop().split("?")[0].split("%2F").pop() : "hero.jpg";
+  return (
+    <Field label="히어로 이미지" helper="홈페이지 최상단에 보여지는 큰 이미지 (가로형 권장)">
       <div
         style={{
           display: "flex",
@@ -59,28 +49,30 @@ const HeroEditor = ({ data, update }) => (
       >
         <div
           style={{
-            width: 80,
-            height: 80,
+            width: 96,
+            height: 96,
             borderRadius: "var(--radius-sm)",
             background: data.image,
             backgroundSize: "cover",
+            backgroundPosition: "center",
             flexShrink: 0,
           }}
         />
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 6 }}>
-          <div style={{ fontWeight: 600, fontSize: "var(--text-label-md)" }}>hero-spring-2026.jpg</div>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 6, minWidth: 0 }}>
+          <div style={{ fontWeight: 600, fontSize: "var(--text-label-md)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {filename}
+          </div>
           <div className="text-tertiary" style={{ fontSize: "var(--text-caption)" }}>
-            1920 × 1080 · 248KB
+            {imageUrl ? "라이브 사이트에 표시 중" : "이미지가 아직 업로드되지 않았어요"}
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 4, justifyContent: "center" }}>
           <Button variant="outline" size="sm" iconLeft="upload">교체</Button>
-          <Button variant="ghost" size="sm" iconLeft="image">갤러리</Button>
         </div>
       </div>
     </Field>
-  </>
-);
+  );
+};
 
 const GreetingEditor = ({ data, update }) => (
   <>
@@ -190,21 +182,14 @@ const FeaturedEditor = ({ data, update, products }) => (
   </>
 );
 
+// 실제 사이트는 매장 정보 영역에 주소와 영업 시간만 노출 (전화·인스타 없음).
 const InfoEditor = ({ data, update }) => (
   <>
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--size-400)" }}>
-      <Field label="주소">
-        <Input value={data.address} onChange={(e) => update({ address: e.target.value })} />
-      </Field>
-      <Field label="전화">
-        <Input value={data.phone} onChange={(e) => update({ phone: e.target.value })} inputMode="tel" />
-      </Field>
-    </div>
-    <Field label="영업 시간">
-      <Input value={data.hours} onChange={(e) => update({ hours: e.target.value })} />
+    <Field label="주소" helper="네이버 지도 검색에도 사용됩니다">
+      <Input value={data.address || ""} onChange={(e) => update({ address: e.target.value })} />
     </Field>
-    <Field label="인스타그램">
-      <Input value={data.instagram} onChange={(e) => update({ instagram: e.target.value })} prefix={<span style={{ color: "var(--sm-content-tertiary)" }}>@</span>} />
+    <Field label="영업 시간" helper="예: 11:00 ~ 19:00 · 매주 일요일 휴무">
+      <Input value={data.hours || ""} onChange={(e) => update({ hours: e.target.value })} />
     </Field>
   </>
 );
