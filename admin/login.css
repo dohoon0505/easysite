@@ -207,6 +207,38 @@
   letter-spacing: -0.015em;
 }
 
+/* "No Code" — 밝은 시안→민트→흰색 shimmer + 부드러운 글로우 */
+.login-logo-emph {
+  display: inline-block;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(
+    100deg,
+    #7df9ff 0%,
+    #b8fff4 25%,
+    #ffffff 45%,
+    #b8fff4 65%,
+    #7df9ff 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 6px rgba(125, 249, 255, 0.45))
+          drop-shadow(0 0 14px rgba(125, 249, 255, 0.18));
+  animation: logo-shimmer 3.2s linear infinite;
+}
+
+@keyframes logo-shimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: -220% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-logo-emph { animation: none; }
+}
+
 .login-back {
   font-size: 13px;
   font-weight: 500;
