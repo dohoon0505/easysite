@@ -140,7 +140,18 @@ const LoginPage = ({ onLogin }) => {
           <div className="login-visual-top">
             <div className="login-logo">
               <span className="login-logo-name">
-                <span className="login-logo-emph">No Code</span> Branding WebSite
+                <span className="login-logo-emph" aria-label="No Code">
+                  {"No Code".split("").map((c, i) => (
+                    <span
+                      key={i}
+                      className="login-logo-char"
+                      style={{ animationDelay: `${i * 0.08}s` }}
+                      aria-hidden="true"
+                    >
+                      {c === " " ? " " : c}
+                    </span>
+                  ))}
+                </span>{" "}Branding WebSite
               </span>
             </div>
           </div>

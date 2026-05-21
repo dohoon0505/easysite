@@ -207,36 +207,42 @@
   letter-spacing: -0.015em;
 }
 
-/* "No Code" — 밝은 시안→민트→흰색 shimmer + 부드러운 글로우 */
+/* "No Code" — 글자별 stagger wave + 네온 글로우 + 미세한 hue cycle */
 .login-logo-emph {
-  display: inline-block;
+  display: inline-flex;
   font-weight: 800;
   letter-spacing: -0.02em;
-  background: linear-gradient(
-    100deg,
-    #7df9ff 0%,
-    #b8fff4 25%,
-    #ffffff 45%,
-    #b8fff4 65%,
-    #7df9ff 100%
-  );
-  background-size: 220% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 6px rgba(125, 249, 255, 0.45))
-          drop-shadow(0 0 14px rgba(125, 249, 255, 0.18));
-  animation: logo-shimmer 3.2s linear infinite;
+  white-space: pre;
+}
+.login-logo-char {
+  display: inline-block;
+  color: #7df9ff;
+  text-shadow:
+    0 0 6px rgba(125, 249, 255, 0.75),
+    0 0 14px rgba(125, 249, 255, 0.35),
+    0 0 28px rgba(125, 249, 255, 0.18);
+  animation:
+    char-wave 2.4s ease-in-out infinite,
+    char-hue 6s linear infinite;
+  will-change: transform, filter;
 }
 
-@keyframes logo-shimmer {
-  0%   { background-position: 0% center; }
-  100% { background-position: -220% center; }
+@keyframes char-wave {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%           { transform: translateY(-5px); }
+}
+
+@keyframes char-hue {
+  0%   { filter: hue-rotate(0deg); }
+  50%  { filter: hue-rotate(45deg); }
+  100% { filter: hue-rotate(0deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .login-logo-emph { animation: none; }
+  .login-logo-char {
+    animation: none;
+    transform: none !important;
+  }
 }
 
 .login-back {
