@@ -1,6 +1,5 @@
 /* eslint-disable */
 // 도화원플라워 — 상품 카탈로그 (자동 생성: publishToGitHub)
-
 const HAIR_CATEGORIES = [
   { id: "best", name: "베스트", blurb: "도화원의 베스트 상품", sub: "BEST PICK" },
   { id: "bouquet", name: "꽃다발", blurb: "마음을 전하는 꽃다발", sub: "BOUQUET" },
@@ -9,7 +8,6 @@ const HAIR_CATEGORIES = [
   { id: "acrylic", name: "아크릴백", blurb: "세련된 아크릴백 플라워", sub: "ACRYLIC" },
   { id: "bridal", name: "부케", blurb: "아름다운 날을 위한 부케", sub: "BRIDAL" }
 ];
-
 const HAIR_STYLES = {
   best: [
     { name: "코랄 로즈 꽃다발 (S)", price: 55000, desc: "소형 · 코랄톤 장미 믹스", img: "img/bouquet-s-coral.jpg", categoryName: "베스트" },
@@ -50,5 +48,12 @@ const HAIR_STYLES = {
   ]
 ,
 };
-
-Object.assign(window, { HAIR_CATEGORIES, HAIR_STYLES });
+const HOME_SECTIONS = [
+  { id: "hero", type: "hero", title: "히어로", icon: "image", data: { storeDesc: "평범한 일상도 꽃 한 송이가 더해지면 특별한 순간이 됩니다.\n\n계절을 듬뿍 머금은 다채로운 꽃들로, 당신의 오늘을 가장 아름답게 피워내겠습니다.", image: "url(\"https://firebasestorage.googleapis.com/v0/b/easysite-5a560.firebasestorage.app/o/sites%2Fdohwawon%2Fhome%2Fhero.jpg?alt=media&token=b10fd1c2-d665-4a50-a4ec-973068eca20f\")", hours: "11:00 ~ 19:00 · 매주 일요일 휴무", address: "대구 달서구 당산로 99 1층 도화원플라워", mapImage: "url(\"https://firebasestorage.googleapis.com/v0/b/easysite-5a560.firebasestorage.app/o/sites%2Fdohwawon%2Fhome%2Fmap.png?alt=media&token=46baf348-9706-4dc1-81d7-828b4a7905cd\")", imageStoragePath: "sites/dohwawon/home/hero.jpg", mapImageStoragePath: "sites/dohwawon/home/map.png", mapImageUrl: "https://firebasestorage.googleapis.com/v0/b/easysite-5a560.firebasestorage.app/o/sites%2Fdohwawon%2Fhome%2Fmap.png?alt=media&token=46baf348-9706-4dc1-81d7-828b4a7905cd", imageUrl: "https://firebasestorage.googleapis.com/v0/b/easysite-5a560.firebasestorage.app/o/sites%2Fdohwawon%2Fhome%2Fhero.jpg?alt=media&token=b10fd1c2-d665-4a50-a4ec-973068eca20f", bannerText: "예약요청 탭을 통해 간편히 예약을 요청해보세요!", storeName: "도화원플라워", region: "대구광역시 | 달서구", mapAddress: "대구 달서구 당산로 99" } },
+  { id: "slider_1", type: "slider", title: "상품 슬라이더 (1)", icon: "star", data: { pickedIds: [], title: "풍성한 꽃다발 추천" } },
+  { id: "slider_2", type: "slider", title: "상품 슬라이더 (2)", icon: "star", data: { pickedIds: [], title: "특별한 날, 꽃바구니 선물!" } },
+  { id: "slider_3", type: "slider", title: "상품 슬라이더 (3)", icon: "star", data: { subtitle: "333", title: "아름다운 효도, 용돈박스", pickedIds: [] } },
+  { id: "slider_4", type: "slider", title: "상품 슬라이더 (4)", icon: "star", data: { pickedIds: [], title: "특색있는 아크릴백" } },
+  { id: "faq", type: "faq", title: "FAQ", icon: "help", data: { pickedIds: [], title: "주문 전 자주하는 질문" } }
+];
+Object.assign(window, { HAIR_CATEGORIES, HAIR_STYLES, HOME_SECTIONS });
