@@ -6,6 +6,12 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId })
   const existing = productId ? products.find((p) => p.id === productId) : null;
   const toast = useToast();
 
+  // 카테고리 드롭다운도 Firestore 마스터와 동기화 (상품 페이지·카테고리 페이지와 동일 출처).
+  const [liveCats] = (typeof useLiveCategories === "function"
+    ? useLiveCategories(siteId)
+    : [[]]);
+  const selectableCats = (liveCats && liveCats.length > 0) ? liveCats : CATEGORIES.filter((c) => c.id !== "all");
+
   const [form, setForm] = React.useState(() => ({
     name: existing?.name || "",
     category: existing?.category || "bouquet",
@@ -104,7 +110,7 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId })
       toast({ tone: "error", message: "입력값을 다시 확인해 주세요" });
       return;
     }
-    const cat = CATEGORIES.find((c) => c.id === form.category);
+    const cat = selectableCats.find((c) => c.id === form.category) || CATEGORIES.find((c) => c.id === form.category);
     const updated = {
       id: existing?.id || `p_${Math.random().toString(36).slice(2, 6)}`,
       name: form.name,
@@ -235,7 +241,7 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId })
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--size-400)" }}>
                 <Field label="카테고리" required>
                   <Select value={form.category} onChange={(e) => update("category", e.target.value)}>
-                    {CATEGORIES.filter((c) => c.id !== "all").map((c) => (
+                    {selectableCats.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.name}
                       </option>
@@ -552,7 +558,7 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId })
           <div style={{ fontSize: "var(--text-label-md)", fontWeight: 600, color: "var(--sm-content-tertiary)", letterSpacing: "0.04em", textTransform: "uppercase" }}>
             사이트 미리보기
           </div>
-          <ProductPreview form={form} />
+          <ProductPreview form={form} cats={selectableCats} />
           <Card>
             <div className="card-body" style={{ display: "flex", flexDirection: "column", gap: "var(--size-300)" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -599,7 +605,7 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId })
   );
 };
 
-const ProductPreview = ({ form }) => (
+const ProductPreview = ({ form, cats }) => (
   <div
     style={{
       background: "var(--sm-surface-raised)",
@@ -654,7 +660,7 @@ const ProductPreview = ({ form }) => (
     </div>
     <div style={{ padding: "var(--size-400)" }}>
       <div style={{ fontSize: "var(--text-caption)", color: "var(--sm-content-tertiary)", marginBottom: 4 }}>
-        {CATEGORIES.find((c) => c.id === form.category)?.name || ""}
+        {((cats && cats.find((c) => c.id === form.category)) || CATEGORIES.find((c) => c.id === form.category))?.name || ""}
       </div>
       <div
         style={{

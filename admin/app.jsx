@@ -189,6 +189,7 @@ const App = () => {
             onCreate={openCreate}
             products={products}
             setProducts={setProducts}
+            siteId={siteId}
           />
         )}
         {route === "editor" && (

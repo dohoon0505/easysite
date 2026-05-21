@@ -9,7 +9,7 @@ const toBgImageUrl = (src) => {
   return `url("${src}")`;
 };
 
-const ProductsPage = ({ onEdit, onCreate, products, setProducts, onCsvImport }) => {
+const ProductsPage = ({ onEdit, onCreate, products, setProducts, onCsvImport, siteId }) => {
   const [view, setView] = React.useState("card"); // 'card' | 'table'
   const [category, setCategory] = React.useState("all");
   const [query, setQuery] = React.useState("");
@@ -17,6 +17,17 @@ const ProductsPage = ({ onEdit, onCreate, products, setProducts, onCsvImport }) 
   const [showHidden, setShowHidden] = React.useState(false);
   const [selected, setSelected] = React.useState([]);
   const toast = useToast();
+
+  // 카테고리 칩은 Firestore 의 카테고리 마스터와 동기화 (카테고리 페이지와 동일 출처).
+  // useLiveCategories 가 [items, setItems] 반환 → 첫 요소만 사용.
+  const [liveCats] = (typeof useLiveCategories === "function"
+    ? useLiveCategories(siteId)
+    : [[]]);
+  // "전체" 칩은 마스터에 존재하지 않으므로 UI 에서 prepend.
+  const chipCats = React.useMemo(
+    () => [{ id: "all", name: "전체" }, ...(liveCats || [])],
+    [liveCats]
+  );
 
   const hiddenCount = products.filter((p) => !p.visible).length;
 
@@ -107,7 +118,7 @@ const ProductsPage = ({ onEdit, onCreate, products, setProducts, onCsvImport }) 
           />
         </div>
         <div style={{ flex: 1, display: "flex", gap: "var(--size-200)", flexWrap: "wrap" }}>
-          {CATEGORIES.map((c) => (
+          {chipCats.map((c) => (
             <Chip
               key={c.id}
               selected={category === c.id}
