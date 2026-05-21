@@ -55,6 +55,16 @@ service cloud.firestore {
         allow read, write:       if memberOf(siteId);
       }
 
+      // greenlight_art 갤러리 작품 큐레이션 (작품 슬라이더가 ID로 참조)
+      match /galleryWorks/{workId} {
+        allow read, write:       if memberOf(siteId);
+      }
+
+      // 사이트 기본 정보 (전화/플친/OG) — settings/info 단일 문서
+      match /settings/{settingId} {
+        allow read, write:       if memberOf(siteId);
+      }
+
       // publishes는 발행 이력 — 읽기는 멤버, 쓰기는 Functions 전용
       match /publishes/{publishId} {
         allow read:              if memberOf(siteId);
