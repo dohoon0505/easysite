@@ -102,7 +102,27 @@ const STATUS_LABELS = {
 };
 
 const UsersManagePage = () => {
-  const [users, setUsers] = React.useState(SAMPLE_USERS);
+  // Firestore 라이브 사용자 — 없으면 mock 으로 fallback (디자인 보기용)
+  const liveUsers = (window.useLiveUsers && window.useLiveUsers()) || [];
+  const usersSource = liveUsers.length > 0
+    ? liveUsers.map((u) => ({
+        id: u.id,
+        name: u.displayName || u.email.split("@")[0],
+        email: u.email,
+        role: u.role,
+        status: "active",
+        sites: u.siteId ? [u.siteId] : [],
+        lastSeen: u.lastLoginAt || "—",
+        avatar: (u.displayName || u.email || "?").slice(0, 1).toUpperCase(),
+      }))
+    : SAMPLE_USERS;
+
+  const [users, setUsers] = React.useState(usersSource);
+  React.useEffect(() => {
+    setUsers(usersSource);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(usersSource.map((u) => u.id + u.role + (u.sites || []).join(",")))]);
+
   const [query, setQuery] = React.useState("");
   const [roleFilter, setRoleFilter] = React.useState("all");
   const [selected, setSelected] = React.useState(null);
@@ -266,7 +286,25 @@ const UsersManagePage = () => {
         </div>
 
         {selected && (
-          <UserDetail user={selected} onClose={() => setSelected(null)} onUpdate={(u) => {
+          <UserDetail user={selected} onClose={() => setSelected(null)} onUpdate={async (u) => {
+            // Firestore 모드: 실제 setSiteClaim 호출 (slow, 권한 확인 필요)
+            if (window.callSetSiteClaim && window.fbDb && liveUsers.length > 0) {
+              const newSiteId = u.role === "super" ? null : (u.sites && u.sites[0]) || null;
+              try {
+                await window.callSetSiteClaim({
+                  uid: u.id,
+                  siteId: newSiteId,
+                  role: u.role,
+                });
+                // onSnapshot 가 자동으로 갱신 — 별도 setUsers 불필요
+                setSelected({ ...u });
+              } catch (err) {
+                console.error("setSiteClaim failed", err);
+                alert("권한 변경 실패: " + (err.message || "알 수 없는 오류"));
+              }
+              return;
+            }
+            // Mock 모드 fallback (디자인 데모 용도)
             setUsers((us) => us.map((x) => (x.id === u.id ? u : x)));
             setSelected(u);
           }} />

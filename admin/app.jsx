@@ -30,24 +30,31 @@ const App = () => {
   const [route, setRoute] = React.useState("products");
   const [editingId, setEditingId] = React.useState(null);
   const [creating, setCreating] = React.useState(false);
-  const [products, setProducts] = React.useState(PRODUCTS);
-  const [sections, setSections] = React.useState(HOME_SECTIONS);
   const [showSwitcher, setShowSwitcher] = React.useState(false);
 
   // 사용자 claim 의 siteId 가 있으면 자동 선택, 없으면 t.site 또는 dohwawon.
   const initialSiteId = React.useMemo(
-    () => session.claims?.siteId || t.site || "dohwawon",
+    () => (session.claims && session.claims.siteId) || t.site || "dohwawon",
     []
   );
   const [siteId, setSiteId] = React.useState(initialSiteId);
 
   // 로그인 후 claim 의 siteId 가 들어오면 한 번만 자동 반영 (super 는 자유 선택 유지).
   React.useEffect(() => {
-    if (session.claims?.siteId && session.claims.siteId !== siteId) {
+    if (session.claims && session.claims.siteId && session.claims.siteId !== siteId) {
       setSiteId(session.claims.siteId);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session.claims?.siteId]);
+  }, [session.claims && session.claims.siteId]);
+
+  // ── Firestore 라이브 데이터 ─────────────────────────────
+  // useLive* 가 [items, setItems, loading] 반환 — setItems 호출 시 Firestore diff write.
+  const [liveProducts, setProducts, productsLoading] = window.useLiveProducts(siteId);
+  const [liveSections, setSections, sectionsLoading] = window.useLiveSections(siteId);
+
+  // 미인증/loading 상태에선 mock 으로 fallback → 디자인이 항상 렌더링 가능.
+  const products = loggedIn ? liveProducts : PRODUCTS;
+  const sections = loggedIn ? liveSections : HOME_SECTIONS;
   const [bulkOpen, setBulkOpen] = React.useState(false);
   const [cmdkOpen, setCmdkOpen] = React.useState(false);
   const [csvOpen, setCsvOpen] = React.useState(false);
@@ -177,6 +184,7 @@ const App = () => {
             setProducts={setProducts}
             setSections={setSections}
             onGoto={setRoute}
+            siteId={siteId}
           />
         )}
         {route === "account" && <AccountPage />}

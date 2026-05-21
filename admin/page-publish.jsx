@@ -9,7 +9,7 @@ const PUBLISH_STAGES = [
   { id: "deploy", label: "사이트 재빌드", duration: 4500 },
 ];
 
-const PublishCenterPage = ({ products, sections, setProducts, setSections, onGoto }) => {
+const PublishCenterPage = ({ products, sections, setProducts, setSections, onGoto, siteId }) => {
   const toast = useToast();
   const draftProducts = products.filter((p) => p.draft);
   const draftSections = sections.filter((s) => s.draft);
@@ -20,7 +20,12 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
   const [stageIdx, setStageIdx] = React.useState(-1);
   const [logs, setLogs] = React.useState([]);
   const [done, setDone] = React.useState(false);
-  const [history, setHistory] = React.useState(PUBLISH_HISTORY);
+
+  // Firestore 라이브 발행 이력 — siteId 없으면 mock fallback
+  const liveHistory = window.useLivePublishes && siteId ? window.useLivePublishes(siteId, 10) : null;
+  const [historyOverride, setHistoryOverride] = React.useState(null);
+  const history = historyOverride || (liveHistory && liveHistory.length > 0 ? liveHistory : PUBLISH_HISTORY);
+  const setHistory = setHistoryOverride;
 
   const log = (line, tone = "info") => {
     setLogs((l) => [
@@ -36,45 +41,70 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
 
   const start = async () => {
     if (running) return;
+    if (!siteId) {
+      toast({ tone: "error", message: "사이트가 지정되지 않았습니다" });
+      return;
+    }
     setRunning(true);
     setDone(false);
     setLogs([]);
     setStageIdx(0);
-    log("► 발행 시작 — 도화원플라워 (dohwawon.kr)");
+    log(`► 발행 시작 — ${siteId}`);
     log(`변경사항: 상품 ${draftProducts.length}건, 섹션 ${draftSections.length}건`);
 
-    for (let i = 0; i < PUBLISH_STAGES.length; i++) {
-      setStageIdx(i);
-      const stage = PUBLISH_STAGES[i];
-      const stageLogs = STAGE_LOG_LINES[stage.id] || [];
-      const interval = stage.duration / Math.max(stageLogs.length, 1);
-      for (const line of stageLogs) {
-        await new Promise((r) => setTimeout(r, interval));
-        log(line.text, line.tone);
-      }
-    }
-    setStageIdx(PUBLISH_STAGES.length);
-    setRunning(false);
-    setDone(true);
-    log("✓ 발행 완료 — 사이트에 1~3분 내 반영됩니다", "success");
+    try {
+      // 1) Stage: validate — draft 를 live 로 승격 (Firestore write)
+      setStageIdx(0);
+      log("변경사항을 'live' 로 승격하는 중...");
+      setProducts((ps) =>
+        ps.map((p) => (p.draft ? { ...p, draft: false, status: "live" } : p))
+      );
+      setSections((ss) => ss.map((s) => (s.draft ? { ...s, draft: false } : s)));
+      // Firestore batch write 가 완료될 시간을 약간 줌
+      await new Promise((r) => setTimeout(r, 600));
+      log("✓ Firestore 상태 갱신 완료", "success");
 
-    // mark all drafts as live
-    setProducts((ps) => ps.map((p) => (p.draft ? { ...p, draft: false, status: "live" } : p)));
-    setSections((ss) => ss.map((s) => (s.draft ? { ...s, draft: false } : s)));
-    setHistory((h) => [
-      {
-        id: `pub_${Math.random().toString(36).slice(2, 6)}`,
-        when: new Date().toLocaleString("ko-KR", { month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" }),
-        author: "박소연",
-        note: note || "(메모 없음)",
-        items: { products: draftProducts.length, categories: 0, home: draftSections.length },
-        status: "success",
-        duration: "2분 14초",
-      },
-      ...h,
-    ]);
-    setNote("");
-    toast({ tone: "success", message: "발행 완료 — GitHub Pages 재빌드 중" });
+      // 2) Stage: build / images / push — publishToGitHub callable 호출
+      setStageIdx(1);
+      log("코드 생성 + 이미지 동기화 + GitHub 푸시 호출 중...");
+      const result = await window.callPublishToGitHub({
+        siteId,
+        note: note || undefined,
+      });
+
+      setStageIdx(3);
+      if (result.noop) {
+        log("ℹ 변경된 파일이 없어 새 커밋이 생성되지 않았습니다 (noop)", "warning");
+      } else {
+        log(
+          `✓ GitHub 커밋 ${result.commitSha.slice(0, 7)} 푸시 완료 — ${result.filesChanged}개 파일 변경`,
+          "git"
+        );
+      }
+
+      // 3) Stage: deploy — GitHub Pages 재빌드 (대기만)
+      setStageIdx(4);
+      log("GitHub Pages 가 1~3분 내 사이트에 반영합니다", "info");
+
+      setStageIdx(PUBLISH_STAGES.length);
+      setRunning(false);
+      setDone(true);
+      log("✓ 발행 완료", "success");
+
+      setNote("");
+      toast({
+        tone: "success",
+        message: result.noop
+          ? "변경사항 없음 — 새 커밋 미생성"
+          : `발행 완료 — 커밋 ${result.commitSha.slice(0, 7)}`,
+      });
+    } catch (err) {
+      setRunning(false);
+      setDone(false);
+      const msg = (err && err.message) || "알 수 없는 오류";
+      log(`✗ 발행 실패: ${msg}`, "error");
+      toast({ tone: "error", message: `발행 실패: ${msg}` });
+    }
   };
 
   return (
