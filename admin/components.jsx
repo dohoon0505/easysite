@@ -61,6 +61,7 @@ const Icon = ({ name, size = 18, ...rest }) => {
     logo: <><path d="M12 2L4 7v10l8 5 8-5V7l-8-5z"/><path d="M12 2v10l8 5"/><path d="M4 7l8 5"/></>,
     bolt: <><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></>,
     book: <><path d="M4 4.5A2.5 2.5 0 016.5 2H20v15H6.5a2.5 2.5 0 000 5H20"/><line x1="20" y1="17" x2="20" y2="22"/></>,
+    logout: <><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></>,
   };
   return (
     <svg

@@ -114,21 +114,8 @@ const Sidebar = ({ route, onNav, site, onSwitchSite, draftCount }) => {
   );
 };
 
-// 사용자 정보 + 로그아웃. Firebase 인증 세션을 직접 읽어 표시.
-const SidebarUserFooter = ({ site }) => {
-  const session = (typeof useAuthSession === "function" ? useAuthSession() : null);
-  const user = session && session.user;
-  const claims = session && session.claims;
-
-  const displayName = (user && (user.displayName || (user.email ? user.email.split("@")[0] : ""))) || "운영자";
-  const initial = displayName.charAt(0) || "?";
-  const roleLabel = claims && claims.role === "super"
-    ? "슈퍼"
-    : claims && claims.role === "owner"
-      ? "오너"
-      : "에디터";
-  const siteName = (claims && claims.siteId) || (site && site.name) || "사이트 미지정";
-
+// 사이드바 푸터 — 로그아웃 버튼만 (상단 프로필과 중복 제거)
+const SidebarUserFooter = () => {
   const onLogout = async () => {
     if (!window.signOutCurrent) return;
     try {
@@ -139,14 +126,10 @@ const SidebarUserFooter = ({ site }) => {
   };
 
   return (
-    <div className="sidebar-footer">
-      <div className="avatar">{initial}</div>
-      <div className="user-info">
-        <div className="user-name">{displayName}</div>
-        <div className="user-role">{roleLabel}{siteName ? ` · ${siteName}` : ""}</div>
-      </div>
-      <IconButton icon="logout" onClick={onLogout} title="로그아웃" aria-label="로그아웃" />
-    </div>
+    <button type="button" className="sidebar-logout" onClick={onLogout} aria-label="로그아웃">
+      <Icon name="logout" size={16} />
+      로그아웃
+    </button>
   );
 };
 Object.assign(window, { SidebarUserFooter });
