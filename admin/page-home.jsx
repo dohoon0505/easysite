@@ -4,6 +4,7 @@
 
 const HomeSectionsPage = ({ sections, setSections, products, galleryWorks, onNav, site }) => {
   const [activeId, setActiveId] = React.useState(sections[0]?.id);
+  const [addOpen, setAddOpen] = React.useState(false);
   // sections 가 비동기로 로드되면 초기 activeId 가 undefined 일 수 있다.
   // 사용자가 직접 고른 상태가 아니라면 첫 항목으로 자동 선택.
   React.useEffect(() => {
@@ -27,10 +28,16 @@ const HomeSectionsPage = ({ sections, setSections, products, galleryWorks, onNav
     return m;
   }, [sections]);
 
+  const isAcademy = site && site.type === "academy";
+  const sliderLabel = isAcademy ? "작품 슬라이더" : "상품 슬라이더";
   const displayLabel = (s) => {
-    if (s.type === "slider") return `상품 슬라이더 (${sliderIdxById[s.id] || "?"})`;
+    if (s.type === "slider") return `${sliderLabel} (${sliderIdxById[s.id] || "?"})`;
     if (s.type === "hero") return "히어로";
     if (s.type === "faq") return "FAQ";
+    if (s.type === "dev") return "교육영역";
+    if (s.type === "mosaic") return "콜라주 갤러리";
+    if (s.type === "award") return "수상 섹션";
+    if (s.type === "philosophy") return "교훈/인용";
     return s.title || s.type;
   };
 
@@ -58,6 +65,38 @@ const HomeSectionsPage = ({ sections, setSections, products, galleryWorks, onNav
     });
   };
 
+  const sectionTemplates = React.useMemo(() => {
+    const base = [
+      { type: "slider", icon: "star", label: isAcademy ? "작품 슬라이더" : "상품 슬라이더", desc: isAcademy ? "작품 가로 슬라이더" : "상품 추천 슬라이더", data: { title: "", subtitle: "", pickedIds: [] } },
+      { type: "faq", icon: "help", label: "FAQ", desc: "자주 묻는 질문", data: { title: "자주 묻는 질문", pickedIds: [] } },
+    ];
+    if (isAcademy) {
+      base.push(
+        { type: "dev", icon: "book", label: "교육영역", desc: "활동 카드 그리드", data: { title: "미술이 아이의 <em>인지를 키웁니다</em>", sub: "", items: [] } },
+        { type: "mosaic", icon: "image", label: "콜라주 갤러리", desc: "이미지 그리드", data: { title: "매일의 작업, 매일의 성장", sub: "", images: [] } },
+        { type: "award", icon: "star", label: "수상 섹션", desc: "단일 이미지 + 배지", data: { title: "공모전·대회 수상까지!", sub: "", image: null, badges: [] } },
+        { type: "philosophy", icon: "sparkle", label: "교훈/인용", desc: "인용 카드", data: { text: "", emphasis: "", sign: "" } }
+      );
+    }
+    return base;
+  }, [isAcademy]);
+
+  const addSection = (template) => {
+    const newId = `${template.type}_${Date.now().toString(36)}`;
+    const newSec = {
+      id: newId,
+      type: template.type,
+      icon: template.icon,
+      title: template.label,
+      enabled: true,
+      draft: true,
+      data: template.data,
+    };
+    setSections((all) => [...all, newSec]);
+    setActiveId(newId);
+    setAddOpen(false);
+  };
+
   return (
     <div className="page">
       <div className="page-header">
@@ -83,7 +122,7 @@ const HomeSectionsPage = ({ sections, setSections, products, galleryWorks, onNav
             <h2 className="card-title" style={{ fontSize: "var(--text-body-md)" }}>
               섹션 ({sections.length})
             </h2>
-            <IconButton icon="plus" />
+            <IconButton icon="plus" onClick={() => setAddOpen(true)} />
           </div>
           <div style={{ padding: "var(--size-200)" }}>
             {sections.map((s, i) => (
@@ -161,6 +200,7 @@ const HomeSectionsPage = ({ sections, setSections, products, galleryWorks, onNav
           galleryWorks={galleryWorks}
           onNav={onNav}
           siteId={site && site.id}
+          site={site}
         />
 
         {/* Mobile-frame preview — 실제 사이트를 iframe 으로 표시 (라이브 100% 동일) */}
@@ -168,6 +208,43 @@ const HomeSectionsPage = ({ sections, setSections, products, galleryWorks, onNav
           <HomePreview siteId={site && site.id} sections={sections} />
         </div>
       </div>
+
+      <Modal
+        open={addOpen}
+        onClose={() => setAddOpen(false)}
+        title="섹션 추가"
+        desc="추가할 섹션 유형을 선택하세요. 같은 유형을 여러 번 추가할 수 있어요."
+        size="md"
+      >
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+          {sectionTemplates.map((t) => (
+            <button
+              key={t.type + t.label}
+              type="button"
+              onClick={() => addSection(t)}
+              style={{
+                display: "flex",
+                gap: 10,
+                padding: 14,
+                border: "1px solid var(--sm-border-default)",
+                background: "var(--sm-background-default)",
+                borderRadius: "var(--radius-md)",
+                textAlign: "left",
+                alignItems: "flex-start",
+                cursor: "pointer",
+              }}
+            >
+              <div style={{ width: 36, height: 36, borderRadius: "var(--radius-sm)", background: "var(--sm-interactive-brand-subtle)", color: "var(--sm-interactive-brand-default)", display: "grid", placeItems: "center", flexShrink: 0 }}>
+                <Icon name={t.icon} size={18} />
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 600, fontSize: 14 }}>{t.label}</div>
+                <div style={{ fontSize: 12, color: "var(--sm-content-tertiary)", marginTop: 2 }}>{t.desc}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </Modal>
     </div>
   );
 };

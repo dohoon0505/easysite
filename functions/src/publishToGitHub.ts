@@ -134,29 +134,42 @@ export const publishToGitHub = onCall<PublishRequest>(
         .get();
       const faqs = faqsSnap.docs.map((d) => d.data() as Record<string, unknown>);
 
-      // 홈 섹션의 Storage 이미지 (hero.jpg, map.png) 를 추출해
+      // 홈 섹션의 Storage 이미지 (hero.jpg, map.png, mosaic-N, award.jpg 등) 를 추출해
       // 1) commit 파일에 추가하고
       // 2) 섹션 데이터의 image 필드를 raw 경로(img/hero.jpg) 로 치환한다.
       const sitePath = site.github.sitePath;
       const homeImageRefs: Array<{ storagePath: string; repoPath: string }> = [];
+      const pushImageRef = (storage: string, fallbackName: string): string => {
+        const base = (storage.split("/").pop() ?? fallbackName) || fallbackName;
+        const repoPath = `${sitePath}/img/${base}`;
+        homeImageRefs.push({ storagePath: storage, repoPath });
+        return `img/${base}`;
+      };
       const homeSections = homeSectionsRaw.map((s) => {
         const data = { ...(s.data as Record<string, unknown> | undefined ?? {}) };
-        // 히어로 이미지
+
+        // 히어로 / 수상 섹션 등 단일 image 필드
         const heroStorage = data.imageStoragePath as string | undefined;
-        if (heroStorage) {
-          const base = heroStorage.split("/").pop() ?? "hero.jpg";
-          const repoPath = `${sitePath}/img/${base}`;
-          homeImageRefs.push({ storagePath: heroStorage, repoPath });
-          data.image = `img/${base}`;
-        }
+        if (heroStorage) data.image = pushImageRef(heroStorage, "image.jpg");
+
         // 지도 이미지
         const mapStorage = data.mapImageStoragePath as string | undefined;
-        if (mapStorage) {
-          const base = mapStorage.split("/").pop() ?? "map.png";
-          const repoPath = `${sitePath}/img/${base}`;
-          homeImageRefs.push({ storagePath: mapStorage, repoPath });
-          data.mapImage = `img/${base}`;
+        if (mapStorage) data.mapImage = pushImageRef(mapStorage, "map.png");
+
+        // 콜라주 갤러리 이미지 배열
+        if (Array.isArray(data.images)) {
+          data.images = (data.images as Array<Record<string, unknown>>).map((im, idx) => {
+            const next = { ...im };
+            const storage = next.storagePath as string | undefined;
+            if (storage) {
+              next.url = pushImageRef(storage, `mosaic-${idx}.jpg`);
+            }
+            delete next.storagePath;
+            delete next.downloadUrl;
+            return next;
+          });
         }
+
         // Firestore 내부 필드 제거 (live site 가 알 필요 없음)
         delete data.imageUrl;
         delete data.imageStoragePath;

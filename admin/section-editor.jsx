@@ -15,13 +15,17 @@ const toBgImage = (src) => {
   return `url("${src}")`;
 };
 
-const SectionEditor = ({ section, update, products, galleryWorks, onNav, siteId }) => {
+const SectionEditor = ({ section, update, products, galleryWorks, onNav, siteId, site }) => {
   if (!section) return null;
 
   const subtitleByType = {
     hero: "이미지·매장 소개·지도·안내 배너를 한 번에 편집합니다",
-    slider: "추천 슬라이더의 제목과 상품 목록을 선택합니다",
+    slider: "추천 슬라이더의 제목과 항목 목록을 선택합니다",
     faq: "FAQ 영역의 제목과 노출 항목을 선택합니다",
+    dev: "교육영역의 활동 카드들을 편집합니다",
+    mosaic: "콜라주 갤러리의 8개 이미지를 편집합니다",
+    award: "수상 섹션의 이미지와 배지 텍스트를 편집합니다",
+    philosophy: "교훈/인용 영역의 문구를 편집합니다",
   };
 
   return (
@@ -41,8 +45,12 @@ const SectionEditor = ({ section, update, products, galleryWorks, onNav, siteId 
       </div>
       <div className="card-body" style={{ display: "grid", gap: "var(--size-500)" }}>
         {section.type === "hero" && <HeroFullEditor data={section.data} update={update} siteId={siteId} />}
-        {section.type === "slider" && <SliderEditor data={section.data} update={update} products={products} galleryWorks={galleryWorks} />}
+        {section.type === "slider" && <SliderEditor data={section.data} update={update} products={products} galleryWorks={galleryWorks} site={site} />}
         {section.type === "faq" && <FaqSectionEditor data={section.data} update={update} siteId={siteId} />}
+        {section.type === "dev" && <DevSectionEditor data={section.data} update={update} />}
+        {section.type === "mosaic" && <MosaicSectionEditor data={section.data} update={update} siteId={siteId} section={section} />}
+        {section.type === "award" && <AwardSectionEditor data={section.data} update={update} siteId={siteId} />}
+        {section.type === "philosophy" && <PhilosophySectionEditor data={section.data} update={update} />}
       </div>
     </Card>
   );
@@ -217,10 +225,26 @@ const ImageSlot = ({ cssValue, downloadUrl, labelFallback, onReplace }) => {
 };
 
 // ── SliderEditor — 슬라이더 제목 + 상품/작품 선택 ────────────────────
-const SliderEditor = ({ data, update, products, galleryWorks }) => {
-  const useGallery = Array.isArray(galleryWorks) && galleryWorks.length > 0;
-  const items = useGallery ? galleryWorks : products;
+const SliderEditor = ({ data, update, products, galleryWorks, site }) => {
+  // typeC 사이트(미술학원 등)는 galleryWorks 가 비어있어도 작품 모드로 표시
+  const useGallery = site && site.type === "academy";
+  const items = useGallery ? (galleryWorks || []) : (products || []);
   const itemLabel = useGallery ? "작품" : "상품";
+  const [seeding, setSeeding] = React.useState(false);
+
+  const seedDefaults = async () => {
+    if (!site || !site.id) return;
+    if (!confirm(`${site.name} 의 갤러리 작품 컬렉션에 기본 4개 작품을 시드하시겠습니까?\n(이미 있는 작품과 같은 ID 면 덮어씁니다.)`)) return;
+    try {
+      setSeeding(true);
+      const count = await window.seedGalleryWorks(site.id);
+      alert(`${count}개 작품을 시드했습니다.`);
+    } catch (e) {
+      alert("시드 실패: " + (e && e.message));
+    } finally {
+      setSeeding(false);
+    }
+  };
 
   const pickedIds = Array.isArray(data.pickedIds) ? data.pickedIds : [];
   const [pickerOpen, setPickerOpen] = React.useState(false);
@@ -344,9 +368,16 @@ const SliderEditor = ({ data, update, products, galleryWorks }) => {
             })}
           </div>
         )}
-        <Button variant="outline" size="sm" iconLeft="plus" onClick={() => setPickerOpen(true)} style={{ marginTop: 8 }}>
-          {itemLabel} 선택
-        </Button>
+        <div style={{ display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+          <Button variant="outline" size="sm" iconLeft="plus" onClick={() => setPickerOpen(true)}>
+            {itemLabel} 선택
+          </Button>
+          {useGallery && items.length === 0 && (
+            <Button variant="outline" size="sm" iconLeft="rocket" onClick={seedDefaults} disabled={seeding}>
+              {seeding ? "시드 중…" : "기본 작품 4개 시드"}
+            </Button>
+          )}
+        </div>
       </Field>
 
       <ProductPickerModal
@@ -636,5 +667,210 @@ const FaqPickerModal = ({ open, onClose, faqs, pickedIds, onToggle }) => {
     </Modal>
   );
 };
+
+// ── DevSectionEditor — 교육영역 (활동 카드 N개) ──────────────────
+const DEV_COLORS = ["teal", "blue", "pink", "yellow", "orange", "purple"];
+const DEV_DEFAULT_ITEMS = [
+  { id: "ipad",   activity: "아이패드 드로잉", tags: ["디지털 리터러시", "창의력"],  desc: "아이패드로 새로운 도구를 익히며, 표현의 경계를 넓혀갑니다.", color: "teal" },
+  { id: "draw",   activity: "기초 드로잉",   tags: ["관찰력", "집중력"],           desc: "선 하나하나를 쌓아가며 손과 눈의 협응력이 자라요.", color: "blue" },
+  { id: "water",  activity: "수채화",         tags: ["색채 감각", "감성 표현"],     desc: "물과 물감이 번지는 순간, 아이의 감수성이 함께 피어납니다.", color: "pink" },
+  { id: "sketch", activity: "소묘",           tags: ["공간 지각력", "정밀함"],      desc: "명암과 형태를 잡으며 사물을 입체로 이해하는 힘을 키워요.", color: "yellow" },
+  { id: "pencil", activity: "색연필화",       tags: ["색감", "섬세함"],             desc: "색을 겹치고 쌓으며 나만의 색 조합을 찾아가는 과정이에요.", color: "orange" },
+  { id: "pen",    activity: "펜화",           tags: ["집중력", "표현력"],           desc: "지울 수 없는 선 위에서 과감하게 표현하는 자신감이 생겨요.", color: "purple" },
+];
+
+const DevSectionEditor = ({ data, update }) => {
+  const items = Array.isArray(data.items) && data.items.length > 0 ? data.items : DEV_DEFAULT_ITEMS;
+  const updateItem = (idx, patch) => {
+    const next = items.map((it, i) => (i === idx ? { ...it, ...patch } : it));
+    update({ items: next });
+  };
+  const addItem = () => {
+    const next = [...items, { id: `card_${Date.now().toString(36)}`, activity: "새 활동", tags: ["태그"], desc: "설명을 입력하세요.", color: DEV_COLORS[items.length % DEV_COLORS.length] }];
+    update({ items: next });
+  };
+  const removeItem = (idx) => {
+    if (!confirm("이 활동 카드를 삭제할까요?")) return;
+    update({ items: items.filter((_, i) => i !== idx) });
+  };
+  const moveItem = (idx, dir) => {
+    const j = idx + dir;
+    if (j < 0 || j >= items.length) return;
+    const next = [...items];
+    [next[idx], next[j]] = [next[j], next[idx]];
+    update({ items: next });
+  };
+
+  return (
+    <>
+      <Field label="섹션 제목" required helper="예: 미술이 아이의 인지를 키웁니다">
+        <Input value={data.title || ""} onChange={(e) => update({ title: e.target.value })} placeholder="미술이 아이의 인지를 키웁니다" />
+      </Field>
+      <Field label="부제목 (선택)">
+        <Input value={data.sub || ""} onChange={(e) => update({ sub: e.target.value })} placeholder="손을 움직이고, 관찰하고, 표현하는 과정에서 두뇌가 가장 활발하게 자랍니다." />
+      </Field>
+      <Field label={`활동 카드 (${items.length}개)`} helper="홈 화면 교육영역에 그리드로 표시됩니다.">
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {items.map((it, idx) => (
+            <div key={it.id || idx} style={{ padding: "var(--size-300)", border: "1px solid var(--sm-border-default)", borderRadius: "var(--radius-md)", background: "var(--sm-background-default)", display: "grid", gap: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{ flex: 1, fontWeight: 600, fontSize: 13 }}>{idx + 1}. {it.activity}</div>
+                <button onClick={() => moveItem(idx, -1)} disabled={idx === 0} style={{ color: idx === 0 ? "var(--sm-content-disabled)" : "var(--sm-content-tertiary)", padding: 4 }}><Icon name="chevronUp" size={14} /></button>
+                <button onClick={() => moveItem(idx, +1)} disabled={idx === items.length - 1} style={{ color: idx === items.length - 1 ? "var(--sm-content-disabled)" : "var(--sm-content-tertiary)", padding: 4 }}><Icon name="chevronDown" size={14} /></button>
+                <IconButton icon="x" onClick={() => removeItem(idx)} />
+              </div>
+              <Input value={it.activity || ""} onChange={(e) => updateItem(idx, { activity: e.target.value })} placeholder="활동명" />
+              <Input value={(it.tags || []).join(", ")} onChange={(e) => updateItem(idx, { tags: e.target.value.split(",").map((t) => t.trim()).filter(Boolean) })} placeholder="태그 (콤마 구분)" />
+              <Textarea value={it.desc || ""} onChange={(e) => updateItem(idx, { desc: e.target.value })} rows={2} placeholder="활동 설명" />
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 12, color: "var(--sm-content-tertiary)" }}>색상:</span>
+                {DEV_COLORS.map((c) => (
+                  <button key={c} onClick={() => updateItem(idx, { color: c })}
+                    style={{
+                      width: 22, height: 22, borderRadius: "50%",
+                      background: it.color === c ? "var(--sm-interactive-brand-default)" : "var(--sm-background-muted)",
+                      color: it.color === c ? "white" : "var(--sm-content-secondary)",
+                      fontSize: 10, border: "none", cursor: "pointer",
+                    }}>
+                    {c[0].toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <Button variant="outline" size="sm" iconLeft="plus" onClick={addItem} style={{ marginTop: 8 }}>활동 카드 추가</Button>
+      </Field>
+    </>
+  );
+};
+
+// ── MosaicSectionEditor — 콜라주 갤러리 (이미지 N개) ──────────────
+const MOSAIC_DEFAULT_IMAGES = ["img/work_1.jpg", "img/work_2.jpg", "img/work_3.jpg", "img/work_4.jpg", "img/work_5.jpg", "img/work_6.jpg", "img/work_7.jpg", "img/work_8.jpg"];
+
+const MosaicSectionEditor = ({ data, update, siteId, section }) => {
+  const images = Array.isArray(data.images) && data.images.length > 0 ? data.images : MOSAIC_DEFAULT_IMAGES.map((src) => ({ url: src }));
+  const sectionId = section && section.id ? section.id : "mosaic";
+
+  const updateAt = (idx, patch) => {
+    const next = images.map((im, i) => (i === idx ? { ...im, ...patch } : im));
+    update({ images: next });
+  };
+  const removeAt = (idx) => {
+    update({ images: images.filter((_, i) => i !== idx) });
+  };
+  const moveAt = (idx, dir) => {
+    const j = idx + dir;
+    if (j < 0 || j >= images.length) return;
+    const next = [...images];
+    [next[idx], next[j]] = [next[j], next[idx]];
+    update({ images: next });
+  };
+
+  return (
+    <>
+      <Field label="섹션 제목" required>
+        <Input value={data.title || ""} onChange={(e) => update({ title: e.target.value })} placeholder="매일의 작업, 매일의 성장" />
+      </Field>
+      <Field label="부제목 (선택)">
+        <Input value={data.sub || ""} onChange={(e) => update({ sub: e.target.value })} placeholder="학원의 매일을 담았어요." />
+      </Field>
+      <Field label={`이미지 (${images.length}개)`} helper="홈 화면 콜라주 그리드에 표시됩니다.">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+          {images.map((im, idx) => (
+            <div key={idx} style={{ display: "grid", gap: 6 }}>
+              <ImageSlot
+                cssValue={im.url ? (im.url.startsWith("url(") ? im.url : `url("${im.url}")`) : null}
+                downloadUrl={im.downloadUrl || im.url}
+                labelFallback={`이미지 ${idx + 1}`}
+                onReplace={async (file, onPct) => {
+                  if (!siteId) { alert("siteId 가 없습니다"); return; }
+                  const res = await window.uploadSectionImage(siteId, sectionId, `mosaic-${idx}`, file, onPct);
+                  updateAt(idx, { url: res.downloadUrl, downloadUrl: res.downloadUrl, storagePath: res.storagePath });
+                }}
+              />
+              <div style={{ display: "flex", gap: 4, justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ fontSize: 11, color: "var(--sm-content-tertiary)", fontWeight: 600 }}>#{idx + 1}</span>
+                <div style={{ display: "flex", gap: 2 }}>
+                  <button onClick={() => moveAt(idx, -1)} disabled={idx === 0} style={{ color: idx === 0 ? "var(--sm-content-disabled)" : "var(--sm-content-tertiary)", padding: 2 }}><Icon name="chevronUp" size={12} /></button>
+                  <button onClick={() => moveAt(idx, +1)} disabled={idx === images.length - 1} style={{ color: idx === images.length - 1 ? "var(--sm-content-disabled)" : "var(--sm-content-tertiary)", padding: 2 }}><Icon name="chevronDown" size={12} /></button>
+                  <IconButton icon="x" onClick={() => removeAt(idx)} />
+                </div>
+              </div>
+            </div>
+          ))}
+          <button
+            onClick={() => update({ images: [...images, { url: "" }] })}
+            style={{ aspectRatio: "1/1", border: "2px dashed var(--sm-border-default)", borderRadius: "var(--radius-sm)", background: "var(--sm-background-subtle)", color: "var(--sm-content-tertiary)", display: "grid", placeItems: "center", cursor: "pointer" }}
+          >
+            <Icon name="plus" size={20} />
+          </button>
+        </div>
+      </Field>
+    </>
+  );
+};
+
+// ── AwardSectionEditor — 수상 섹션 (단일 이미지 + 배지) ──────────
+const AwardSectionEditor = ({ data, update, siteId }) => {
+  const badges = Array.isArray(data.badges) && data.badges.length > 0 ? data.badges : ["입선·수상 다수 배출", "전국·지역 미술대회 참가"];
+  const updateBadge = (idx, val) => {
+    const next = badges.map((b, i) => (i === idx ? val : b));
+    update({ badges: next });
+  };
+  return (
+    <>
+      <Field label="섹션 제목" required>
+        <Input value={data.title || ""} onChange={(e) => update({ title: e.target.value })} placeholder="공모전·대회 수상까지!" />
+      </Field>
+      <Field label="부제목 (선택)">
+        <Input value={data.sub || ""} onChange={(e) => update({ sub: e.target.value })} placeholder="아이가 노력에 대한 보상을 얻을 수 있도록" />
+      </Field>
+      <Field label="대표 이미지" helper="수상 결과/장면 이미지">
+        <ImageSlot
+          cssValue={data.image}
+          downloadUrl={data.imageUrl}
+          labelFallback="award.jpg"
+          onReplace={async (file, onPct) => {
+            if (!siteId) { alert("siteId 가 없습니다"); return; }
+            const res = await window.uploadSectionImage(siteId, "award", "image", file, onPct);
+            update({ image: `url("${res.downloadUrl}")`, imageUrl: res.downloadUrl, imageStoragePath: res.storagePath });
+          }}
+        />
+      </Field>
+      <Field label={`배지 (${badges.length}개)`} helper="이미지 아래 표시되는 텍스트 칩">
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {badges.map((b, idx) => (
+            <div key={idx} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <Input value={b} onChange={(e) => updateBadge(idx, e.target.value)} placeholder="배지 텍스트" />
+              <IconButton icon="x" onClick={() => update({ badges: badges.filter((_, i) => i !== idx) })} />
+            </div>
+          ))}
+        </div>
+        <Button variant="outline" size="sm" iconLeft="plus" onClick={() => update({ badges: [...badges, ""] })} style={{ marginTop: 8 }}>배지 추가</Button>
+      </Field>
+    </>
+  );
+};
+
+// ── PhilosophySectionEditor — 교훈/인용 ──────────────────
+const PhilosophySectionEditor = ({ data, update }) => (
+  <>
+    <Field label="인용 본문" required helper="여러 줄 입력 가능. 줄바꿈은 그대로 표시됩니다.">
+      <Textarea
+        value={data.text || ""}
+        onChange={(e) => update({ text: e.target.value })}
+        rows={5}
+        placeholder="탄탄한 표현력은 기본, 스스로 세상을 관찰하고 도화지에 담아내는 즐거움까지."
+      />
+    </Field>
+    <Field label="강조 단어 (선택)" helper="본문 마지막에 강조 표시할 단어">
+      <Input value={data.emphasis || ""} onChange={(e) => update({ emphasis: e.target.value })} placeholder="풀빛그림아이" />
+    </Field>
+    <Field label="서명" helper="인용 끝에 표시됩니다.">
+      <Input value={data.sign || ""} onChange={(e) => update({ sign: e.target.value })} placeholder="— 풀빛그림아이 미술학원" />
+    </Field>
+  </>
+);
 
 Object.assign(window, { SectionEditor });

@@ -781,6 +781,42 @@ async function diffWriteGalleryWorks(siteId, prev, next) {
   if (ops > 0) await batch.commit();
 }
 
+// ── galleryWorks 기본 시드 — greenlight_art 정적 GALLERY_BEST 와 동일 ──
+const GALLERY_WORKS_SEED = [
+  { id: "gb1", name: "포카리스웨트 정물", age: "초6", duration: "3회", review: "색깔 섞는 게 너무 재밌었어요!", img: "img/work_1.jpg", desc: "마카+색연필로 표현한 정물 일러스트. 색감과 빛 표현이 돋보이는 작품.", develop: ["색채 감각", "관찰력"], group: "best" },
+  { id: "gb2", name: "큐브 소묘",         age: "초5", duration: "2회", review: "명암 표현이 어렵지만 뿌듯해요.", img: "img/work_2.jpg", desc: "기초 소묘 입시 과제. 명암 단계와 면 처리를 익혀요.", develop: ["공간 지각력", "집중력"], group: "best" },
+  { id: "gb3", name: "츄파춥스 일러스트", age: "중1", duration: "2회", review: "내가 그린 게 맞나 싶을 정도예요!", img: "img/work_3.jpg", desc: "마카로 표현한 츄파춥스. 화면 구성과 색감 대비 연습.", develop: ["화면 구성력", "색채 감각"], group: "best" },
+  { id: "gb4", name: "과일 정물 마카",    age: "초6", duration: "2회", review: "과일이 진짜처럼 보여서 신기했어요.", img: "img/work_6.jpg", desc: "다양한 과일을 마카로 표현. 입체감과 텍스처 묘사를 연습해요.", develop: ["입체 인지력", "관찰력"], group: "best" },
+];
+
+const seedGalleryWorks = async (siteId) => {
+  if (!siteId || !window.fbDb) throw new Error("siteId 또는 Firestore 미준비");
+  const col = window.fbDb.collection("sites").doc(siteId).collection("galleryWorks");
+  const uid = (window.fbAuth && window.fbAuth.currentUser && window.fbAuth.currentUser.uid) || "admin-ui";
+  const batch = window.fbDb.batch();
+  GALLERY_WORKS_SEED.forEach((w, idx) => {
+    batch.set(col.doc(w.id), {
+      workId: w.id,
+      name: w.name,
+      age: w.age,
+      duration: w.duration,
+      review: w.review,
+      img: w.img,
+      desc: w.desc,
+      develop: w.develop,
+      group: w.group,
+      sortOrder: idx * 10,
+      visible: true,
+      image: null,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedBy: uid,
+    });
+  });
+  await batch.commit();
+  return GALLERY_WORKS_SEED.length;
+};
+
 Object.assign(window, {
   useLiveProducts,
   useLiveSections,
@@ -790,5 +826,6 @@ Object.assign(window, {
   useLiveSites,
   useLiveFaqs,
   useLiveGalleryWorks,
+  seedGalleryWorks,
   liveSiteUrl,
 });

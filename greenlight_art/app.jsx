@@ -209,6 +209,12 @@ function HomeScreen({ go, openWork }) {
     ? slider.pickedIds.map((id) => allGalleryWorks.find((w) => w.id === id)).filter(Boolean)
     : allGalleryWorks;
 
+  // 어드민 신규 섹션들 — dev / mosaic / award / philosophy
+  const devSec = (HS.find((s) => s && s.type === "dev") || {}).data || null;
+  const mosaicSec = (HS.find((s) => s && s.type === "mosaic") || {}).data || null;
+  const awardSec = (HS.find((s) => s && s.type === "award") || {}).data || null;
+  const philoSec = (HS.find((s) => s && s.type === "philosophy") || {}).data || null;
+
   // 홈 FAQ — 어드민에서 고른 항목 우선, 없으면 첫 6개 폴백.
   const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
   const allFaqs = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
@@ -269,25 +275,25 @@ function HomeScreen({ go, openWork }) {
 
       <section className="section dev-section">
         <div className="section-head dev-head">
-          <h3>미술이 아이의 <em>인지를 키웁니다</em></h3>
-          <p className="dev-sub">손을 움직이고, 관찰하고, 표현하는 과정에서 두뇌가 가장 활발하게 자랍니다.</p>
+          <h3 dangerouslySetInnerHTML={{ __html: (devSec && devSec.title) || "미술이 아이의 <em>인지를 키웁니다</em>" }} />
+          <p className="dev-sub">{(devSec && devSec.sub) || "손을 움직이고, 관찰하고, 표현하는 과정에서 두뇌가 가장 활발하게 자랍니다."}</p>
         </div>
         <div className="dev-grid">
-          {[
+          {((devSec && Array.isArray(devSec.items) && devSec.items.length > 0) ? devSec.items : [
             { id: "ipad",   activity: "아이패드 드로잉", tags: ["디지털 리터러시", "창의력"],  desc: "아이패드로 새로운 도구를 익히며, 표현의 경계를 넓혀갑니다.", color: "teal" },
             { id: "draw",   activity: "기초 드로잉",   tags: ["관찰력", "집중력"],           desc: "선 하나하나를 쌓아가며 손과 눈의 협응력이 자라요.", color: "blue" },
             { id: "water",  activity: "수채화",         tags: ["색채 감각", "감성 표현"],     desc: "물과 물감이 번지는 순간, 아이의 감수성이 함께 피어납니다.", color: "pink" },
             { id: "sketch", activity: "소묘",           tags: ["공간 지각력", "정밀함"],      desc: "명암과 형태를 잡으며 사물을 입체로 이해하는 힘을 키워요.", color: "yellow" },
             { id: "pencil", activity: "색연필화",       tags: ["색감", "섬세함"],             desc: "색을 겹치고 쌓으며 나만의 색 조합을 찾아가는 과정이에요.", color: "orange" },
             { id: "pen",    activity: "펜화",           tags: ["집중력", "표현력"],           desc: "지울 수 없는 선 위에서 과감하게 표현하는 자신감이 생겨요.", color: "purple" },
-          ].map((a) => (
-            <div key={a.id} className="dev-card" data-color={a.color}>
+          ]).map((a, i) => (
+            <div key={a.id || i} className="dev-card" data-color={a.color || "teal"}>
               <div className="dev-card-head">
                 <span className="dev-bullet" aria-hidden="true" />
                 <span className="dev-activity">{a.activity}</span>
               </div>
               <div className="dev-tags">
-                {a.tags.map((t, i) => <span key={i} className="dev-tag">{t}</span>)}
+                {(a.tags || []).map((t, j) => <span key={j} className="dev-tag">{t}</span>)}
               </div>
               <p className="dev-desc">{a.desc}</p>
             </div>
@@ -297,15 +303,14 @@ function HomeScreen({ go, openWork }) {
 
       <section className="section mosaic-section">
         <div className="section-head">
-          <h3>매일의 작업, 매일의 성장</h3>
-          <p className="section-sub">학원의 매일을 담았어요.</p>
+          <h3>{(mosaicSec && mosaicSec.title) || "매일의 작업, 매일의 성장"}</h3>
+          <p className="section-sub">{(mosaicSec && mosaicSec.sub) || "학원의 매일을 담았어요."}</p>
         </div>
         <div className="mosaic">
-          {[
-            "img/work_1.jpg","img/work_2.jpg","img/work_3.jpg",
-            "img/work_4.jpg","img/work_5.jpg","img/work_6.jpg",
-            "img/work_7.jpg","img/work_8.jpg",
-          ].map((src, i) => (
+          {((mosaicSec && Array.isArray(mosaicSec.images) && mosaicSec.images.length > 0)
+            ? mosaicSec.images.map((im) => unwrapUrl(im.url || im.downloadUrl) || "")
+            : ["img/work_1.jpg","img/work_2.jpg","img/work_3.jpg","img/work_4.jpg","img/work_5.jpg","img/work_6.jpg","img/work_7.jpg","img/work_8.jpg"]
+          ).map((src, i) => (
             <button key={i} className={"mosaic-tile m" + i} onClick={() => openWork({ name: "수업 풍경", age: "PARKHADI", img: src, desc: "풀빛그림아이의 일상 한 컷." })}>
               <img src={src} alt="" loading="lazy" />
             </button>
@@ -315,22 +320,23 @@ function HomeScreen({ go, openWork }) {
 
       <section className="section award-section">
         <div className="section-head">
-          <h3>공모전·대회 수상까지!</h3>
-          <p className="section-sub">아이가 노력에 대한 보상을 얻을 수 있도록</p>
+          <h3>{(awardSec && awardSec.title) || "공모전·대회 수상까지!"}</h3>
+          <p className="section-sub">{(awardSec && awardSec.sub) || "아이가 노력에 대한 보상을 얻을 수 있도록"}</p>
         </div>
         <div className="award-card">
           <div className="award-img-wrap">
-            <img src="img/award.jpg" alt="공모전 수상 상장들" loading="lazy" />
+            <img src={unwrapUrl(awardSec && awardSec.image) || "img/award.jpg"} alt="공모전 수상 상장들" loading="lazy" />
           </div>
           <div className="award-foot">
-            <span className="award-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M8 14l-2 7 6-3 6 3-2-7"/></svg>
-              입선·수상 다수 배출
-            </span>
-            <span className="award-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"/></svg>
-              전국·지역 미술대회 참가
-            </span>
+            {((awardSec && Array.isArray(awardSec.badges) && awardSec.badges.length > 0)
+              ? awardSec.badges
+              : ["입선·수상 다수 배출", "전국·지역 미술대회 참가"]
+            ).map((label, i) => (
+              <span key={i} className="award-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M8 14l-2 7 6-3 6 3-2-7"/></svg>
+                {label}
+              </span>
+            ))}
           </div>
         </div>
       </section>
@@ -338,11 +344,28 @@ function HomeScreen({ go, openWork }) {
       <section className="section philosophy-section">
         <div className="philo-card">
           <div className="philo-mark" aria-hidden="true">“</div>
-          <p className="philo-text">
-            탄탄한 표현력은 기본, 스스로 세상을 관찰하고 도화지에 담아내는 즐거움까지.<br />
-            <em>풀빛그림아이</em>는 아이의 시선이 머무는 모든 것을 훌륭한 작품으로 만듭니다.
-          </p>
-          <div className="philo-sign">— 풀빛그림아이 미술학원</div>
+          {philoSec && philoSec.text ? (
+            <p className="philo-text">
+              {philoSec.text.split(/\r?\n/).map((line, i, arr) => (
+                <React.Fragment key={i}>
+                  {philoSec.emphasis && line.includes(philoSec.emphasis) ? (
+                    <>
+                      {line.split(philoSec.emphasis)[0]}
+                      <em>{philoSec.emphasis}</em>
+                      {line.split(philoSec.emphasis).slice(1).join(philoSec.emphasis)}
+                    </>
+                  ) : line}
+                  {i < arr.length - 1 && <br />}
+                </React.Fragment>
+              ))}
+            </p>
+          ) : (
+            <p className="philo-text">
+              탄탄한 표현력은 기본, 스스로 세상을 관찰하고 도화지에 담아내는 즐거움까지.<br />
+              <em>풀빛그림아이</em>는 아이의 시선이 머무는 모든 것을 훌륭한 작품으로 만듭니다.
+            </p>
+          )}
+          <div className="philo-sign">{(philoSec && philoSec.sign) || "— 풀빛그림아이 미술학원"}</div>
         </div>
       </section>
 
