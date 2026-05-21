@@ -235,7 +235,7 @@ const LoginPage = ({ onLogin }) => {
                 <Field label="이메일" error={error && !email.includes("@") ? error : null}>
                   <Input
                     type="email"
-                    placeholder="park@dohwawon.kr"
+                    placeholder="admin@naver.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     inputMode="email"
