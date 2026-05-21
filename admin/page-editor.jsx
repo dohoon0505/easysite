@@ -410,47 +410,55 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId, s
             </div>
           </Card>
 
-          {/* Site-specific (flower) */}
+          {/* Site-specific (flower 만 사이즈 노출) */}
           <Card>
             <div className="card-header">
               <div>
-                <h2 className="card-title">꽃집 추가 정보</h2>
-                <div className="card-subtitle">도화원플라워의 사이트 타입(flower)에만 노출되는 필드</div>
+                <h2 className="card-title">
+                  {site && site.type === "flower" ? "꽃집 추가 정보" : "추가 정보"}
+                </h2>
+                <div className="card-subtitle">
+                  {site && site.type === "flower"
+                    ? `${site.name || "도화원플라워"}의 사이트 타입(flower)에만 노출되는 필드`
+                    : "태그는 검색·필터에 사용됩니다"}
+                </div>
               </div>
-              <Badge tone="brand">site-specific</Badge>
+              {site && site.type === "flower" && <Badge tone="brand">site-specific</Badge>}
             </div>
             <div className="card-body" style={{ display: "grid", gap: "var(--size-500)" }}>
-              <Field label="제공 사이즈" helper="고객이 선택할 수 있는 옵션">
-                <div style={{ display: "flex", gap: "var(--size-200)" }}>
-                  {["S", "M", "L", "XL"].map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => toggleSize(s)}
-                      style={{
-                        width: 60,
-                        height: 44,
-                        borderRadius: "var(--radius-md)",
-                        border: `1px solid ${
-                          form.sizes.includes(s)
+              {site && site.type === "flower" && (
+                <Field label="제공 사이즈" helper="고객이 선택할 수 있는 옵션">
+                  <div style={{ display: "flex", gap: "var(--size-200)" }}>
+                    {["S", "M", "L", "XL"].map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => toggleSize(s)}
+                        style={{
+                          width: 60,
+                          height: 44,
+                          borderRadius: "var(--radius-md)",
+                          border: `1px solid ${
+                            form.sizes.includes(s)
+                              ? "var(--sm-interactive-brand-default)"
+                              : "var(--sm-border-default)"
+                          }`,
+                          background: form.sizes.includes(s)
+                            ? "var(--sm-interactive-brand-subtle)"
+                            : "var(--sm-background-default)",
+                          color: form.sizes.includes(s)
                             ? "var(--sm-interactive-brand-default)"
-                            : "var(--sm-border-default)"
-                        }`,
-                        background: form.sizes.includes(s)
-                          ? "var(--sm-interactive-brand-subtle)"
-                          : "var(--sm-background-default)",
-                        color: form.sizes.includes(s)
-                          ? "var(--sm-interactive-brand-default)"
-                          : "var(--sm-content-secondary)",
-                        fontWeight: 600,
-                        fontSize: "var(--text-body-md)",
-                        transition: "all var(--motion-fast)",
-                      }}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </Field>
+                            : "var(--sm-content-secondary)",
+                          fontWeight: 600,
+                          fontSize: "var(--text-body-md)",
+                          transition: "all var(--motion-fast)",
+                        }}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </Field>
+              )}
               <Field label="태그" helper="검색·필터에 사용됩니다. Enter로 추가.">
                 <div
                   style={{

@@ -334,13 +334,13 @@ function HomeScreen({ go, openStyle, openDesigner }) {
     { title: "아름다운 효도, 용돈박스", list: STARTER_STYLES },
     { title: "특색있는 아크릴백", list: ACRYLIC_STYLES },
   ];
-  // 어드민이 슬라이더에 상품을 골라 채웠으면 그것을 사용, 비어 있으면 legacy 큐레이션.
-  const adminSliders = sliderSections
-    .map((s) => ({
-      title: s.title || "",
-      list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
-    }))
-    .filter((s) => s.list.length > 0);
+  // 어드민이 슬라이더를 정의했으면 사용 (목록이 비어있어도 제목/부제 변경은 즉시 반영).
+  // 어드민 슬라이더가 하나도 없을 때만 legacy 큐레이션 fallback.
+  const adminSliders = sliderSections.map((s) => ({
+    title: s.title || "",
+    subtitle: s.subtitle || "",
+    list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
+  }));
   const resolvedSliders = adminSliders.length > 0 ? adminSliders : legacySliders;
 
   // 홈 FAQ — pickedIds 가 있으면 그에 해당하는 FAQS 만, 없으면 첫 6개 폴백.
