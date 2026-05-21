@@ -1,20 +1,94 @@
-<!doctype html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#4F46E5" />
-    <title>easysite 어드민</title>
+<!DOCTYPE html>
+<html lang="ko" data-theme="light" data-accent="navy" data-density="comfortable">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>easysite admin · 도화원플라워</title>
 
-    <!-- Pretendard Variable (디자인시스템 v0.5.2 단일 폰트 패밀리) -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-    />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="mobile.css">
+  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="command-palette.css">
+  <link rel="stylesheet" href="offline.css">
+
+  <style>
+    /* keyframes used across components */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    /* density variant */
+    html[data-density="compact"] .page { padding: var(--size-500); }
+    html[data-density="compact"] .card-body { padding: var(--size-400) var(--size-500); }
+    html[data-density="compact"] .card-header { padding: var(--size-400) var(--size-500); }
+    html[data-density="compact"] .table td { padding: var(--size-300); }
+    html[data-density="compact"] .table th { padding: var(--size-200) var(--size-300); }
+    /* responsive */
+    @media (max-width: 1100px) {
+      .app { grid-template-columns: 72px 1fr; }
+      .sidebar { padding: var(--size-400) var(--size-200); }
+      .sidebar .brand-name, .sidebar .brand-sub, .sidebar .site-meta,
+      .sidebar .nav-item span:not(.nav-count), .sidebar .nav-label,
+      .sidebar .user-info, .sidebar .site-switcher .caret { display: none; }
+      .sidebar .brand { justify-content: center; }
+      .sidebar .nav-item { justify-content: center; padding: var(--size-300); }
+      .sidebar .nav-group + .nav-group { border-top: 1px solid var(--sm-border-subtle); }
+      .sidebar .site-switcher { justify-content: center; padding: var(--size-200); }
+      .sidebar-footer { justify-content: center; padding: 0; }
+      .sidebar-footer .icon-btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React + Babel -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- Firebase JS SDK (compat) — easysite-5a560, region asia-northeast3 -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-functions-compat.js"></script>
+  <script src="firebase-init.js"></script>
+
+  <!-- Data + components (load order matters) -->
+  <script src="data.js"></script>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="shell.jsx"></script>
+  <script type="text/babel" src="home-preview.jsx"></script>
+  <script type="text/babel" src="section-editor.jsx"></script>
+  <script type="text/babel" src="page-home.jsx"></script>
+  <script type="text/babel" src="page-products.jsx"></script>
+  <script type="text/babel" src="page-editor.jsx"></script>
+  <script type="text/babel" src="page-publish.jsx"></script>
+  <script type="text/babel" src="page-categories.jsx"></script>
+  <script type="text/babel" src="page-stubs.jsx"></script>
+  <script type="text/babel" src="page-users.jsx"></script>
+  <script type="text/babel" src="page-sites.jsx"></script>
+  <script type="text/babel" src="page-audit.jsx"></script>
+  <script type="text/babel" src="page-account.jsx"></script>
+  <script type="text/babel" src="page-login.jsx"></script>
+  <script type="text/babel" src="command-palette.jsx"></script>
+  <script type="text/babel" src="csv-import.jsx"></script>
+  <script type="text/babel" src="offline.jsx"></script>
+  <script type="text/babel" src="mobile-shell.jsx"></script>
+  <script type="text/babel" src="bulk-price.jsx"></script>
+  <script type="text/babel" src="mobile-home.jsx"></script>
+  <script type="text/babel" src="mobile-products.jsx"></script>
+  <script type="text/babel" src="mobile-editor.jsx"></script>
+  <script type="text/babel" src="mobile-publish.jsx"></script>
+  <script type="text/babel" src="mobile-home-sections.jsx"></script>
+  <script type="text/babel" src="mobile-app.jsx"></script>
+
+  <!-- Firebase auth + callable hooks (loaded just before app.jsx) -->
+  <script type="text/babel" src="firebase-auth.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+</body>
 </html>
