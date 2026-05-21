@@ -183,10 +183,10 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   overflow-x: clip;
 }
 @media (min-width: 520px) {
-  .app { padding: 24px 0; align-items: flex-start; }
+  .app { padding: 0; align-items: flex-start; justify-content: center; }
   .app-frame {
-    border-radius: 28px;
-    box-shadow: var(--elevation-4), 0 0 0 1px var(--sm-border-subtle);
+    border-radius: 0;
+    box-shadow: 0 0 0 1px var(--sm-border-subtle);
     overflow: clip;
     min-height: 880px;
   }
