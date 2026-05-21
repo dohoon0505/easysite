@@ -16,7 +16,7 @@ const SITES = [
     lastPublishedAt: "2026-05-19 09:42",
   },
   {
-    id: "bell-cake",
+    id: "bell_cake",
     name: "벨케이크",
     type: "cake",
     domain: "bellcake.kr",
@@ -27,7 +27,7 @@ const SITES = [
     operatorRole: "오너",
   },
   {
-    id: "parkhad",
+    id: "PARKHAD",
     name: "PARKHAD",
     type: "hair",
     domain: "parkhad.com",
@@ -38,7 +38,7 @@ const SITES = [
     operatorRole: "오너",
   },
   {
-    id: "flower-example",
+    id: "flower_example",
     name: "flower_example",
     type: "flower",
     domain: "flower-example.kr",
@@ -49,7 +49,7 @@ const SITES = [
     operatorRole: "오너",
   },
   {
-    id: "greenlight-art",
+    id: "greenlight_art",
     name: "풀빛그림아이 미술학원",
     type: "academy",
     domain: "greenlightart.kr",

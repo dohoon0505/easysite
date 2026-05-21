@@ -3,10 +3,10 @@
 
 const SITE_META = {
   dohwawon: { type: "꽃집", products: 8, users: 2, lastPub: "2일 전", traffic: "1.2k" },
-  "bell-cake": { type: "케이크 전문점", products: 14, users: 1, lastPub: "5일 전", traffic: "840" },
-  parkhad: { type: "헤어샵", products: 22, users: 2, lastPub: "1일 전", traffic: "2.1k" },
-  "flower-example": { type: "플라워 샘플", products: 4, users: 1, lastPub: "2주 전", traffic: "—" },
-  "greenlight-art": { type: "미술학원", products: 12, users: 1, lastPub: "1주 전", traffic: "560" },
+  bell_cake: { type: "케이크 전문점", products: 14, users: 1, lastPub: "5일 전", traffic: "840" },
+  PARKHAD: { type: "헤어샵", products: 22, users: 2, lastPub: "1일 전", traffic: "2.1k" },
+  flower_example: { type: "플라워 샘플", products: 4, users: 1, lastPub: "2주 전", traffic: "—" },
+  greenlight_art: { type: "미술학원", products: 12, users: 1, lastPub: "1주 전", traffic: "560" },
 };
 
 const SitesManagePage = () => {

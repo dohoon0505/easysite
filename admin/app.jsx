@@ -81,7 +81,15 @@ const App = () => {
   const [bulkOpen, setBulkOpen] = React.useState(false);
   const [cmdkOpen, setCmdkOpen] = React.useState(false);
   const [csvOpen, setCsvOpen] = React.useState(false);
-  const site = SITES.find((s) => s.id === siteId) || SITES[0];
+  // 사이트 매핑 — siteId 가 SITES 의 id 와 정확히 일치하지 않더라도
+  // 하이픈·언더스코어·대소문자 차이만으로 못 찾는 일이 없도록 정규화.
+  const site = React.useMemo(() => {
+    if (!siteId) return SITES[0];
+    const norm = (x) => (x || "").toLowerCase().replace(/[-_]/g, "");
+    return SITES.find((s) => s.id === siteId) ||
+           SITES.find((s) => norm(s.id) === norm(siteId)) ||
+           SITES[0];
+  }, [siteId]);
 
   // Global ⌘K / Ctrl+K listener
   React.useEffect(() => {

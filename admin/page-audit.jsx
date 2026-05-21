@@ -100,7 +100,7 @@ const AUDIT_ENTRIES = [
     when: "5월 11일 11:30",
     fullDate: "2026-05-11 11:30:11",
     actor: { name: "박정훈", avatar: "박", color: "linear-gradient(135deg, #c9cad0, #1a1d24)" },
-    site: "parkhad",
+    site: "PARKHAD",
     action: "product.delete",
     actionLabel: "상품 삭제",
     target: "여름 시즌 한정 트리트먼트",
