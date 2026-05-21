@@ -22,7 +22,7 @@ const SITE_INFO_DEFAULTS: Record<string, SiteInfoDefault> = {
     ogTitle: "도화원플라워",
     ogDescription:
       "평범한 일상도 꽃 한 송이가 더해지면 특별한 순간이 됩니다. 계절을 듬뿍 머금은 다채로운 꽃들로, 당신의 오늘을 가장 아름답게 피워내겠습니다.",
-    ogImage: "img/hero.jpg",
+    ogImage: "https://easysite.kr/dohwawon/img/hero.jpg",
   },
   bell_cake: {
     phone: "",
@@ -30,21 +30,21 @@ const SITE_INFO_DEFAULTS: Record<string, SiteInfoDefault> = {
     ogTitle: "쌀케이크 전문점 벨케이크",
     ogDescription:
       "No 밀가루, No 식물성크림. 100% 국내산 쌀가루로 만든 쌀케이크, 동물성 생크림케이크 전문점 벨케이크입니다:) 1인운영매장이라, 전화를 못받을 수 있으니 부재시 카카오톡채널로 연락주세요^^",
-    ogImage: "img/hero.jpg",
+    ogImage: "https://easysite.kr/bell_cake/img/hero.jpg",
   },
   PARKHAD: {
     phone: "",
     kakaoChannel: "",
     ogTitle: "박하디, 프리미엄 남성 커트",
     ogDescription: "대구 달서구 남성 전용 헤어샵 — 편안한 환경, 유쾌한 경험.",
-    ogImage: "./img/hero.jpg",
+    ogImage: "https://easysite.kr/PARKHAD/img/hero.jpg",
   },
   flower_example: {
     phone: "010-0000-0000",
     kakaoChannel: "",
     ogTitle: "전국꽃배달서비스",
     ogDescription: "대한민국 어디든 3시간 당일배송",
-    ogImage: "./img/cover.jpg",
+    ogImage: "https://easysite.kr/flower_example/img/cover.jpg",
   },
   greenlight_art: {
     phone: "0507-1399-2425",
