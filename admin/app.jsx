@@ -165,7 +165,7 @@ const App = () => {
               <Button
                 variant="outline"
                 iconLeft="link"
-                onClick={() => window.open("https://" + site.domain, "_blank")}
+                onClick={() => window.open(window.liveSiteUrl(site.id), "_blank")}
               >
                 사이트 열기
               </Button>
@@ -181,7 +181,7 @@ const App = () => {
           }
         />
         {route === "home" && (
-          <HomeSectionsPage sections={sections} setSections={setSections} products={products} onNav={setRoute} />
+          <HomeSectionsPage sections={sections} setSections={setSections} products={products} onNav={setRoute} site={site} />
         )}
         {route === "products" && (
           <ProductsPage

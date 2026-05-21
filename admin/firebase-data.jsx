@@ -483,6 +483,11 @@ const useLiveSites = (claims) => {
   }, [claims]);
 };
 
+// 사이트의 라이브 URL — easysite.kr 단일 도메인 아래 siteId 경로로 서빙된다.
+// (sites-config 의 domain 필드는 wish-domain 이며 실제 DNS 가 붙어 있지 않음)
+const liveSiteUrl = (siteId) =>
+  siteId ? `https://easysite.kr/${siteId}/` : "https://easysite.kr/";
+
 Object.assign(window, {
   useLiveProducts,
   useLiveSections,
@@ -490,4 +495,5 @@ Object.assign(window, {
   useLivePublishes,
   useLiveUsers,
   useLiveSites,
+  liveSiteUrl,
 });

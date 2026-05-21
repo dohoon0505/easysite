@@ -2,7 +2,7 @@
 // H01 — 홈 섹션 편집
 // Left rail: list of sections (drag-reorder, toggle enable). Right: editor + preview.
 
-const HomeSectionsPage = ({ sections, setSections, products, onNav }) => {
+const HomeSectionsPage = ({ sections, setSections, products, onNav, site }) => {
   const [activeId, setActiveId] = React.useState(sections[0]?.id);
   const active = sections.find((s) => s.id === activeId);
   const toast = useToast();
@@ -126,12 +126,21 @@ const HomeSectionsPage = ({ sections, setSections, products, onNav }) => {
         {/* Editor */}
         <SectionEditor section={active} update={updateActive} products={products} onNav={onNav} />
 
-        {/* Mobile-frame preview */}
+        {/* Mobile-frame preview — 실제 사이트를 iframe 으로 표시 (라이브 100% 동일) */}
         <div style={{ position: "sticky", top: 100 }}>
-          <div style={{ fontSize: "var(--text-label-md)", fontWeight: 600, color: "var(--sm-content-tertiary)", letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 12 }}>
-            모바일 미리보기
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+            <div style={{ fontSize: "var(--text-label-md)", fontWeight: 600, color: "var(--sm-content-tertiary)", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+              모바일 미리보기 — 라이브
+            </div>
+            <button
+              type="button"
+              onClick={() => window.open(window.liveSiteUrl(site && site.id), "_blank")}
+              style={{ fontSize: 12, color: "var(--sm-content-brand)", fontWeight: 600 }}
+            >
+              새 탭에서 열기 ↗
+            </button>
           </div>
-          <HomePreview sections={sections} products={products} activeId={activeId} />
+          <HomePreview siteId={site && site.id} />
         </div>
       </div>
     </div>

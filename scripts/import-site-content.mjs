@@ -301,11 +301,14 @@ for (const site of sitesToProcess) {
   }
 
   // 2) hero 섹션 — 이미지 + 헤드라인(사이트명) + 서브헤드(요약)
+  //    data.image 는 CSS background 값으로 그대로 들어가므로 url("…") 로 감싼다.
   const heroSubhead = parsed.desc ? parsed.desc.split(/\n+/)[0].slice(0, 80) : null;
+  const heroImageCss = heroResult?.downloadUrl ? `url("${heroResult.downloadUrl}")` : null;
   await mergeSection(site.siteId, "hero", {
     headline: parsed.name || site.name,
     subhead: heroSubhead,
-    image: heroResult?.downloadUrl || null,
+    image: heroImageCss,
+    imageUrl: heroResult?.downloadUrl || null,
     imageStoragePath: heroResult?.storagePath || null,
   }, PRESETS.hero);
 
