@@ -154,10 +154,14 @@ const LoginPage = ({ onLogin }) => {
               고객을 이탈시키는 양산형 사이트는 이제 그만, 우리 브랜드에 딱 맞는 디자인의
               사이트로 브랜딩을 구축하고 잠재고객 전환율을 증폭시켜보세요!
             </p>
-            <div className="login-pager">
-              <span className="active" />
-              <span />
-              <span />
+            <div className="login-badges" aria-label="지원 업종">
+              <div className="login-badge-track">
+                {["꽃집", "케이크", "타투샵", "자동차", "인테리어", "네일샵", "미용실", "왁싱샵",
+                  "꽃집", "케이크", "타투샵", "자동차", "인테리어", "네일샵", "미용실", "왁싱샵"
+                ].map((b, i) => (
+                  <span key={i} className="login-badge">{b}</span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
