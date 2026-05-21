@@ -231,11 +231,15 @@ function HomeScreen({ go, openStyle, openDesigner }) {
     { title: "요즘 20대 스타일링", meta: "MZ 스타일", list: MZ_STYLES },
     { title: "젊어보이는 마법을", meta: "30대 이상 추천", list: STARTER_STYLES },
   ];
-  const adminSliders = sliderSections.map((s) => ({
-    title: s.title || "",
-    meta: s.subtitle || "",
-    list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
-  }));
+  const adminSliders = sliderSections.map((s, i) => {
+    const picked = (s.pickedIds || []).map((id) => productById[id]).filter(Boolean);
+    const fallback = (legacySliders[i] && legacySliders[i].list) || (legacySliders[0] && legacySliders[0].list) || [];
+    return {
+      title: s.title || (legacySliders[i] && legacySliders[i].title) || "",
+      meta: s.subtitle || (legacySliders[i] && legacySliders[i].meta) || "",
+      list: picked.length > 0 ? picked : fallback,
+    };
+  });
   const resolvedSliders = adminSliders.length > 0 ? adminSliders : legacySliders;
 
   const allFaqs = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);

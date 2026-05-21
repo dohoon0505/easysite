@@ -217,7 +217,7 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId, s
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 380px",
+          gridTemplateColumns: "1fr 440px",
           gap: "var(--size-600)",
           alignItems: "flex-start",
         }}
@@ -285,7 +285,8 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId, s
                     position: "relative",
                     aspectRatio: "1 / 1",
                     maxWidth: 320,
-                    background: form.image,
+                    backgroundImage: typeof form.image === "string" && form.image.startsWith("url(") ? form.image : `url("${form.image}")`,
+                    backgroundColor: "var(--sm-background-muted)",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     borderRadius: "var(--radius-md)",

@@ -287,11 +287,15 @@ function HomeScreen({ go, openStyle, openDesigner }) {
     { title: "여심저격 베스트 디자인", list: MZ_STYLES },
     { title: "부모님 베스트픽 디자인", list: STARTER_STYLES },
   ];
-  const adminSliders = sliderSections.map((s) => ({
-    title: s.title || "",
-    subtitle: s.subtitle || "",
-    list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
-  }));
+  const adminSliders = sliderSections.map((s, i) => {
+    const picked = (s.pickedIds || []).map((id) => productById[id]).filter(Boolean);
+    const fallback = (legacySliders[i] && legacySliders[i].list) || (legacySliders[0] && legacySliders[0].list) || [];
+    return {
+      title: s.title || (legacySliders[i] && legacySliders[i].title) || "",
+      subtitle: s.subtitle || "",
+      list: picked.length > 0 ? picked : fallback,
+    };
+  });
   const resolvedSliders = adminSliders.length > 0 ? adminSliders : legacySliders;
 
   const allFaqs = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
