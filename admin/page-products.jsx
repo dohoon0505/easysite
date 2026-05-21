@@ -304,6 +304,11 @@ const ProductCard = ({ product, selected, onToggleSelect, onEdit, onToggleVisibi
     }}
   >
     <div
+      onClick={onEdit}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onEdit(); } }}
+      aria-label={`${product.name} 편집`}
       style={{
         position: "relative",
         aspectRatio: "4 / 3",
@@ -311,6 +316,7 @@ const ProductCard = ({ product, selected, onToggleSelect, onEdit, onToggleVisibi
         backgroundColor: "var(--sm-background-muted)",
         backgroundSize: "cover",
         backgroundPosition: "center",
+        cursor: "pointer",
       }}
     >
       <div
@@ -429,7 +435,10 @@ const ProductTable = ({
               <Checkbox checked={selected.includes(p.id)} onChange={() => onToggleSelect(p.id)} />
             </td>
             <td>
-              <div
+              <button
+                type="button"
+                onClick={() => onEdit(p.id)}
+                aria-label={`${p.name} 편집`}
                 style={{
                   width: 44,
                   height: 44,
@@ -438,6 +447,10 @@ const ProductTable = ({
                   backgroundColor: "var(--sm-background-muted)",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
+                  border: 0,
+                  padding: 0,
+                  cursor: "pointer",
+                  display: "block",
                 }}
               />
             </td>
