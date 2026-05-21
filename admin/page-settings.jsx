@@ -4,9 +4,12 @@
 // sites/{siteId}/settings/info 단일 도큐먼트에 저장.
 
 const SettingsPage = ({ siteId, site }) => {
+  const session = typeof useAuthSession === "function" ? useAuthSession() : null;
+  const isSuper = !!(session && session.claims && session.claims.role === "super");
   const [info, setInfo, loading] = (typeof useLiveSiteInfo === "function"
     ? useLiveSiteInfo(siteId)
     : [{}, () => {}, false]);
+  const [syncing, setSyncing] = React.useState(false);
   const [phone, setPhone] = React.useState("");
   const [kakaoChannel, setKakaoChannel] = React.useState("");
   const [ogTitle, setOgTitle] = React.useState("");
@@ -76,6 +79,36 @@ const SettingsPage = ({ siteId, site }) => {
 
   const fileInputRef = React.useRef(null);
 
+  const syncCurrent = async () => {
+    if (!siteId || !window.seedSiteInfo) return;
+    if (!confirm(`${(site && site.name) || siteId} 의 코드 베이스에 등록된 OG·전화·카카오 정보를 가져옵니다.\n이미 입력한 값이 있으면 덮어씁니다. 진행할까요?`)) return;
+    try {
+      setSyncing(true);
+      await window.seedSiteInfo(siteId);
+      toast({ tone: "success", message: "현재 사이트 정보를 가져왔습니다 — 발행 시 사이트에 반영됩니다" });
+    } catch (e) {
+      toast({ tone: "error", message: `동기화 실패: ${e.message || e}` });
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const syncAll = async () => {
+    if (!window.seedAllSiteInfo) return;
+    if (!confirm("5개 사이트 전부의 OG·전화·카카오 정보를 코드 베이스에서 가져옵니다.\n각 사이트의 기존 입력값을 덮어씁니다. 진행할까요?")) return;
+    try {
+      setSyncing(true);
+      const results = await window.seedAllSiteInfo();
+      const ok = Object.values(results).filter((r) => !r.error).length;
+      const fail = Object.values(results).filter((r) => r.error).length;
+      toast({ tone: fail === 0 ? "success" : "warning", message: `${ok}개 동기화 완료${fail > 0 ? `, ${fail}개 실패` : ""}` });
+    } catch (e) {
+      toast({ tone: "error", message: `동기화 실패: ${e.message || e}` });
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="page">
@@ -98,9 +131,19 @@ const SettingsPage = ({ siteId, site }) => {
             연락처와 검색·SNS 공유 시 보여지는 메타 정보를 관리합니다.
           </div>
         </div>
-        <Button variant="primary" iconLeft="save" onClick={save} disabled={!dirty || saving}>
-          {saving ? "저장 중…" : dirty ? "변경사항 저장" : "저장됨"}
-        </Button>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <Button variant="outline" iconLeft="refresh" onClick={syncCurrent} disabled={syncing}>
+            {syncing ? "동기화 중…" : "현재 사이트 정보 가져오기"}
+          </Button>
+          {isSuper && (
+            <Button variant="ghost" iconLeft="refresh" onClick={syncAll} disabled={syncing}>
+              5개 사이트 일괄
+            </Button>
+          )}
+          <Button variant="primary" iconLeft="save" onClick={save} disabled={!dirty || saving}>
+            {saving ? "저장 중…" : dirty ? "변경사항 저장" : "저장됨"}
+          </Button>
+        </div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 440px", gap: "var(--size-400)", alignItems: "flex-start" }}>

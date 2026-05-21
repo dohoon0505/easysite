@@ -880,6 +880,77 @@ const useLiveSiteInfo = (siteId) => {
   return [info, setInfo, loading];
 };
 
+// ── 사이트별 현재 등록된 기본 정보 (코드 베이스 추출) ─────────────
+// 각 사이트의 index.html (og meta) + app.jsx (PHONE_HREF / KAKAO_HREF) 에서 추출한 값.
+// '현재 사이트 정보 가져오기' 버튼이 이 데이터를 settings/info 에 시드한다.
+const SITE_INFO_DEFAULTS = {
+  dohwawon: {
+    phone: "",
+    kakaoChannel: "https://pf.kakao.com/_xleKLxj",
+    ogTitle: "도화원플라워",
+    ogDescription: "평범한 일상도 꽃 한 송이가 더해지면 특별한 순간이 됩니다. 계절을 듬뿍 머금은 다채로운 꽃들로, 당신의 오늘을 가장 아름답게 피워내겠습니다.",
+    ogImage: "img/hero.jpg",
+  },
+  bell_cake: {
+    phone: "",
+    kakaoChannel: "https://pf.kakao.com/_txnxncb",
+    ogTitle: "쌀케이크 전문점 벨케이크",
+    ogDescription: "No 밀가루, No 식물성크림. 100% 국내산 쌀가루로 만든 쌀케이크, 동물성 생크림케이크 전문점 벨케이크입니다:) 1인운영매장이라, 전화를 못받을 수 있으니 부재시 카카오톡채널로 연락주세요^^",
+    ogImage: "img/hero.jpg",
+  },
+  PARKHAD: {
+    phone: "",
+    kakaoChannel: "",
+    ogTitle: "박하디, 프리미엄 남성 커트",
+    ogDescription: "대구 달서구 남성 전용 헤어샵 — 편안한 환경, 유쾌한 경험.",
+    ogImage: "./img/hero.jpg",
+  },
+  flower_example: {
+    phone: "010-0000-0000",
+    kakaoChannel: "",
+    ogTitle: "전국꽃배달서비스",
+    ogDescription: "대한민국 어디든 3시간 당일배송",
+    ogImage: "./img/cover.jpg",
+  },
+  greenlight_art: {
+    phone: "0507-1399-2425",
+    kakaoChannel: "",
+    ogTitle: "풀빛그림아이 미술학원 · 대구 달서구",
+    ogDescription: "아이의 손끝에 색을 더하는 시간 — 대구 달서구 풀빛그림아이 미술학원",
+    ogImage: "https://easysite.kr/greenlight_art/img/hero.jpg",
+  },
+};
+
+// 단일 사이트 시드
+const seedSiteInfo = async (siteId) => {
+  if (!siteId || !window.fbDb) throw new Error("siteId 또는 Firestore 미준비");
+  const defaults = SITE_INFO_DEFAULTS[siteId];
+  if (!defaults) throw new Error(`SITE_INFO_DEFAULTS 에 ${siteId} 가 없음`);
+  const uid = (window.fbAuth && window.fbAuth.currentUser && window.fbAuth.currentUser.uid) || "admin-ui";
+  await window.fbDb
+    .collection("sites").doc(siteId).collection("settings").doc("info")
+    .set({
+      ...defaults,
+      ogImageStoragePath: "",
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedBy: uid,
+    }, { merge: true });
+  return defaults;
+};
+
+// 전체 사이트 시드 (슈퍼 어드민용)
+const seedAllSiteInfo = async () => {
+  const results = {};
+  for (const siteId of Object.keys(SITE_INFO_DEFAULTS)) {
+    try {
+      results[siteId] = await seedSiteInfo(siteId);
+    } catch (e) {
+      results[siteId] = { error: e.message || String(e) };
+    }
+  }
+  return results;
+};
+
 Object.assign(window, {
   useLiveProducts,
   useLiveSections,
@@ -891,5 +962,8 @@ Object.assign(window, {
   useLiveGalleryWorks,
   useLiveSiteInfo,
   seedGalleryWorks,
+  seedSiteInfo,
+  seedAllSiteInfo,
+  SITE_INFO_DEFAULTS,
   liveSiteUrl,
 });

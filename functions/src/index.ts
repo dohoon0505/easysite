@@ -16,3 +16,4 @@ export { setSiteClaim } from "./setSiteClaim";
 export { onUserCreate } from "./onUserCreate";
 export { auditOnWrite } from "./auditOnWrite";
 export { publishToGitHub } from "./publishToGitHub";
+export { seedSiteInfo } from "./seedSiteInfo";
