@@ -165,8 +165,24 @@ function FeaturedSlider({ title, sub, list, openWork }) {
 
 // ─── HOME ───────────────────────────────────────────────────
 function HomeScreen({ go, openWork }) {
-  // 어드민(easysite admin) 에서 발행된 HOME_SECTIONS / FAQS 우선 사용.
-  const HS = window.HOME_SECTIONS || [];
+  // 어드민에서 발행된 HOME_SECTIONS / FAQS 우선 사용.
+  // 어드민 미리보기는 postMessage 로 draft 데이터를 전송 — setDraftHS 가 우선.
+  const [draftHS, setDraftHS] = React.useState(null);
+  React.useEffect(() => {
+    const handler = (e) => {
+      const d = e && e.data;
+      if (d && d.type === "draftHomeSections" && Array.isArray(d.sections)) {
+        setDraftHS(d.sections);
+      }
+    };
+    window.addEventListener("message", handler);
+    if (window.parent && window.parent !== window) {
+      try { window.parent.postMessage({ type: "previewReady" }, "*"); } catch (_) {}
+    }
+    return () => window.removeEventListener("message", handler);
+  }, []);
+
+  const HS = draftHS || window.HOME_SECTIONS || [];
   const hero = (HS.find((s) => s && s.type === "hero") || {}).data || {};
   const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
 
@@ -192,9 +208,10 @@ function HomeScreen({ go, openWork }) {
   // 홈 FAQ — 어드민에서 고른 항목 우선, 없으면 첫 6개 폴백.
   const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
   const allFaqs = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
-  const homeFaqItems = (faqHome.pickedIds && faqHome.pickedIds.length > 0 && window.FAQS)
-    ? faqHome.pickedIds.map((id) => window.FAQS.find((f) => f.id === id)).filter(Boolean)
-    : allFaqs.slice(0, 6);
+  const pickedFaqs = (faqHome.pickedIds && faqHome.pickedIds.length > 0)
+    ? faqHome.pickedIds.map((id) => allFaqs.find((f) => f.id === id || f.faqId === id)).filter(Boolean)
+    : [];
+  const homeFaqItems = pickedFaqs.length > 0 ? pickedFaqs : allFaqs.slice(0, 6);
   const homeFaqTitle = faqHome.title || "학원 등록 전 자주하는 질문";
 
   return (

@@ -176,7 +176,7 @@ const HomeSectionsPage = ({ sections, setSections, products, onNav, site }) => {
               새 탭에서 열기 ↗
             </button>
           </div>
-          <HomePreview siteId={site && site.id} />
+          <HomePreview siteId={site && site.id} sections={sections} />
         </div>
       </div>
     </div>

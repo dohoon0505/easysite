@@ -282,9 +282,25 @@ function BottomNav({ route, go }) {
 
 // ─── HOME ────────────────────────────────────────────────────
 function HomeScreen({ go, openStyle, openDesigner }) {
-  // 어드민(easysite admin) 에서 발행된 HOME_SECTIONS / FAQS 를 우선 사용.
-  // 데이터가 비어 있으면 기존 하드코딩으로 폴백 (점진 마이그레이션 안전망).
-  const HS = window.HOME_SECTIONS || [];
+  // 어드민에서 발행된 HOME_SECTIONS / FAQS 를 우선 사용. 비어 있으면 폴백.
+  // 어드민 미리보기는 postMessage 로 draft 데이터를 보내므로 setDraftHS 가 우선.
+  const [draftHS, setDraftHS] = React.useState(null);
+  React.useEffect(() => {
+    const handler = (e) => {
+      const d = e && e.data;
+      if (d && d.type === "draftHomeSections" && Array.isArray(d.sections)) {
+        setDraftHS(d.sections);
+      }
+    };
+    window.addEventListener("message", handler);
+    // 어드민이 iframe.onload 보다 먼저 메시지를 못 보내도록 ready 신호.
+    if (window.parent && window.parent !== window) {
+      try { window.parent.postMessage({ type: "previewReady" }, "*"); } catch (_) {}
+    }
+    return () => window.removeEventListener("message", handler);
+  }, []);
+
+  const HS = draftHS || window.HOME_SECTIONS || [];
   const hero = (HS.find((s) => s && s.type === "hero") || {}).data || {};
   const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
   const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
@@ -312,23 +328,27 @@ function HomeScreen({ go, openStyle, openDesigner }) {
     if (p && p.productId) productById[p.productId] = p;
     if (p && p.id) productById[p.id] = p;
   });
-  const resolvedSliders = sliderSections.length > 0
-    ? sliderSections.map((s) => ({
-        title: s.title || "",
-        list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
-      })).filter((s) => s.list.length > 0)
-    : [
-        { title: "풍성한 꽃다발 추천", list: BUSINESS_STYLES },
-        { title: "특별한 날, 꽃바구니 선물!", list: MZ_STYLES },
-        { title: "아름다운 효도, 용돈박스", list: STARTER_STYLES },
-        { title: "특색있는 아크릴백", list: ACRYLIC_STYLES },
-      ];
+  const legacySliders = [
+    { title: "풍성한 꽃다발 추천", list: BUSINESS_STYLES },
+    { title: "특별한 날, 꽃바구니 선물!", list: MZ_STYLES },
+    { title: "아름다운 효도, 용돈박스", list: STARTER_STYLES },
+    { title: "특색있는 아크릴백", list: ACRYLIC_STYLES },
+  ];
+  // 어드민이 슬라이더에 상품을 골라 채웠으면 그것을 사용, 비어 있으면 legacy 큐레이션.
+  const adminSliders = sliderSections
+    .map((s) => ({
+      title: s.title || "",
+      list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
+    }))
+    .filter((s) => s.list.length > 0);
+  const resolvedSliders = adminSliders.length > 0 ? adminSliders : legacySliders;
 
   // 홈 FAQ — pickedIds 가 있으면 그에 해당하는 FAQS 만, 없으면 첫 6개 폴백.
   const allFaqs = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
-  const homeFaqItems = (faqHome.pickedIds && faqHome.pickedIds.length > 0 && window.FAQS)
-    ? faqHome.pickedIds.map((id) => window.FAQS.find((f) => f.id === id)).filter(Boolean)
-    : allFaqs.slice(0, 6);
+  const pickedFaqs = (faqHome.pickedIds && faqHome.pickedIds.length > 0)
+    ? faqHome.pickedIds.map((id) => allFaqs.find((f) => f.id === id || f.faqId === id)).filter(Boolean)
+    : [];
+  const homeFaqItems = pickedFaqs.length > 0 ? pickedFaqs : allFaqs.slice(0, 6);
   const homeFaqTitle = faqHome.title || "주문 전 자주하는 질문";
 
   return (

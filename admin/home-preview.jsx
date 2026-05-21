@@ -1,16 +1,52 @@
 /* eslint-disable */
 // 홈 섹션 편집 미리보기 — 폰 베젤 안에 라이브 사이트를 iframe 으로 렌더.
-// 디자인 단계의 mock 섹션 렌더러는 실제 사이트와 어긋났기 때문에 폐기,
-// 발행된 콘텐츠를 그대로 보여주는 방식으로 전환했다.
-// 편집 중인 draft 는 발행 후 반영된다(아래 안내 문구 참조).
+// 어드민이 sections 를 편집하면 postMessage 로 iframe 에 즉시 draft 를 보내고,
+// 사이트 app.jsx 는 발행 전이라도 draft 데이터를 우선해 렌더한다.
 
-const HomePreview = ({ siteId }) => {
+const HomePreview = ({ siteId, sections }) => {
   const url = (typeof window.liveSiteUrl === "function" ? window.liveSiteUrl(siteId) : "") || "about:blank";
   const [reloadKey, setReloadKey] = React.useState(0);
+  const [ready, setReady] = React.useState(false);
+  const iframeRef = React.useRef(null);
+
+  // 어드민 → iframe: sections 가 바뀔 때마다 draft 페이로드 전송.
+  // iframe 이 아직 로드 전이면 ready 신호를 기다렸다가 전송.
+  const sendDraft = React.useCallback(() => {
+    const iframe = iframeRef.current;
+    if (!iframe || !iframe.contentWindow) return;
+    // 어드민 sections 의 draft 필드는 사이트에 불필요 — sectionId/type/data/enabled 만.
+    // 데이터는 그대로 전달; 사이트의 unwrapUrl 헬퍼가 url("...") 형태도 처리한다.
+    const sanitized = (sections || []).map((s) => ({
+      id: s.id || s.sectionId,
+      type: s.type,
+      title: s.title || "",
+      icon: s.icon || null,
+      enabled: s.enabled !== false,
+      data: s.data || {},
+    }));
+    try {
+      iframe.contentWindow.postMessage({ type: "draftHomeSections", sections: sanitized }, "*");
+    } catch (_) { /* 다른 origin 에 보낼 수 없는 경우 무시 */ }
+  }, [sections]);
+
+  // iframe 이 previewReady 를 알려오면 ready=true, 그리고 즉시 1차 draft 전송.
+  React.useEffect(() => {
+    const onMessage = (e) => {
+      if (e && e.data && e.data.type === "previewReady") {
+        setReady(true);
+      }
+    };
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, []);
+
+  // sections 가 바뀌거나 ready 가 되면 새 draft 전송.
+  React.useEffect(() => {
+    if (ready) sendDraft();
+  }, [ready, sendDraft]);
 
   return (
     <div style={{ position: "relative" }}>
-      {/* Phone bezel */}
       <div
         style={{
           background: "#1a1d24",
@@ -23,7 +59,6 @@ const HomePreview = ({ siteId }) => {
           position: "relative",
         }}
       >
-        {/* notch */}
         <div
           style={{
             position: "absolute",
@@ -46,7 +81,6 @@ const HomePreview = ({ siteId }) => {
             height: 760,
           }}
         >
-          {/* status bar — 폰 느낌만 부여, 콘텐츠는 iframe */}
           <div
             style={{
               padding: "8px 18px 6px",
@@ -67,12 +101,17 @@ const HomePreview = ({ siteId }) => {
           </div>
           {siteId ? (
             <iframe
+              ref={iframeRef}
               key={reloadKey}
               title={`${siteId} 라이브 미리보기`}
               src={url}
               loading="lazy"
               referrerPolicy="no-referrer"
               sandbox="allow-scripts allow-same-origin"
+              onLoad={() => {
+                // 사이트의 useEffect 가 previewReady 를 보낼 때까지 약간의 지연 후 한번 더 시도.
+                setTimeout(() => sendDraft(), 400);
+              }}
               style={{
                 width: "100%",
                 height: "calc(100% - 30px)",
@@ -98,11 +137,11 @@ const HomePreview = ({ siteId }) => {
         }}
       >
         <div style={{ fontSize: "var(--text-caption)", color: "var(--sm-content-tertiary)" }}>
-          현재 발행된 사이트를 표시 · 편집은 발행 후 반영됩니다
+          {ready ? "편집 중 — 실시간 반영됩니다 · 발행해야 사이트에 저장됩니다" : "라이브 사이트를 불러오는 중…"}
         </div>
         <button
           type="button"
-          onClick={() => setReloadKey((k) => k + 1)}
+          onClick={() => { setReady(false); setReloadKey((k) => k + 1); }}
           style={{
             fontSize: 12,
             color: "var(--sm-content-tertiary)",

@@ -237,8 +237,24 @@ function BottomNav({ route, go }) {
 
 // ─── HOME ────────────────────────────────────────────────────
 function HomeScreen({ go, openStyle, openDesigner }) {
-  // 어드민(easysite admin) 에서 발행된 HOME_SECTIONS / FAQS 우선 사용. 비어 있으면 폴백.
-  const HS = window.HOME_SECTIONS || [];
+  // 어드민에서 발행된 HOME_SECTIONS / FAQS 우선 사용. 비어 있으면 폴백.
+  // 어드민 미리보기는 postMessage 로 draft 데이터를 전송 — setDraftHS 가 우선.
+  const [draftHS, setDraftHS] = React.useState(null);
+  React.useEffect(() => {
+    const handler = (e) => {
+      const d = e && e.data;
+      if (d && d.type === "draftHomeSections" && Array.isArray(d.sections)) {
+        setDraftHS(d.sections);
+      }
+    };
+    window.addEventListener("message", handler);
+    if (window.parent && window.parent !== window) {
+      try { window.parent.postMessage({ type: "previewReady" }, "*"); } catch (_) {}
+    }
+    return () => window.removeEventListener("message", handler);
+  }, []);
+
+  const HS = draftHS || window.HOME_SECTIONS || [];
   const hero = (HS.find((s) => s && s.type === "hero") || {}).data || {};
   const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
   const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
@@ -265,22 +281,25 @@ function HomeScreen({ go, openStyle, openDesigner }) {
     if (p && p.productId) productById[p.productId] = p;
     if (p && p.id) productById[p.id] = p;
   });
-  const resolvedSliders = sliderSections.length > 0
-    ? sliderSections.map((s) => ({
-        title: s.title || "",
-        list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
-      })).filter((s) => s.list.length > 0)
-    : [
-        { title: "귀여운 도시락케이크", list: FEATURED_STYLES },
-        { title: "이달의 베스트 케이크", list: BUSINESS_STYLES },
-        { title: "여심저격 베스트 디자인", list: MZ_STYLES },
-        { title: "부모님 베스트픽 디자인", list: STARTER_STYLES },
-      ];
+  const legacySliders = [
+    { title: "귀여운 도시락케이크", list: FEATURED_STYLES },
+    { title: "이달의 베스트 케이크", list: BUSINESS_STYLES },
+    { title: "여심저격 베스트 디자인", list: MZ_STYLES },
+    { title: "부모님 베스트픽 디자인", list: STARTER_STYLES },
+  ];
+  const adminSliders = sliderSections
+    .map((s) => ({
+      title: s.title || "",
+      list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
+    }))
+    .filter((s) => s.list.length > 0);
+  const resolvedSliders = adminSliders.length > 0 ? adminSliders : legacySliders;
 
   const allFaqs = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
-  const homeFaqItems = (faqHome.pickedIds && faqHome.pickedIds.length > 0 && window.FAQS)
-    ? faqHome.pickedIds.map((id) => window.FAQS.find((f) => f.id === id)).filter(Boolean)
-    : allFaqs.slice(0, 6);
+  const pickedFaqs = (faqHome.pickedIds && faqHome.pickedIds.length > 0)
+    ? faqHome.pickedIds.map((id) => allFaqs.find((f) => f.id === id || f.faqId === id)).filter(Boolean)
+    : [];
+  const homeFaqItems = pickedFaqs.length > 0 ? pickedFaqs : allFaqs.slice(0, 6);
   const homeFaqTitle = faqHome.title || "주문 전 자주하는 질문";
 
   return (
