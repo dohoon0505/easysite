@@ -201,61 +201,13 @@ const LoginPage = ({ onLogin }) => {
                 )}
               </Button>
 
-              {resetMode ? (
+              {resetMode && (
                 <Button type="button" variant="ghost" full onClick={() => { setResetMode(false); setError(null); }}>
                   ← 로그인으로 돌아가기
                 </Button>
-              ) : (
-                <div className="login-demo">
-                  <div style={{ flex: 1, height: 1, background: "var(--sm-border-subtle)" }} />
-                  <span>또는</span>
-                  <div style={{ flex: 1, height: 1, background: "var(--sm-border-subtle)" }} />
-                </div>
-              )}
-
-              {!resetMode && (
-                <button
-                  type="button"
-                  onClick={fillDemo}
-                  className="demo-fill"
-                >
-                  <div
-                    style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: "var(--radius-sm)",
-                      background: "linear-gradient(135deg, #f4c8d0 0%, #d36a8a 100%)",
-                      flexShrink: 0,
-                    }}
-                  />
-                  <div style={{ flex: 1, textAlign: "left" }}>
-                    <div style={{ fontWeight: 600, fontSize: 14 }}>도화원플라워 데모로 로그인</div>
-                    <div style={{ fontSize: 12, color: "var(--sm-content-tertiary)" }}>
-                      박소연 (오너) 자격으로 둘러보기
-                    </div>
-                  </div>
-                  <Icon name="arrowRight" size={16} style={{ color: "var(--sm-content-tertiary)" }} />
-                </button>
               )}
             </form>
           )}
-
-          {/* First time hint */}
-          {!resetMode && !resetSent && (
-            <div className="login-firsttime">
-              <Icon name="info" size={14} />
-              <div>
-                초대받은 운영자이신가요?{" "}
-                <button style={{ color: "var(--sm-content-brand)", fontWeight: 600, padding: 0 }}>
-                  첫 로그인 안내 보기
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="login-footer">
-          © 2026 easysite · 운영 중인 5개 사이트의 어드민
         </div>
       </div>
     </div>
