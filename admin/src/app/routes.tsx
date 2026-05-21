@@ -5,7 +5,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthBoundary } from "./AuthBoundary";
 import { AppShell } from "./AppShell";
 import { Login } from "@/pages/Login";
-import { Dashboard } from "@/pages/Dashboard";
+import { HomeSection } from "@/pages/HomeSection";
 import { ProductList } from "@/pages/ProductList";
 import { ProductEdit } from "@/pages/ProductEdit";
 import { CategoryManage } from "@/pages/CategoryManage";
@@ -25,7 +25,7 @@ export function AppRoutes() {
           </AuthBoundary>
         }
       >
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<HomeSection />} />
         <Route path="/products" element={<ProductList />} />
         <Route path="/products/new" element={<ProductEdit />} />
         <Route path="/products/:productId" element={<ProductEdit />} />
