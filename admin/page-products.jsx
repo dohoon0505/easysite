@@ -2,6 +2,13 @@
 // P01 — 상품 목록 page
 // Card grid + table view, filter chips, multi-select sticky action bar
 
+// 상품 image 필드는 raw URL · repoPath · url(...) 모두 가능 — 안전하게 background-image 로 변환.
+const toBgImageUrl = (src) => {
+  if (!src || typeof src !== "string") return undefined;
+  if (src.startsWith("url(") || src.startsWith("linear-gradient") || src.startsWith("radial-gradient")) return src;
+  return `url("${src}")`;
+};
+
 const ProductsPage = ({ onEdit, onCreate, products, setProducts, onCsvImport }) => {
   const [view, setView] = React.useState("card"); // 'card' | 'table'
   const [category, setCategory] = React.useState("all");
@@ -289,7 +296,8 @@ const ProductCard = ({ product, selected, onToggleSelect, onEdit, onToggleVisibi
       style={{
         position: "relative",
         aspectRatio: "4 / 3",
-        background: product.image,
+        backgroundImage: toBgImageUrl(product.image),
+        backgroundColor: "var(--sm-background-muted)",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -414,7 +422,8 @@ const ProductTable = ({
                   width: 44,
                   height: 44,
                   borderRadius: "var(--radius-sm)",
-                  background: p.image,
+                  backgroundImage: toBgImageUrl(p.image),
+                  backgroundColor: "var(--sm-background-muted)",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}

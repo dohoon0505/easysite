@@ -124,7 +124,7 @@ function formatRelative(d) {
 
 // ── 카테고리 ──────────────────────────────────────────────
 const useLiveCategories = (siteId) => {
-  const [cats, setCats] = React.useState([]);
+  const [cats, setCatsLocal] = React.useState([]);
   React.useEffect(() => {
     if (!siteId || !window.fbDb) return;
     const unsub = window.fbDb
@@ -144,14 +144,82 @@ const useLiveCategories = (siteId) => {
               count: 0, // 페이지에서 products 로 계산
             };
           });
-          setCats(list);
+          setCatsLocal(list);
         },
         (err) => console.error("useLiveCategories", err)
       );
     return unsub;
   }, [siteId]);
-  return cats;
+
+  const setCats = React.useCallback(
+    (updater) => {
+      setCatsLocal((prev) => {
+        const next = typeof updater === "function" ? updater(prev) : updater;
+        if (siteId && window.fbDb) {
+          diffWriteCategories(siteId, prev, next).catch((e) =>
+            console.error("diffWriteCategories", e)
+          );
+        }
+        return next;
+      });
+    },
+    [siteId]
+  );
+
+  return [cats, setCats];
 };
+
+async function diffWriteCategories(siteId, prev, next) {
+  if (!window.fbDb) return;
+  const prevById = new Map(prev.map((c) => [c.id, c]));
+  const nextById = new Map(next.map((c) => [c.id, c]));
+  const batch = window.fbDb.batch();
+  const col = window.fbDb.collection("sites").doc(siteId).collection("categories");
+  const uid = (window.fbAuth && window.fbAuth.currentUser && window.fbAuth.currentUser.uid) || "admin-ui";
+  let ops = 0;
+
+  next.forEach((c, idx) => {
+    const old = prevById.get(c.id);
+    const sortOrder = idx * 10;
+    if (!old) {
+      batch.set(col.doc(c.id), {
+        categoryId: c.id,
+        name: c.name || "",
+        blurb: c.blurb || "",
+        sub: c.sub || "",
+        visible: c.visible !== false,
+        sortOrder,
+        status: "live",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedBy: uid,
+      });
+      ops++;
+      return;
+    }
+    const patch = {};
+    if (old.name !== c.name) patch.name = c.name;
+    if ((old.blurb || "") !== (c.blurb || "")) patch.blurb = c.blurb || "";
+    if ((old.sub || "") !== (c.sub || "")) patch.sub = c.sub || "";
+    if ((old.visible !== false) !== (c.visible !== false)) patch.visible = c.visible !== false;
+    if (old.sortOrder !== sortOrder) patch.sortOrder = sortOrder;
+    if (Object.keys(patch).length) {
+      patch.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+      patch.updatedBy = uid;
+      batch.update(col.doc(c.id), patch);
+      ops++;
+    }
+  });
+
+  prev.forEach((c) => {
+    if (!nextById.has(c.id)) {
+      batch.delete(col.doc(c.id));
+      ops++;
+    }
+  });
+
+  if (ops > 0) await batch.commit();
+}
 
 // ── 상품 ──────────────────────────────────────────────────
 const useLiveProducts = (siteId) => {

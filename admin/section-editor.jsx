@@ -5,6 +5,16 @@
 //   · slider  — 상품 슬라이더 1개 (타이틀 + 상품 ID 목록). N 개 공존 가능.
 //   · faq     — FAQ 노출 섹션 (타이틀 + FAQ ID 목록). 항목은 '질문/답변' 페이지에서 관리.
 
+// 상품 image 필드는 raw URL · repoPath · url(...) 셋 중 어느 형태든 올 수 있으므로
+// background-image 로 안전하게 변환한다.
+const toBgImage = (src) => {
+  if (!src) return undefined;
+  if (typeof src !== "string") return undefined;
+  if (src.startsWith("url(")) return src;
+  if (src.startsWith("linear-gradient") || src.startsWith("radial-gradient")) return src;
+  return `url("${src}")`;
+};
+
 const SectionEditor = ({ section, update, products, onNav, siteId }) => {
   if (!section) return null;
 
@@ -263,7 +273,8 @@ const SliderEditor = ({ data, update, products }) => {
                       width: 36,
                       height: 36,
                       borderRadius: "var(--radius-sm)",
-                      background: p.image,
+                      backgroundImage: toBgImage(p.image),
+                      backgroundColor: "var(--sm-background-muted)",
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       flexShrink: 0,
@@ -356,7 +367,8 @@ const ProductPickerModal = ({ open, onClose, products, pickedIds, onToggle }) =>
                   width: 44,
                   height: 44,
                   borderRadius: "var(--radius-sm)",
-                  background: p.image,
+                  backgroundImage: toBgImage(p.image),
+                  backgroundColor: "var(--sm-background-muted)",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   flexShrink: 0,

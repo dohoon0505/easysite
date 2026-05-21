@@ -200,7 +200,7 @@ const App = () => {
             siteId={siteId}
           />
         )}
-        {route === "categories" && <CategoriesRealPage />}
+        {route === "categories" && <CategoriesRealPage siteId={siteId} products={products} />}
         {route === "faqs" && <FaqsPage siteId={siteId} />}
         {route === "publish" && (
           <PublishCenterPage

@@ -1,10 +1,20 @@
 /* eslint-disable */
 // C01 — 카테고리 관리 with real HTML5 drag-and-drop
+// Firestore live 데이터에 연결 (sites/{siteId}/categories).
 
-const CategoriesRealPage = () => {
-  const [items, setItems] = React.useState(
-    CATEGORIES.filter((c) => c.id !== "all").map((c) => ({ ...c, visible: true }))
-  );
+const CategoriesRealPage = ({ siteId, products }) => {
+  const [itemsRaw, setItems] = (typeof useLiveCategories === "function"
+    ? useLiveCategories(siteId)
+    : [[], () => {}]);
+  // 라이브 상품 데이터로 카테고리별 상품 수를 계산
+  const items = React.useMemo(() => {
+    const counts = {};
+    (products || []).forEach((p) => {
+      const cid = p.category || p.categoryId;
+      if (cid) counts[cid] = (counts[cid] || 0) + 1;
+    });
+    return (itemsRaw || []).map((c) => ({ ...c, count: counts[c.id] || 0 }));
+  }, [itemsRaw, products]);
   const [dragId, setDragId] = React.useState(null);
   const [overId, setOverId] = React.useState(null);
   const [editing, setEditing] = React.useState(null);
