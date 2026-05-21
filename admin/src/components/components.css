@@ -684,6 +684,19 @@
   text-align: left;
   padding: 0;
   min-width: 0;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background-color var(--motion-fast) var(--ease-standard);
+}
+.pcard-body:hover {
+  background: var(--sm-background-subtle);
+}
+.pcard-body::after {
+  content: "수정 ›";
+  display: block;
+  font: var(--text-caption);
+  color: var(--sm-content-brand);
+  margin-top: 6px;
 }
 .pcard-name {
   font: var(--text-label-md);

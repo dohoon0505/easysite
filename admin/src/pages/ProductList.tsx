@@ -151,7 +151,16 @@ export function ProductList() {
       id: "name",
       header: "상품명",
       cell: (p) => (
-        <Link to={`/products/${p.productId}`} style={{ color: "var(--sm-content-primary)" }}>
+        <Link
+          to={`/products/${p.productId}`}
+          style={{
+            color: "var(--sm-content-brand)",
+            fontWeight: 600,
+            textDecoration: "underline",
+            textDecorationStyle: "dotted",
+            textUnderlineOffset: "3px",
+          }}
+        >
           {p.name}
         </Link>
       ),
@@ -194,6 +203,23 @@ export function ProductList() {
         <Badge tone={p.status === "live" ? "success" : "warning"}>
           {p.status === "live" ? "발행됨" : "드래프트"}
         </Badge>
+      ),
+    },
+    {
+      id: "actions",
+      header: "작업",
+      align: "right",
+      width: "120px",
+      cell: (p) => (
+        <div style={{ display: "inline-flex", gap: 4 }}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate(`/products/${p.productId}`)}
+          >
+            수정
+          </Button>
+        </div>
       ),
     },
   ];
