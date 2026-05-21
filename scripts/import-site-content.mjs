@@ -327,11 +327,24 @@ async function seedFaqSection(site) {
   const sectionId = "faq";
   const ref = db.doc(`sites/${site.siteId}/homeSections/${sectionId}`);
   const existing = await ref.get();
+
+  // 사용자가 이미 골랐다면(=pickedIds 가 비어있지 않다면) 보존,
+  // 비어 있으면 라이브 사이트의 기본 노출(상단 6개) 과 동일하게 시드.
+  let pickedIds = existing.exists && Array.isArray(existing.data().data?.pickedIds)
+    ? existing.data().data.pickedIds
+    : [];
+  if (pickedIds.length === 0) {
+    const faqsSnap = await db.collection(`sites/${site.siteId}/faqs`)
+      .orderBy("sortOrder", "asc").limit(6).get();
+    pickedIds = faqsSnap.docs
+      .map((d) => d.data())
+      .filter((f) => f.visible !== false)
+      .map((f) => f.faqId);
+  }
+
   const data = {
     title: "주문 전 자주하는 질문",
-    pickedIds: existing.exists && Array.isArray(existing.data().data?.pickedIds)
-      ? existing.data().data.pickedIds
-      : [],
+    pickedIds,
   };
   const doc = {
     sectionId,
@@ -444,17 +457,7 @@ for (const site of sitesToProcess) {
     console.error(`  ✗ map.png 업로드 실패: ${e.message}`);
   }
 
-  // 2) 새 스키마 시드
-  try {
-    await seedHero(site, parsed, heroResult, mapResult);
-    const n = await seedSliders(site, parsed);
-    await seedFaqSection(site);
-    console.log(`  ✓ homeSections 시드 — hero + slider×${n} + faq`);
-  } catch (e) {
-    console.error(`  ✗ homeSections 시드 실패: ${e.message}`);
-  }
-
-  // 3) FAQ master
+  // 2) FAQ master 를 먼저 임포트 (homeSections faq 가 pickedIds 를 채울 때 참조)
   try {
     const faqResult = await importFaqsForSite(site.siteId);
     if (faqResult.imported) console.log(`  ✓ FAQ ${faqResult.imported}개 동기화 (스킵 ${faqResult.skipped})`);
@@ -462,6 +465,16 @@ for (const site of sitesToProcess) {
     else console.log(`  - FAQ 건너뜀 — ${faqResult.reason}`);
   } catch (e) {
     console.error(`  ✗ FAQ 임포트 실패: ${e.message}`);
+  }
+
+  // 3) 새 스키마 시드
+  try {
+    await seedHero(site, parsed, heroResult, mapResult);
+    const n = await seedSliders(site, parsed);
+    await seedFaqSection(site);
+    console.log(`  ✓ homeSections 시드 — hero + slider×${n} + faq`);
+  } catch (e) {
+    console.error(`  ✗ homeSections 시드 실패: ${e.message}`);
   }
 
   console.log(`  ✓ ${site.siteId} 임포트 완료`);
