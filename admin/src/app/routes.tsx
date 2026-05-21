@@ -1,5 +1,5 @@
 /**
- * 라우트 테이블 — M3 확장.
+ * 라우트 테이블 — 새 디자인 도입 후.
  */
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthBoundary } from "./AuthBoundary";
@@ -11,7 +11,9 @@ import { ProductEdit } from "@/pages/ProductEdit";
 import { CategoryManage } from "@/pages/CategoryManage";
 import { PublishCenter } from "@/pages/PublishCenter";
 import { AccountSettings } from "@/pages/AccountSettings";
+import { AuditLogs } from "@/pages/AuditLogs";
 import { UsersAdmin } from "@/pages/super/UsersAdmin";
+import { SitesAdmin } from "@/pages/super/SitesAdmin";
 
 export function AppRoutes() {
   return (
@@ -30,15 +32,23 @@ export function AppRoutes() {
         <Route path="/products/new" element={<ProductEdit />} />
         <Route path="/products/:productId" element={<ProductEdit />} />
         <Route path="/categories" element={<CategoryManage />} />
-        <Route path="/media" element={<Navigate to="/products" replace />} />
         <Route path="/publish" element={<PublishCenter />} />
         <Route path="/account" element={<AccountSettings />} />
+        <Route path="/audit" element={<AuditLogs />} />
 
         <Route
           path="/super/users"
           element={
             <AuthBoundary requireRole="super">
               <UsersAdmin />
+            </AuthBoundary>
+          }
+        />
+        <Route
+          path="/super/sites"
+          element={
+            <AuthBoundary requireRole="super">
+              <SitesAdmin />
             </AuthBoundary>
           }
         />

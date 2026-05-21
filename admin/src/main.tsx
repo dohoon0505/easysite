@@ -3,9 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import "./styles/tokens.css";
-import "./styles/reset.css";
-import "./styles/globals.css";
-import "./styles/responsive.css";
+import "./styles/app.css";
 
 import { App } from "./app/App";
 

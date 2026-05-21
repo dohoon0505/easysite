@@ -1,18 +1,15 @@
 /**
- * App shell — router + auth listener + global toast container + confirm host.
+ * App shell — router + auth listener + global toast provider.
  */
-import { ToastContainer, ConfirmHost } from "@/components";
-import { ConfirmProvider } from "@/hooks/useConfirm";
+import { ToastProvider } from "@/components";
 import { AuthListener } from "./AuthBoundary";
 import { AppRoutes } from "./routes";
 
 export function App() {
   return (
-    <ConfirmProvider>
+    <ToastProvider>
       <AuthListener />
       <AppRoutes />
-      <ToastContainer />
-      <ConfirmHost />
-    </ConfirmProvider>
+    </ToastProvider>
   );
 }

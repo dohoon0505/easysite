@@ -1,3 +1,234 @@
-/* 디자인시스템 토큰을 직접 import.
-   desgin_system 에서 `npm run build:tokens` 실행 시 HMR 로 즉시 반영. */
-@import "@ds/assets/css/_tokens.generated.css";
+/* ==========================================================================
+   easysite admin — design tokens (v0.5.2 base, navy accent variant)
+   Semantic tokens only — no hex/px in product code.
+   ========================================================================== */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css');
+
+:root {
+  /* ── Typography ── */
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+
+  --text-display-lg: 56px;
+  --text-display-md: 44px;
+  --text-display-sm: 36px;
+  --text-heading-lg: 28px;
+  --text-heading-md: 22px;
+  --text-heading-sm: 18px;
+  --text-body-lg: 17px;
+  --text-body-md: 15px;
+  --text-body-sm: 13px;
+  --text-label-lg: 15px;
+  --text-label-md: 13px;
+  --text-label-sm: 13px;
+  --text-caption: 13px;
+  --text-overline: 13px;
+
+  /* ── Spacing (4px grid) ── */
+  --size-50: 2px;
+  --size-100: 4px;
+  --size-150: 6px;
+  --size-200: 8px;
+  --size-300: 12px;
+  --size-400: 16px;
+  --size-500: 20px;
+  --size-600: 24px;
+  --size-700: 32px;
+  --size-800: 40px;
+  --size-900: 48px;
+  --size-1000: 64px;
+  --size-1100: 80px;
+  --size-1200: 96px;
+
+  /* ── Radius ── */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 9999px;
+
+  /* ── Motion ── */
+  --motion-instant: 0ms;
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+  --motion-slow: 320ms;
+  --motion-slower: 480ms;
+  --ease-standard: cubic-bezier(0.2, 0.0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+  --ease-decelerate: cubic-bezier(0, 0, 0, 1);
+  --ease-accelerate: cubic-bezier(0.3, 0, 1, 1);
+
+  /* ── Z-index ── */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal-backdrop: 900;
+  --z-modal: 1000;
+  --z-toast: 1100;
+
+  /* ── Color (LIGHT) — Navy/Indigo accent ── */
+  --sm-background-default: #ffffff;
+  --sm-background-subtle: #f7f8fa;
+  --sm-background-muted: #eff1f5;
+  --sm-background-elevated: #ffffff;
+  --sm-background-inverse: #0f1430;
+
+  --sm-content-primary: #0d1226;
+  --sm-content-secondary: #4b5266;
+  --sm-content-tertiary: #8b91a3;
+  --sm-content-disabled: #c5c9d4;
+  --sm-content-inverse: #ffffff;
+  --sm-content-brand: #1f2a52;
+  --sm-content-onBrand: #ffffff;
+
+  --sm-border-subtle: #eef0f4;
+  --sm-border-default: #e1e4eb;
+  --sm-border-strong: #c6cad4;
+  --sm-border-brand: #1f2a52;
+  --sm-border-focus: #4855a3;
+
+  --sm-surface-default: #ffffff;
+  --sm-surface-raised: #ffffff;
+  --sm-surface-sunken: #f7f8fa;
+
+  --sm-interactive-brand-default: #1f2a52;
+  --sm-interactive-brand-hover: #16203f;
+  --sm-interactive-brand-active: #0f1830;
+  --sm-interactive-brand-subtle: #eef0f8;
+  --sm-interactive-brand-subtle-hover: #e3e6f3;
+
+  --sm-status-success: #157a47;
+  --sm-status-success-subtle: #e7f4ec;
+  --sm-status-warning: #a5630a;
+  --sm-status-warning-subtle: #fbf1dd;
+  --sm-status-error: #b3261e;
+  --sm-status-error-subtle: #fbe9e7;
+  --sm-status-info: #1d4ed8;
+  --sm-status-info-subtle: #e7eefe;
+
+  --sm-signal-highlight: #d97706;
+
+  --shadow-xs: 0 1px 2px rgba(15, 20, 48, 0.04);
+  --shadow-sm: 0 1px 2px rgba(15, 20, 48, 0.04), 0 1px 3px rgba(15, 20, 48, 0.06);
+  --shadow-md: 0 4px 8px -2px rgba(15, 20, 48, 0.06), 0 2px 4px -1px rgba(15, 20, 48, 0.04);
+  --shadow-lg: 0 12px 24px -8px rgba(15, 20, 48, 0.12), 0 4px 8px -4px rgba(15, 20, 48, 0.06);
+  --shadow-overlay: 0 24px 48px -12px rgba(15, 20, 48, 0.22);
+}
+
+[data-theme="dark"] {
+  --sm-background-default: #0d1226;
+  --sm-background-subtle: #11172e;
+  --sm-background-muted: #181e36;
+  --sm-background-elevated: #161c33;
+  --sm-background-inverse: #ffffff;
+
+  --sm-content-primary: #f3f4f8;
+  --sm-content-secondary: #b6bbcb;
+  --sm-content-tertiary: #7a8094;
+  --sm-content-disabled: #4a4f63;
+  --sm-content-inverse: #0d1226;
+  --sm-content-brand: #aab3df;
+  --sm-content-onBrand: #ffffff;
+
+  --sm-border-subtle: #1d243f;
+  --sm-border-default: #262d4a;
+  --sm-border-strong: #3a4264;
+  --sm-border-brand: #aab3df;
+  --sm-border-focus: #7783c4;
+
+  --sm-surface-default: #11172e;
+  --sm-surface-raised: #161c33;
+  --sm-surface-sunken: #0d1226;
+
+  --sm-interactive-brand-default: #5765b0;
+  --sm-interactive-brand-hover: #6975c0;
+  --sm-interactive-brand-active: #4956a3;
+  --sm-interactive-brand-subtle: #1a2249;
+  --sm-interactive-brand-subtle-hover: #232c5a;
+
+  --sm-status-success-subtle: #14321f;
+  --sm-status-warning-subtle: #3a2807;
+  --sm-status-error-subtle: #3a1612;
+  --sm-status-info-subtle: #112a5e;
+}
+
+/* ── Accent palette overrides ── */
+[data-accent="indigo"] {
+  --sm-interactive-brand-default: #3b3f8f;
+  --sm-interactive-brand-hover: #2f3274;
+  --sm-interactive-brand-active: #25285c;
+  --sm-interactive-brand-subtle: #ecedf8;
+  --sm-content-brand: #3b3f8f;
+  --sm-border-brand: #3b3f8f;
+}
+[data-accent="forest"] {
+  --sm-interactive-brand-default: #1f4d36;
+  --sm-interactive-brand-hover: #173d2a;
+  --sm-interactive-brand-active: #0f2e1f;
+  --sm-interactive-brand-subtle: #e6efe9;
+  --sm-content-brand: #1f4d36;
+  --sm-border-brand: #1f4d36;
+}
+[data-accent="charcoal"] {
+  --sm-interactive-brand-default: #1a1d24;
+  --sm-interactive-brand-hover: #0d0f14;
+  --sm-interactive-brand-active: #050608;
+  --sm-interactive-brand-subtle: #eeeff2;
+  --sm-content-brand: #1a1d24;
+  --sm-border-brand: #1a1d24;
+}
+
+/* ── Base reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-body-md);
+  line-height: 1.5;
+  color: var(--sm-content-primary);
+  background: var(--sm-background-subtle);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "ss02", "tnum";
+}
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+input,
+textarea,
+select {
+  font-family: inherit;
+  color: inherit;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--sm-border-default);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--sm-background-default);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::selection {
+  background: var(--sm-interactive-brand-subtle);
+  color: var(--sm-interactive-brand-default);
+}

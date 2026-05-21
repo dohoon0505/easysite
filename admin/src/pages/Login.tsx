@@ -1,7 +1,5 @@
 /**
- * Login 페이지 — Email/Password.
- * desgin_system/snippets/patterns.json#login-form 패턴 참고.
- * 성공 시 직전 location.state.from 또는 "/" 로 리다이렉트.
+ * Login 페이지 — 새 디자인 (Card 가운데 정렬, navy accent).
  */
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,9 +7,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { Button, Card, FormField, TextField } from "@/components";
+import { Button, Card, Field, Input, useToast } from "@/components";
 import { signIn, resetPassword } from "@/lib/auth";
-import { toast } from "@/state/toastStore";
 
 const schema = z.object({
   email: z.string().email("이메일 형식이 아닙니다."),
@@ -22,6 +19,7 @@ type FormValues = z.infer<typeof schema>;
 export function Login() {
   const navigate = useNavigate();
   const location = useLocation();
+  const toast = useToast();
   const [submitting, setSubmitting] = useState(false);
   const [resetting, setResetting] = useState(false);
 
@@ -39,8 +37,7 @@ export function Login() {
       const from = (location.state as { from?: string } | null)?.from ?? "/";
       navigate(from, { replace: true });
     } catch (e) {
-      const msg = mapAuthError(e);
-      toast.danger(msg);
+      toast({ tone: "error", message: mapAuthError(e) });
     } finally {
       setSubmitting(false);
     }
@@ -49,15 +46,15 @@ export function Login() {
   async function onReset() {
     const email = getValues("email");
     if (!email) {
-      toast.warning("비밀번호 재설정 이메일을 받을 주소를 먼저 입력해 주세요.");
+      toast({ tone: "error", message: "이메일을 먼저 입력해 주세요." });
       return;
     }
     setResetting(true);
     try {
       await resetPassword(email);
-      toast.success(`${email} 로 비밀번호 재설정 메일을 보냈습니다.`);
+      toast({ tone: "success", message: `${email} 로 비밀번호 재설정 메일을 보냈습니다.` });
     } catch (e) {
-      toast.danger(mapAuthError(e));
+      toast({ tone: "error", message: mapAuthError(e) });
     } finally {
       setResetting(false);
     }
@@ -69,85 +66,74 @@ export function Login() {
         minHeight: "100vh",
         display: "grid",
         placeItems: "center",
-        padding: "16px",
+        padding: "var(--size-500)",
         background: "var(--sm-background-subtle)",
       }}
     >
-      <Card density="loose" style={{ width: "100%", maxWidth: 420 }}>
-        <h1
-          style={{
-            font: "var(--text-heading-md)",
-            color: "var(--sm-content-primary)",
-            marginBottom: 8,
-          }}
-        >
-          easysite 어드민
-        </h1>
-        <p
-          style={{
-            font: "var(--text-body-sm)",
-            color: "var(--sm-content-secondary)",
-            marginBottom: 24,
-          }}
-        >
-          운영자 계정으로 로그인하세요.
-        </p>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          style={{ display: "flex", flexDirection: "column", gap: 16 }}
-        >
-          <FormField
-            label="이메일"
-            htmlFor="login-email"
-            required
-            errorText={errors.email?.message}
+      <Card style={{ width: "100%", maxWidth: 420 }}>
+        <div className="card-body">
+          <div
+            className="brand-mark"
+            style={{
+              width: 48,
+              height: 48,
+              fontSize: 22,
+              marginBottom: "var(--size-400)",
+            }}
           >
-            <TextField
-              id="login-email"
-              type="email"
-              autoComplete="username"
-              inputMode="email"
-              placeholder="you@example.com"
-              error={!!errors.email}
-              {...register("email")}
-            />
-          </FormField>
+            e
+          </div>
+          <h1
+            style={{
+              font: "var(--text-heading-md)",
+              fontWeight: 700,
+              marginBottom: "var(--size-150)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            easysite 어드민
+          </h1>
+          <p
+            style={{
+              font: "var(--text-body-sm)",
+              color: "var(--sm-content-secondary)",
+              marginBottom: "var(--size-600)",
+            }}
+          >
+            운영자 계정으로 로그인하세요.
+          </p>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            style={{ display: "flex", flexDirection: "column", gap: "var(--size-400)" }}
+          >
+            <Field label="이메일" required error={errors.email?.message}>
+              <Input
+                type="email"
+                autoComplete="username"
+                inputMode="email"
+                placeholder="you@example.com"
+                aria-invalid={!!errors.email}
+                {...register("email")}
+              />
+            </Field>
 
-          <FormField
-            label="비밀번호"
-            htmlFor="login-password"
-            required
-            errorText={errors.password?.message}
-          >
-            <TextField
-              id="login-password"
-              type="password"
-              autoComplete="current-password"
-              error={!!errors.password}
-              {...register("password")}
-            />
-          </FormField>
+            <Field label="비밀번호" required error={errors.password?.message}>
+              <Input
+                type="password"
+                autoComplete="current-password"
+                aria-invalid={!!errors.password}
+                {...register("password")}
+              />
+            </Field>
 
-          <Button
-            type="submit"
-            variant="primary"
-            size="lg"
-            fullWidth
-            loading={submitting}
-          >
-            {submitting ? "로그인 중…" : "로그인"}
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="md"
-            fullWidth
-            onClick={onReset}
-            loading={resetting}
-          >
-            비밀번호 재설정 메일 보내기
-          </Button>
-        </form>
+            <Button type="submit" variant="primary" size="lg" full loading={submitting}>
+              {submitting ? "로그인 중…" : "로그인"}
+            </Button>
+            <Button type="button" variant="ghost" full onClick={onReset} loading={resetting}>
+              비밀번호 재설정 메일 보내기
+            </Button>
+          </form>
+        </div>
       </Card>
     </main>
   );
