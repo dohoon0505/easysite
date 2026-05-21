@@ -1,7 +1,7 @@
 /* eslint-disable */
 // Mobile app router — handles its own page state inside the phone frame
 
-const MobileApp = ({ products, setProducts, sections, setSections, site, onSwitchSite, onLogout, offline }) => {
+const MobileApp = ({ products, setProducts, sections, setSections, categories, site, onSwitchSite, onLogout, offline }) => {
   const [route, setRoute] = React.useState("m-home");
   const [editingId, setEditingId] = React.useState(null);
   const [bulkOpen, setBulkOpen] = React.useState(false);
@@ -50,6 +50,7 @@ const MobileApp = ({ products, setProducts, sections, setSections, site, onSwitc
         <MobileProductsPage
           products={products}
           setProducts={setProducts}
+          categories={categories}
           onEdit={(id) => nav("m-editor", id)}
           onAdd={() => nav("m-editor", null)}
         />
@@ -59,6 +60,7 @@ const MobileApp = ({ products, setProducts, sections, setSections, site, onSwitc
           productId={editingId}
           products={products}
           setProducts={setProducts}
+          categories={categories}
           onBack={() => setRoute("m-products")}
         />
       )}
@@ -91,6 +93,7 @@ const MobileApp = ({ products, setProducts, sections, setSections, site, onSwitc
         onClose={() => setBulkOpen(false)}
         products={products}
         setProducts={setProducts}
+        categories={categories}
       />
     </MobileFrame>
   );

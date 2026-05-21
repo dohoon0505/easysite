@@ -101,8 +101,69 @@ function BottomNav({ route, go }) {
   );
 }
 
+// ---------- HOME FAQ ----------
+function HomeFaqItem({ item }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={"faq-item " + (open ? "open" : "")}>
+      <button className="faq-q" onClick={() => setOpen(!open)} aria-expanded={open}>
+        <span className="faq-q-text">
+          <span className="faq-q-title">{item.q}</span>
+        </span>
+        <span className="faq-icon" aria-hidden="true">
+          {open ? <I.Minus size={18} /> : <I.Plus size={18} />}
+        </span>
+      </button>
+      {open && <div className="faq-a">{item.a}</div>}
+    </div>
+  );
+}
+
 // ---------- HOME ----------
-function HomeScreen({ go, openCat }) {
+function HomeScreen({ go, openCat, onPick }) {
+  const [draftHS, setDraftHS] = useState(null);
+  useEffect(() => {
+    const handler = (e) => {
+      const d = e && e.data;
+      if (d && d.type === "draftHomeSections" && Array.isArray(d.sections)) {
+        setDraftHS(d.sections);
+      }
+    };
+    window.addEventListener("message", handler);
+    if (window.parent && window.parent !== window) {
+      try { window.parent.postMessage({ type: "previewReady" }, "*"); } catch (_) {}
+    }
+    return () => window.removeEventListener("message", handler);
+  }, []);
+
+  const HS = draftHS || window.HOME_SECTIONS || [];
+  const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
+  const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
+
+  const productById = {};
+  Object.values(SECTIONS).forEach((groups) => {
+    groups.forEach((g) => {
+      g.items.forEach((p) => {
+        if (p.productId) productById[p.productId] = p;
+        if (p.id) productById[p.id] = p;
+      });
+    });
+  });
+
+  const adminSliders = sliderSections
+    .map((s) => ({
+      title: s.title || "",
+      subtitle: s.subtitle || "",
+      list: (s.pickedIds || []).map((id) => productById[id]).filter(Boolean),
+    }))
+    .filter((s) => s.list.length > 0);
+
+  const allFaqs = (window.FAQS && window.FAQS.length > 0) ? window.FAQS : (window.FAQ_ITEMS || []);
+  const pickedFaqs = (faqHome.pickedIds && faqHome.pickedIds.length > 0)
+    ? faqHome.pickedIds.map((id) => allFaqs.find((f) => f.id === id || f.faqId === id)).filter(Boolean)
+    : [];
+  const homeFaqTitle = faqHome.title || "자주 묻는 질문";
+
   return (
     <div>
       <section className="hero">
@@ -147,6 +208,29 @@ function HomeScreen({ go, openCat }) {
         </div>
       </section>
 
+      {adminSliders.map((s, i) => (
+        <section className="section" key={"slider-" + i}>
+          <div className="section-head">
+            <h3>{s.title}</h3>
+            {s.subtitle && <span className="meta">{s.subtitle}</span>}
+          </div>
+          <div style={{ display: "flex", gap: 12, overflowX: "auto", padding: "0 20px 12px", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}>
+            {s.list.map((item, j) => (
+              <button key={j} className="product" style={{ minWidth: 150, flex: "0 0 auto", scrollSnapAlign: "start" }}
+                onClick={() => onPick({ ...item, imgLg: item.imgLg || item.img, category: s.title, group: "" })}>
+                <div className="product-img">
+                  <img src={item.img} alt={item.name} loading="lazy" />
+                </div>
+                <div className="product-body">
+                  <div className="product-name">{item.name}</div>
+                  <div className="product-price">{fmt(item.price)}<span className="won">원</span></div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+      ))}
+
       <div className="usp">
         <div>
           <h4>전화 한 통이면, 3시간 안에 도착해요</h4>
@@ -184,6 +268,22 @@ function HomeScreen({ go, openCat }) {
           <I.List size={18} strokeWidth={2.2} />상품 목록 둘러보기
         </button>
       </section>
+
+      {pickedFaqs.length > 0 && (
+        <section className="section">
+          <div className="section-head">
+            <h3>{homeFaqTitle}</h3>
+          </div>
+          <div className="faq-list" style={{ padding: "0 20px" }}>
+            {pickedFaqs.map((it, i) => <HomeFaqItem key={i} item={it} />)}
+          </div>
+          <div style={{ textAlign: "center", padding: "12px 20px 0" }}>
+            <button className="btn-secondary" style={{ width: "auto", display: "inline-flex", padding: "0 18px" }} onClick={() => go("faq")}>
+              전체 질문 보기
+            </button>
+          </div>
+        </section>
+      )}
 
       <div className="footer">
         <a className="num" href={PHONE_HREF}>{PHONE}</a>
@@ -632,7 +732,7 @@ function App() {
     <div className="app">
       <div className="app-frame">
         <AppBar title={title} onBack={onBack} scrolled={scrolled} />
-        {route === "home"  && <HomeScreen go={go} openCat={openCat} />}
+        {route === "home"  && <HomeScreen go={go} openCat={openCat} onPick={setSheet} />}
         {route === "items" && <ItemsScreen activeTab={activeTab} setActiveTab={setActiveTab} onPick={setSheet} />}
         {route === "order" && <OrderScreen initialProduct={orderSeed} />}
         {route === "faq"   && <FaqScreen />}

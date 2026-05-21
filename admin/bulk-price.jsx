@@ -2,7 +2,7 @@
 // Bulk price adjustment sheet — the novel mobile pattern for seasonal flower-shop owners.
 // Select N products → choose %change or fixed → live preview → apply (creates drafts).
 
-const BulkPriceSheet = ({ open, onClose, products, setProducts }) => {
+const BulkPriceSheet = ({ open, onClose, products, setProducts, categories }) => {
   const [step, setStep] = React.useState(1); // 1: pick, 2: adjust, 3: preview
   const [picked, setPicked] = React.useState([]);
   const [mode, setMode] = React.useState("percent"); // 'percent' | 'fixed' | 'round'
@@ -88,7 +88,7 @@ const BulkPriceSheet = ({ open, onClose, products, setProducts }) => {
               </div>
               {/* Category quick-pick */}
               <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
-                {CATEGORIES.filter((c) => c.id !== "all").map((c) => {
+                {categories.filter((c) => c.id !== "all").map((c) => {
                   const inCat = products.filter((p) => p.category === c.id).map((p) => p.id);
                   const allPicked = inCat.length > 0 && inCat.every((id) => picked.includes(id));
                   return (

@@ -1,7 +1,7 @@
 /* eslint-disable */
 // Mobile product list (P01 mobile) + product detail/edit (P02/P03 mobile) + filter sheet
 
-const MobileProductsPage = ({ products, setProducts, onEdit, onAdd, onBack }) => {
+const MobileProductsPage = ({ products, setProducts, categories, onEdit, onAdd, onBack }) => {
   const [category, setCategory] = React.useState("all");
   const [query, setQuery] = React.useState("");
   const [filterOpen, setFilterOpen] = React.useState(false);
@@ -49,7 +49,7 @@ const MobileProductsPage = ({ products, setProducts, onEdit, onAdd, onBack }) =>
           borderBottom: "1px solid var(--sm-border-subtle)",
         }}
       >
-        {CATEGORIES.map((c) => (
+        {categories.map((c) => (
           <Chip
             key={c.id}
             selected={category === c.id}

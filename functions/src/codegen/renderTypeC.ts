@@ -60,6 +60,20 @@ export interface RenderTypeCInput {
     visible?: boolean;
   }>;
   faqCategories?: Array<{ id: string; label: string }>;
+  galleryWorks?: Array<{
+    workId: string;
+    name: string;
+    age?: string;
+    duration?: string;
+    review?: string;
+    img?: string;
+    desc?: string;
+    develop?: string[];
+    group?: string;
+    sortOrder: number;
+    visible?: boolean;
+    image?: { repoPath?: string };
+  }>;
 }
 
 export function renderTypeC(input: RenderTypeCInput): string {
@@ -126,6 +140,7 @@ export function renderTypeC(input: RenderTypeCInput): string {
 
   const homeBlock = renderHomeBlockC(input.homeSections);
   const faqBlock = renderFaqBlockC(input.faqs, input.faqCategories);
+  const galleryBlock = renderGalleryWorksC(input.galleryWorks);
 
   const assigns = [
     "COURSE_CATEGORIES",
@@ -134,6 +149,7 @@ export function renderTypeC(input: RenderTypeCInput): string {
     "HOME_SECTIONS",
     "FAQS",
     "FAQ_CATEGORIES",
+    "GALLERY_WORKS",
   ].join(", ");
 
   return [
@@ -156,6 +172,8 @@ export function renderTypeC(input: RenderTypeCInput): string {
     homeBlock,
     "",
     faqBlock,
+    "",
+    galleryBlock,
     "",
     `Object.assign(window, { ${assigns} });`,
     "",
@@ -201,6 +219,33 @@ function renderFaqBlockC(
       ? "const FAQ_CATEGORIES = [];"
       : `const FAQ_CATEGORIES = [\n${catItems.map((x) => "  " + formatValue(x)).join(",\n")}\n];`;
   return `${faqsBlock}\n${catsBlock}`;
+}
+
+function renderGalleryWorksC(
+  galleryWorks?: RenderTypeCInput["galleryWorks"]
+): string {
+  const items = (galleryWorks ?? [])
+    .filter((w) => w.visible !== false)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((w) => {
+      const imgPath = w.image?.repoPath
+        ? "img/" + path.basename(w.image.repoPath)
+        : w.img ?? "";
+      const obj: Record<string, unknown> = {
+        id: w.workId,
+        name: w.name,
+      };
+      if (w.age) obj.age = w.age;
+      if (w.duration) obj.duration = w.duration;
+      if (w.review) obj.review = w.review;
+      if (imgPath) obj.img = imgPath;
+      if (w.desc) obj.desc = w.desc;
+      if (w.develop && w.develop.length > 0) obj.develop = w.develop;
+      if (w.group) obj.group = w.group;
+      return "  " + formatValue(obj);
+    });
+  if (items.length === 0) return "const GALLERY_WORKS = [];";
+  return `const GALLERY_WORKS = [\n${items.join(",\n")}\n];`;
 }
 
 const SIMPLE_KEY = /^[A-Za-z_][A-Za-z0-9_]*$/;

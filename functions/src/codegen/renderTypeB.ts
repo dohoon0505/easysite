@@ -112,10 +112,11 @@ export function renderTypeB(input: RenderTypeBInput): string {
             ? "img/" + path.basename(p.image.repoPath)
             : "";
           return formatValue({
+            productId: p.productId,
+            id: p.productId,
             name: p.name,
             price: p.price,
             img: imgPath,
-            // imgLg 가 필요하면 future enhancement (M5 는 img 만)
           });
         }).join(", ");
         return `    { kicker: ${JSON.stringify(s.kicker)}, title: ${JSON.stringify(s.title)}, tag: ${JSON.stringify(s.tag)}, items: [${items}] }`;

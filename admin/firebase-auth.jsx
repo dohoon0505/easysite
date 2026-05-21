@@ -124,7 +124,49 @@ const uploadProductImage = (siteId, productId, file, onProgress) => {
   });
 };
 
-Object.assign(window, { uploadProductImage, sanitizeFilename });
+const uploadSectionImage = (siteId, sectionId, imageKey, file, onProgress) => {
+  return new Promise((resolve, reject) => {
+    if (!window.fbStorage) {
+      reject(new Error("Firebase Storage 가 준비되지 않았습니다"));
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      reject(new Error("10MB 이하 이미지만 업로드 가능합니다"));
+      return;
+    }
+    const filename = sanitizeFilename(file.name);
+    const path = `sites/${siteId}/homeSections/${sectionId}/${imageKey}-${filename}`;
+    const ref = window.fbStorage.ref(path);
+    const token = window.crypto && window.crypto.randomUUID
+      ? window.crypto.randomUUID()
+      : Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+
+    const task = ref.put(file, {
+      contentType: file.type,
+      customMetadata: { firebaseStorageDownloadTokens: token },
+    });
+
+    task.on(
+      "state_changed",
+      (snap) => {
+        const pct = snap.totalBytes > 0 ? Math.round((snap.bytesTransferred / snap.totalBytes) * 100) : 0;
+        onProgress && onProgress(pct);
+      },
+      (err) => reject(err),
+      async () => {
+        try {
+          const bucket = window.fbStorage.app.options.storageBucket;
+          const url = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(path)}?alt=media&token=${token}`;
+          resolve({ storagePath: path, downloadUrl: url, filename });
+        } catch (e) {
+          reject(e);
+        }
+      }
+    );
+  });
+};
+
+Object.assign(window, { uploadProductImage, uploadSectionImage, sanitizeFilename });
 
 Object.assign(window, {
   useAuthSession,

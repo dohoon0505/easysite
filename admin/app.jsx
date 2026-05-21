@@ -74,10 +74,15 @@ const App = () => {
   // useLive* 가 [items, setItems, loading] 반환 — setItems 호출 시 Firestore diff write.
   const [liveProducts, setProducts, productsLoading] = window.useLiveProducts(siteId);
   const [liveSections, setSections, sectionsLoading] = window.useLiveSections(siteId);
+  const [liveCategories] = window.useLiveCategories(siteId);
+  const [liveGalleryWorks] = window.useLiveGalleryWorks(siteId);
 
   // 미인증/loading 상태에선 mock 으로 fallback → 디자인이 항상 렌더링 가능.
   const products = loggedIn ? liveProducts : PRODUCTS;
   const sections = loggedIn ? liveSections : HOME_SECTIONS;
+  const categories = loggedIn && liveCategories.length > 0
+    ? [{ id: "all", name: "전체" }, ...liveCategories]
+    : CATEGORIES;
   const [bulkOpen, setBulkOpen] = React.useState(false);
   const [cmdkOpen, setCmdkOpen] = React.useState(false);
   const [csvOpen, setCsvOpen] = React.useState(false);
@@ -189,7 +194,7 @@ const App = () => {
           }
         />
         {route === "home" && (
-          <HomeSectionsPage sections={sections} setSections={setSections} products={products} onNav={setRoute} site={site} />
+          <HomeSectionsPage sections={sections} setSections={setSections} products={products} galleryWorks={liveGalleryWorks} onNav={setRoute} site={site} />
         )}
         {route === "products" && (
           <ProductsPage
@@ -239,6 +244,7 @@ const App = () => {
           setProducts={setProducts}
           sections={sections}
           setSections={setSections}
+          categories={categories}
           site={site}
           onSwitchSite={() => setShowSwitcher(true)}
           onLogout={() => setLoggedIn(false)}
@@ -264,6 +270,7 @@ const App = () => {
         onClose={() => setBulkOpen(false)}
         products={products}
         setProducts={setProducts}
+        categories={categories}
       />
 
       <CommandPalette

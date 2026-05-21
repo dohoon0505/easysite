@@ -659,6 +659,128 @@ async function diffWriteFaqs(siteId, prev, next) {
   if (ops > 0) await batch.commit();
 }
 
+// ── galleryWorks (greenlight_art 작품 큐레이션) ──────────────
+const useLiveGalleryWorks = (siteId) => {
+  const [items, setItemsLocal] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    if (!siteId || !window.fbDb) {
+      setLoading(false);
+      return;
+    }
+    const unsub = window.fbDb
+      .collection("sites").doc(siteId).collection("galleryWorks")
+      .orderBy("sortOrder", "asc")
+      .onSnapshot(
+        (snap) => {
+          setItemsLocal(
+            snap.docs.map((d) => {
+              const fs = d.data();
+              return {
+                id: fs.workId || d.id,
+                name: fs.name || "",
+                age: fs.age || "",
+                duration: fs.duration || "",
+                review: fs.review || "",
+                img: fs.img || "",
+                desc: fs.desc || "",
+                develop: fs.develop || [],
+                group: fs.group || "best",
+                sortOrder: fs.sortOrder || 0,
+                visible: fs.visible !== false,
+                image: fs.image || null,
+              };
+            })
+          );
+          setLoading(false);
+        },
+        (err) => {
+          console.error("useLiveGalleryWorks", err);
+          setLoading(false);
+        }
+      );
+    return unsub;
+  }, [siteId]);
+
+  const setItems = React.useCallback(
+    (updater) => {
+      setItemsLocal((prev) => {
+        const next = typeof updater === "function" ? updater(prev) : updater;
+        if (siteId && window.fbDb) {
+          diffWriteGalleryWorks(siteId, prev, next).catch((e) => console.error("diffWriteGalleryWorks", e));
+        }
+        return next;
+      });
+    },
+    [siteId]
+  );
+
+  return [items, setItems, loading];
+};
+
+async function diffWriteGalleryWorks(siteId, prev, next) {
+  if (!window.fbDb) return;
+  const prevById = new Map(prev.map((x) => [x.id, x]));
+  const nextById = new Map(next.map((x) => [x.id, x]));
+  const batch = window.fbDb.batch();
+  const col = window.fbDb.collection("sites").doc(siteId).collection("galleryWorks");
+  const uid = (window.fbAuth && window.fbAuth.currentUser && window.fbAuth.currentUser.uid) || "admin-ui";
+  let ops = 0;
+
+  next.forEach((x, idx) => {
+    const old = prevById.get(x.id);
+    const sortOrder = idx * 10;
+    if (!old) {
+      batch.set(col.doc(x.id), {
+        workId: x.id,
+        name: x.name || "",
+        age: x.age || "",
+        duration: x.duration || "",
+        review: x.review || "",
+        img: x.img || "",
+        desc: x.desc || "",
+        develop: x.develop || [],
+        group: x.group || "best",
+        sortOrder,
+        visible: x.visible !== false,
+        image: x.image || null,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedBy: uid,
+      });
+      ops++;
+      return;
+    }
+    const patch = {};
+    if (old.name !== x.name) patch.name = x.name;
+    if (old.age !== x.age) patch.age = x.age;
+    if (old.duration !== x.duration) patch.duration = x.duration;
+    if (old.review !== x.review) patch.review = x.review;
+    if (old.desc !== x.desc) patch.desc = x.desc;
+    if (old.group !== x.group) patch.group = x.group;
+    if (JSON.stringify(old.develop) !== JSON.stringify(x.develop)) patch.develop = x.develop;
+    if ((old.visible !== false) !== (x.visible !== false)) patch.visible = x.visible !== false;
+    if (old.sortOrder !== sortOrder) patch.sortOrder = sortOrder;
+    if (JSON.stringify(old.image) !== JSON.stringify(x.image)) patch.image = x.image;
+    if (Object.keys(patch).length) {
+      patch.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+      patch.updatedBy = uid;
+      batch.update(col.doc(x.id), patch);
+      ops++;
+    }
+  });
+
+  prev.forEach((x) => {
+    if (!nextById.has(x.id)) {
+      batch.delete(col.doc(x.id));
+      ops++;
+    }
+  });
+
+  if (ops > 0) await batch.commit();
+}
+
 Object.assign(window, {
   useLiveProducts,
   useLiveSections,
@@ -667,5 +789,6 @@ Object.assign(window, {
   useLiveUsers,
   useLiveSites,
   useLiveFaqs,
+  useLiveGalleryWorks,
   liveSiteUrl,
 });

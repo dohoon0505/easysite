@@ -103,12 +103,18 @@ export const publishToGitHub = onCall<PublishRequest>(
           .get();
         sections = secSnap.docs.map((d) => d.data() as Record<string, unknown>);
       }
+      let galleryWorks: Record<string, unknown>[] | undefined;
       if (site.siteType === "typeC") {
         const techSnap = await db
           .collection(`sites/${siteId}/tech`)
           .where("status", "==", "live")
           .get();
         tech = techSnap.docs.map((d) => d.data() as Record<string, unknown>);
+        const gwSnap = await db
+          .collection(`sites/${siteId}/galleryWorks`)
+          .orderBy("sortOrder", "asc")
+          .get();
+        galleryWorks = gwSnap.docs.map((d) => d.data() as Record<string, unknown>);
       }
 
       // 홈 섹션 (hero / slider / faq) — 모든 사이트 타입 공통.
@@ -181,6 +187,7 @@ export const publishToGitHub = onCall<PublishRequest>(
         tech,
         homeSections,
         faqs,
+        galleryWorks,
       } as unknown as Parameters<typeof renderDataJsx>[1]);
 
       const dataJsxPath = `${site.github.sitePath}/data.jsx`;

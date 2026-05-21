@@ -1,7 +1,7 @@
 /* eslint-disable */
 // Mobile product editor (P02/P03 mobile) — camera-first flow, big numerics
 
-const MobileEditorPage = ({ productId, products, setProducts, onBack }) => {
+const MobileEditorPage = ({ productId, products, setProducts, categories, onBack }) => {
   const existing = productId ? products.find((p) => p.id === productId) : null;
   const toast = useToast();
 
@@ -33,7 +33,7 @@ const MobileEditorPage = ({ productId, products, setProducts, onBack }) => {
       toast({ tone: "error", message: "가격을 입력해 주세요" });
       return;
     }
-    const cat = CATEGORIES.find((c) => c.id === form.category);
+    const cat = categories.find((c) => c.id === form.category);
     const updated = {
       id: existing?.id || `p_${Math.random().toString(36).slice(2, 6)}`,
       ...form,
@@ -201,7 +201,7 @@ const MobileEditorPage = ({ productId, products, setProducts, onBack }) => {
                 fontSize: 15,
               }}
             >
-              {CATEGORIES.find((c) => c.id === form.category)?.name}
+              {categories.find((c) => c.id === form.category)?.name}
               <Icon name="chevronDown" size={16} style={{ color: "var(--sm-content-tertiary)" }} />
             </button>
           </Field>
@@ -291,7 +291,7 @@ const MobileEditorPage = ({ productId, products, setProducts, onBack }) => {
         title="카테고리"
       >
         <div style={{ paddingBottom: 24 }}>
-          {CATEGORIES.filter((c) => c.id !== "all").map((c) => (
+          {categories.filter((c) => c.id !== "all").map((c) => (
             <button
               key={c.id}
               onClick={() => {

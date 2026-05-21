@@ -201,9 +201,13 @@ function HomeScreen({ go, openWork }) {
   const hours = hero.hours || "월~토 13:00 - 19:00 · 일 휴무";
   const bannerText = hero.bannerText || "1회 무료 체험 수업이 가능합니다!!";
 
-  // typeC 슬라이더 — 갤러리(작품) 큐레이션은 COURSES 와 별개라 폴백을 유지한다.
-  // 어드민이 작품 목록을 별도 컬렉션으로 관리하기 전까지는 1개 슬라이더 + 정적 GALLERY_BEST 사용.
   const slider = sliderSections[0] || {};
+  const allGalleryWorks = (window.GALLERY_WORKS && window.GALLERY_WORKS.length > 0)
+    ? window.GALLERY_WORKS
+    : (window.GALLERY_BEST || []);
+  const sliderList = (slider.pickedIds && slider.pickedIds.length > 0)
+    ? slider.pickedIds.map((id) => allGalleryWorks.find((w) => w.id === id)).filter(Boolean)
+    : allGalleryWorks;
 
   // 홈 FAQ — 어드민에서 고른 항목 우선, 없으면 첫 6개 폴백.
   const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
@@ -261,7 +265,7 @@ function HomeScreen({ go, openWork }) {
         <p className="info-banner-text">{bannerText}</p>
       </div>
 
-      <FeaturedSlider title={slider.title || "아이들 작품 둘러보기"} sub={slider.subtitle || "아이들이 완성한 작품들을 소개해요."} list={GALLERY_BEST} openWork={openWork} />
+      <FeaturedSlider title={slider.title || "아이들 작품 둘러보기"} sub={slider.subtitle || "아이들이 완성한 작품들을 소개해요."} list={sliderList} openWork={openWork} />
 
       <section className="section dev-section">
         <div className="section-head dev-head">

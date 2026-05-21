@@ -2,7 +2,7 @@
 // H01 — 홈 섹션 편집
 // Left rail: list of sections (drag-reorder, toggle enable). Right: editor + preview.
 
-const HomeSectionsPage = ({ sections, setSections, products, onNav, site }) => {
+const HomeSectionsPage = ({ sections, setSections, products, galleryWorks, onNav, site }) => {
   const [activeId, setActiveId] = React.useState(sections[0]?.id);
   // sections 가 비동기로 로드되면 초기 activeId 가 undefined 일 수 있다.
   // 사용자가 직접 고른 상태가 아니라면 첫 항목으로 자동 선택.
@@ -158,6 +158,7 @@ const HomeSectionsPage = ({ sections, setSections, products, onNav, site }) => {
           section={active ? { ...active, title: displayLabel(active) } : null}
           update={updateActive}
           products={products}
+          galleryWorks={galleryWorks}
           onNav={onNav}
           siteId={site && site.id}
         />

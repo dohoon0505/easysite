@@ -15,7 +15,7 @@ const toBgImage = (src) => {
   return `url("${src}")`;
 };
 
-const SectionEditor = ({ section, update, products, onNav, siteId }) => {
+const SectionEditor = ({ section, update, products, galleryWorks, onNav, siteId }) => {
   if (!section) return null;
 
   const subtitleByType = {
@@ -40,8 +40,8 @@ const SectionEditor = ({ section, update, products, onNav, siteId }) => {
         </div>
       </div>
       <div className="card-body" style={{ display: "grid", gap: "var(--size-500)" }}>
-        {section.type === "hero" && <HeroFullEditor data={section.data} update={update} />}
-        {section.type === "slider" && <SliderEditor data={section.data} update={update} products={products} />}
+        {section.type === "hero" && <HeroFullEditor data={section.data} update={update} siteId={siteId} />}
+        {section.type === "slider" && <SliderEditor data={section.data} update={update} products={products} galleryWorks={galleryWorks} />}
         {section.type === "faq" && <FaqSectionEditor data={section.data} update={update} siteId={siteId} />}
       </div>
     </Card>
@@ -49,13 +49,17 @@ const SectionEditor = ({ section, update, products, onNav, siteId }) => {
 };
 
 // ── HeroFullEditor — 히어로 + 매장 소개 + 지도 + 안내 배너 ──────────────
-const HeroFullEditor = ({ data, update }) => (
+const HeroFullEditor = ({ data, update, siteId }) => (
   <>
     <Field label="히어로 이미지" helper="홈페이지 최상단의 큰 이미지 (가로형 권장)">
       <ImageSlot
         cssValue={data.image}
         downloadUrl={data.imageUrl}
         labelFallback="hero.jpg"
+        onReplace={async (file, onPct) => {
+          const r = await window.uploadSectionImage(siteId, "hero", "image", file, onPct);
+          update({ image: `url("${r.downloadUrl}")`, imageUrl: r.downloadUrl, imageStoragePath: r.storagePath });
+        }}
       />
     </Field>
 
@@ -92,6 +96,10 @@ const HeroFullEditor = ({ data, update }) => (
         cssValue={data.mapImage}
         downloadUrl={data.mapImageUrl}
         labelFallback="map.png"
+        onReplace={async (file, onPct) => {
+          const r = await window.uploadSectionImage(siteId, "hero", "mapImage", file, onPct);
+          update({ mapImage: `url("${r.downloadUrl}")`, mapImageUrl: r.downloadUrl, mapImageStoragePath: r.storagePath });
+        }}
       />
     </Field>
 
@@ -132,11 +140,31 @@ const HeroFullEditor = ({ data, update }) => (
   </>
 );
 
-// 이미지 슬롯 — 현재 업로드된 이미지 표시(교체 버튼은 추후 연결)
-const ImageSlot = ({ cssValue, downloadUrl, labelFallback }) => {
+const ImageSlot = ({ cssValue, downloadUrl, labelFallback, onReplace }) => {
+  const [uploading, setUploading] = React.useState(false);
+  const [pct, setPct] = React.useState(0);
+  const fileRef = React.useRef(null);
+
+  const handleFile = async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file || !onReplace) return;
+    setUploading(true);
+    setPct(0);
+    try {
+      await onReplace(file, (p) => setPct(p));
+    } catch (err) {
+      console.error("Image upload failed:", err);
+    } finally {
+      setUploading(false);
+      setPct(0);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
+
   const filename = downloadUrl
     ? decodeURIComponent(downloadUrl.split("/").pop().split("?")[0]).split("/").pop()
     : labelFallback;
+
   return (
     <div
       style={{
@@ -164,30 +192,48 @@ const ImageSlot = ({ cssValue, downloadUrl, labelFallback }) => {
           {filename || labelFallback}
         </div>
         <div className="text-tertiary" style={{ fontSize: "var(--text-caption)" }}>
-          {downloadUrl ? "라이브 사이트에 표시 중" : "이미지가 아직 업로드되지 않았어요"}
+          {uploading ? `업로드 중… ${pct}%` : (downloadUrl ? "라이브 사이트에 표시 중" : "이미지가 아직 업로드되지 않았어요")}
         </div>
+        {uploading && (
+          <div style={{ height: 4, borderRadius: 2, background: "var(--sm-border-default)", overflow: "hidden" }}>
+            <div style={{ height: "100%", width: pct + "%", background: "var(--sm-interactive-brand-default)", transition: "width 200ms" }} />
+          </div>
+        )}
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 4, justifyContent: "center" }}>
-        <Button variant="outline" size="sm" iconLeft="upload">교체</Button>
+        <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleFile} />
+        <Button
+          variant="outline"
+          size="sm"
+          iconLeft="upload"
+          onClick={() => fileRef.current && fileRef.current.click()}
+          disabled={uploading || !onReplace}
+        >
+          {uploading ? `${pct}%` : "교체"}
+        </Button>
       </div>
     </div>
   );
 };
 
-// ── SliderEditor — 슬라이더 제목 + 상품 선택 ────────────────────
-const SliderEditor = ({ data, update, products }) => {
+// ── SliderEditor — 슬라이더 제목 + 상품/작품 선택 ────────────────────
+const SliderEditor = ({ data, update, products, galleryWorks }) => {
+  const useGallery = Array.isArray(galleryWorks) && galleryWorks.length > 0;
+  const items = useGallery ? galleryWorks : products;
+  const itemLabel = useGallery ? "작품" : "상품";
+
   const pickedIds = Array.isArray(data.pickedIds) ? data.pickedIds : [];
   const [pickerOpen, setPickerOpen] = React.useState(false);
 
-  const togglePick = (productId) => {
-    const next = pickedIds.includes(productId)
-      ? pickedIds.filter((x) => x !== productId)
-      : [...pickedIds, productId];
+  const togglePick = (itemId) => {
+    const next = pickedIds.includes(itemId)
+      ? pickedIds.filter((x) => x !== itemId)
+      : [...pickedIds, itemId];
     update({ pickedIds: next });
   };
 
-  const movePick = (productId, dir) => {
-    const idx = pickedIds.indexOf(productId);
+  const movePick = (itemId, dir) => {
+    const idx = pickedIds.indexOf(itemId);
     if (idx < 0) return;
     const j = idx + dir;
     if (j < 0 || j >= pickedIds.length) return;
@@ -196,24 +242,28 @@ const SliderEditor = ({ data, update, products }) => {
     update({ pickedIds: next });
   };
 
+  const itemSub = (p) => useGallery
+    ? [p.age, p.duration && `${p.duration} 수업`].filter(Boolean).join(" · ")
+    : `${p.categoryName || p.category} · ${(p.price || 0).toLocaleString()}원`;
+
   return (
     <>
       <Field label="슬라이더 제목" required helper="홈 화면에 큰 글씨로 표시됩니다">
         <Input
           value={data.title || ""}
           onChange={(e) => update({ title: e.target.value })}
-          placeholder="풍성한 꽃다발 추천"
+          placeholder={useGallery ? "아이들 작품 둘러보기" : "풍성한 꽃다발 추천"}
         />
       </Field>
       <Field label="부제목 (선택)" helper="제목 옆에 작게 표시되는 보조 문구">
         <Input
           value={data.subtitle || ""}
           onChange={(e) => update({ subtitle: e.target.value })}
-          placeholder="시즌 추천"
+          placeholder={useGallery ? "아이들이 완성한 작품들을 소개해요" : "시즌 추천"}
         />
       </Field>
 
-      <Field label={`선택된 상품 (${pickedIds.length}개)`} helper="홈에 노출할 상품을 선택합니다. 좌측 ↑↓ 화살표로 순서 변경.">
+      <Field label={`선택된 ${itemLabel} (${pickedIds.length}개)`} helper={`홈에 노출할 ${itemLabel}을 선택합니다. 좌측 ↑↓ 화살표로 순서 변경.`}>
         {pickedIds.length === 0 ? (
           <div
             style={{
@@ -226,12 +276,12 @@ const SliderEditor = ({ data, update, products }) => {
               fontSize: 13,
             }}
           >
-            아직 선택된 상품이 없습니다.
+            아직 선택된 {itemLabel}이 없습니다.
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             {pickedIds.map((pid, idx) => {
-              const p = products.find((x) => x.id === pid);
+              const p = items.find((x) => x.id === pid);
               if (!p) {
                 return (
                   <div
@@ -249,7 +299,7 @@ const SliderEditor = ({ data, update, products }) => {
                     }}
                   >
                     <Icon name="alert" size={14} />
-                    <span style={{ flex: 1 }}>삭제된 상품 ({pid})</span>
+                    <span style={{ flex: 1 }}>삭제된 {itemLabel} ({pid})</span>
                     <IconButton icon="x" onClick={() => togglePick(pid)} />
                   </div>
                 );
@@ -273,7 +323,7 @@ const SliderEditor = ({ data, update, products }) => {
                       width: 36,
                       height: 36,
                       borderRadius: "var(--radius-sm)",
-                      backgroundImage: toBgImage(p.image),
+                      backgroundImage: toBgImage(p.image || p.img),
                       backgroundColor: "var(--sm-background-muted)",
                       backgroundSize: "cover",
                       backgroundPosition: "center",
@@ -285,7 +335,7 @@ const SliderEditor = ({ data, update, products }) => {
                       {p.name}
                     </div>
                     <div style={{ fontSize: 11, color: "var(--sm-content-tertiary)" }}>
-                      {p.categoryName || p.category} · {(p.price || 0).toLocaleString()}원
+                      {itemSub(p)}
                     </div>
                   </div>
                   <IconButton icon="x" onClick={() => togglePick(pid)} />
@@ -295,22 +345,25 @@ const SliderEditor = ({ data, update, products }) => {
           </div>
         )}
         <Button variant="outline" size="sm" iconLeft="plus" onClick={() => setPickerOpen(true)} style={{ marginTop: 8 }}>
-          상품 선택
+          {itemLabel} 선택
         </Button>
       </Field>
 
       <ProductPickerModal
         open={pickerOpen}
         onClose={() => setPickerOpen(false)}
-        products={products}
+        products={items}
         pickedIds={pickedIds}
         onToggle={togglePick}
+        itemLabel={itemLabel}
+        useGallery={useGallery}
       />
     </>
   );
 };
 
-const ProductPickerModal = ({ open, onClose, products, pickedIds, onToggle }) => {
+const ProductPickerModal = ({ open, onClose, products, pickedIds, onToggle, itemLabel, useGallery }) => {
+  const label = itemLabel || "상품";
   const [query, setQuery] = React.useState("");
   React.useEffect(() => { if (open) setQuery(""); }, [open]);
 
@@ -318,15 +371,21 @@ const ProductPickerModal = ({ open, onClose, products, pickedIds, onToggle }) =>
     if (!query.trim()) return true;
     const q = query.toLowerCase();
     return (p.name || "").toLowerCase().includes(q) ||
-           (p.categoryName || p.category || "").toLowerCase().includes(q);
+           (p.categoryName || p.category || "").toLowerCase().includes(q) ||
+           (p.age || "").toLowerCase().includes(q) ||
+           (p.desc || "").toLowerCase().includes(q);
   });
+
+  const subText = (p) => useGallery
+    ? [p.age, p.duration && `${p.duration} 수업`].filter(Boolean).join(" · ")
+    : `${p.categoryName || p.category} · ${(p.price || 0).toLocaleString()}원`;
 
   return (
     <Modal
       open={open}
       onClose={onClose}
-      title="상품 선택"
-      desc="홈 슬라이더에 노출할 상품을 골라 주세요. 다시 클릭하면 해제됩니다."
+      title={`${label} 선택`}
+      desc={`홈 슬라이더에 노출할 ${label}을 골라 주세요. 다시 클릭하면 해제됩니다.`}
       size="md"
       footer={<Button variant="primary" onClick={onClose}>완료</Button>}
     >
@@ -334,7 +393,7 @@ const ProductPickerModal = ({ open, onClose, products, pickedIds, onToggle }) =>
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="상품명·카테고리로 검색"
+          placeholder={useGallery ? "작품명·연령으로 검색" : "상품명·카테고리로 검색"}
           prefix={<Icon name="search" size={16} />}
           autoFocus
         />
@@ -342,7 +401,7 @@ const ProductPickerModal = ({ open, onClose, products, pickedIds, onToggle }) =>
       <div style={{ maxHeight: 420, overflowY: "auto", display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
         {filtered.length === 0 ? (
           <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: 24, color: "var(--sm-content-tertiary)", fontSize: 13 }}>
-            조건에 맞는 상품이 없어요.
+            조건에 맞는 {label}이 없어요.
           </div>
         ) : filtered.map((p) => {
           const picked = pickedIds.includes(p.id);
@@ -367,7 +426,7 @@ const ProductPickerModal = ({ open, onClose, products, pickedIds, onToggle }) =>
                   width: 44,
                   height: 44,
                   borderRadius: "var(--radius-sm)",
-                  backgroundImage: toBgImage(p.image),
+                  backgroundImage: toBgImage(p.image || p.img),
                   backgroundColor: "var(--sm-background-muted)",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
@@ -379,7 +438,7 @@ const ProductPickerModal = ({ open, onClose, products, pickedIds, onToggle }) =>
                   {p.name}
                 </div>
                 <div style={{ fontSize: 11, color: "var(--sm-content-tertiary)" }}>
-                  {p.categoryName || p.category} · {(p.price || 0).toLocaleString()}원
+                  {subText(p)}
                 </div>
               </div>
               {picked && <Icon name="check" size={16} style={{ color: "var(--sm-interactive-brand-default)", flexShrink: 0 }} />}
