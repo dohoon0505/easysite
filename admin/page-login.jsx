@@ -33,14 +33,6 @@ const LoginPage = ({ onLogin }) => {
         shell.style.setProperty("--mx", `${mx}%`);
         shell.style.setProperty("--my", `${my}%`);
 
-        if (visualRef.current) {
-          const vr = visualRef.current.getBoundingClientRect();
-          const lx = ((e.clientX - vr.left) / vr.width) * 100;
-          const ly = ((e.clientY - vr.top) / vr.height) * 100;
-          visualRef.current.style.setProperty("--lx", `${lx}%`);
-          visualRef.current.style.setProperty("--ly", `${ly}%`);
-        }
-
         if (cardRef.current) {
           const cr = cardRef.current.getBoundingClientRect();
           const cx = (e.clientX - (cr.left + cr.width / 2)) / cr.width;
@@ -145,7 +137,6 @@ const LoginPage = ({ onLogin }) => {
       <div className="login-card" ref={cardRef}>
         {/* ── 좌측 비주얼 ── */}
         <div className="login-visual" ref={visualRef}>
-          <div className="login-visual-spot" />
           <div className="login-visual-top">
             <div className="login-logo">
               <span className="login-logo-name">EASYSITE</span>

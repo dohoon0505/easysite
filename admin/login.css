@@ -146,24 +146,7 @@
   overflow: hidden;
   background:
     radial-gradient(ellipse at 30% 20%, rgba(170, 179, 223, 0.25), transparent 50%),
-    radial-gradient(ellipse at 80% 90%, rgba(217, 119, 6, 0.18), transparent 55%),
     linear-gradient(135deg, #0d1226 0%, var(--sm-interactive-brand-active) 65%, var(--sm-interactive-brand-default) 100%);
-  --lx: 50%;
-  --ly: 50%;
-}
-
-/* Cursor-tracking warm spotlight inside the visual panel */
-.login-visual-spot {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle 320px at var(--lx) var(--ly),
-    rgba(255, 225, 170, 0.30),
-    rgba(217, 119, 6, 0.15) 25%,
-    transparent 60%);
-  pointer-events: none;
-  z-index: 1;
-  transition: background 0.12s linear;
-  mix-blend-mode: screen;
 }
 
 /* Slow scanning shimmer band — removed per request */
