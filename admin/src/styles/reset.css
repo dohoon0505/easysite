@@ -8,16 +8,26 @@
 html {
   -webkit-text-size-adjust: 100%;
   tab-size: 4;
-  font-family: var(--font-family-base, system-ui, sans-serif);
+  /* Pretendard 만 사용 — system-ui fallback 의도적으로 제외 (디자인시스템 v0.5.2) */
+  font-family: var(--font-sans);
+  font-size: 15px;
   line-height: 1.5;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--sm-background-default, #fff);
-  color: var(--sm-content-primary, #111);
+  background: var(--sm-background-default);
+  color: var(--sm-content-primary);
+  font: var(--text-body-md);
 }
+
+/* 기본 heading 들은 명시적으로 토큰 매핑.
+   페이지에서 inline style="font:var(--text-heading-md)" 등으로 덮어쓰지 않으면 이 값이 적용됨. */
+h1 { font: var(--text-heading-lg); }
+h2 { font: var(--text-heading-md); }
+h3 { font: var(--text-heading-sm); }
+h4, h5, h6 { font: var(--text-label-lg); }
 
 img,
 picture,
