@@ -33,6 +33,15 @@ export interface RenderTypeAInput {
     time?: number | null;
     tag?: string | null;
   }>;
+  homeSections?: Array<{
+    sectionId: string;
+    type: string;
+    title?: string;
+    icon?: string;
+    enabled?: boolean;
+    sortOrder: number;
+    data?: Record<string, unknown>;
+  }>;
 }
 
 export function renderTypeA(input: RenderTypeAInput): string {
@@ -85,6 +94,8 @@ export function renderTypeA(input: RenderTypeAInput): string {
     })
     .join(",\n");
 
+  const homeBlock = renderHomeSectionsBlock(input.homeSections);
+
   return [
     "/* eslint-disable */",
     `// ${input.siteName} — 상품 카탈로그 (자동 생성: publishToGitHub)`,
@@ -98,9 +109,37 @@ export function renderTypeA(input: RenderTypeAInput): string {
     ",",
     "};",
     "",
-    "Object.assign(window, { HAIR_CATEGORIES, HAIR_STYLES });",
+    homeBlock.declaration,
+    homeBlock.assign,
     "",
-  ].join("\n");
+  ].filter((s) => s !== "").join("\n");
+}
+
+/**
+ * 홈 섹션 선언 + window 노출 코드 생성.
+ * 섹션이 없으면 빈 객체 export. 사이트가 안전하게 window.HOME_SECTIONS 를 참조 가능.
+ */
+export function renderHomeSectionsBlock(
+  homeSections?: RenderTypeAInput["homeSections"]
+): { declaration: string; assign: string } {
+  const enabled = (homeSections ?? [])
+    .filter((s) => s.enabled !== false)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((s) => ({
+      id: s.sectionId,
+      type: s.type,
+      title: s.title ?? "",
+      icon: s.icon ?? null,
+      data: s.data ?? {},
+    }));
+
+  const arrayBody = enabled.map((s) => "  " + formatValue(s)).join(",\n");
+  const declaration =
+    enabled.length === 0
+      ? "const HOME_SECTIONS = [];"
+      : `const HOME_SECTIONS = [\n${arrayBody}\n];`;
+  const assign = "Object.assign(window, { HAIR_CATEGORIES, HAIR_STYLES, HOME_SECTIONS });";
+  return { declaration, assign };
 }
 
 const SIMPLE_KEY = /^[A-Za-z_][A-Za-z0-9_]*$/;

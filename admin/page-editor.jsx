@@ -2,7 +2,7 @@
 // P02/P03 — 상품 등록/수정
 // Two-column layout: form on left, live preview on right
 
-const ProductEditorPage = ({ productId, products, setProducts, onBack }) => {
+const ProductEditorPage = ({ productId, products, setProducts, onBack, siteId }) => {
   const existing = productId ? products.find((p) => p.id === productId) : null;
   const toast = useToast();
 
@@ -22,6 +22,49 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack }) => {
   const [dirty, setDirty] = React.useState(false);
   const [autoSavedAt, setAutoSavedAt] = React.useState(null);
   const [confirmDelete, setConfirmDelete] = React.useState(false);
+
+  // 이미지 업로드 상태
+  const [uploading, setUploading] = React.useState(false);
+  const [uploadPct, setUploadPct] = React.useState(0);
+  const fileInputRef = React.useRef(null);
+  const cameraInputRef = React.useRef(null);
+
+  // 신규 등록 중엔 productId 가 없으니 임시 ID 사용
+  const uploadProductId = React.useMemo(
+    () => existing?.id || `draft-${Math.random().toString(36).slice(2, 8)}`,
+    [existing?.id]
+  );
+
+  const onPickFile = async (e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = ""; // 같은 파일 재선택 가능
+    if (!file) return;
+    if (!siteId) {
+      toast({ tone: "error", message: "사이트가 지정되지 않았습니다" });
+      return;
+    }
+    if (!window.uploadProductImage) {
+      toast({ tone: "error", message: "Firebase Storage 가 준비되지 않았습니다" });
+      return;
+    }
+    setUploading(true);
+    setUploadPct(0);
+    try {
+      const result = await window.uploadProductImage(
+        siteId,
+        uploadProductId,
+        file,
+        (pct) => setUploadPct(pct)
+      );
+      update("image", result.downloadUrl);
+      toast({ tone: "success", message: `업로드 완료 — ${result.filename}` });
+    } catch (err) {
+      toast({ tone: "error", message: `업로드 실패: ${err.message || err}` });
+    } finally {
+      setUploading(false);
+      setUploadPct(0);
+    }
+  };
 
   // simulate autosave when dirty
   React.useEffect(() => {
@@ -316,18 +359,46 @@ const ProductEditorPage = ({ productId, products, setProducts, onBack }) => {
                     <Button
                       variant="secondary"
                       iconLeft="upload"
-                      onClick={() => update("image", flowerThumb("#f4c8d0", "#d36a8a"))}
+                      onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                      disabled={uploading}
                     >
-                      파일 선택
+                      {uploading ? `업로드 중… ${uploadPct}%` : "파일 선택"}
                     </Button>
                     <Button
                       variant="outline"
                       iconLeft="camera"
-                      onClick={() => update("image", flowerThumb("#fbd5e2", "#e87fa3"))}
+                      onClick={() => cameraInputRef.current && cameraInputRef.current.click()}
+                      disabled={uploading}
                     >
                       카메라 촬영
                     </Button>
                   </div>
+                  {/* 숨김 파일 입력 — 실제 Firebase Storage 업로드 트리거 */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    onChange={onPickFile}
+                    style={{ display: "none" }}
+                  />
+                  <input
+                    ref={cameraInputRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={onPickFile}
+                    style={{ display: "none" }}
+                  />
+                </div>
+              )}
+              {uploading && (
+                <div style={{ marginTop: "var(--size-300)", height: 6, background: "var(--sm-background-muted)", borderRadius: 999, overflow: "hidden" }}>
+                  <div style={{
+                    height: "100%",
+                    width: `${uploadPct}%`,
+                    background: "var(--sm-interactive-brand-default)",
+                    transition: "width 0.2s ease",
+                  }} />
                 </div>
               )}
             </div>

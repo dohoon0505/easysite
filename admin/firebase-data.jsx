@@ -45,9 +45,50 @@ const designToFsProductPatch = (designPatch) => {
   if ("status" in designPatch) patch.status = designPatch.status;
   if ("visible" in designPatch) patch.visible = designPatch.visible;
   if ("draft" in designPatch) patch.status = designPatch.draft ? "draft" : "live";
-  // 이미지·태그 등 디자인 전용 필드는 추후 별도 매핑.
+  if ("tag" in designPatch) patch.tag = designPatch.tag;
+  if ("tags" in designPatch && Array.isArray(designPatch.tags)) {
+    // 디자인 tags 배열의 첫 항목을 Firestore tag 로 매핑
+    patch.tag = designPatch.tags[0] || null;
+  }
+  if ("sizes" in designPatch && Array.isArray(designPatch.sizes)) {
+    patch.sizeId = designPatch.sizes[0] || null;
+  }
+  if ("stock" in designPatch) patch.stock = designPatch.stock;
+  // 이미지: 디자인이 URL string 으로 들고 있을 수 있음 → Firestore image 객체로 복원
+  if ("image" in designPatch) {
+    patch.image = normalizeImageForFs(designPatch.image, designPatch._fs && designPatch._fs.image);
+  }
   return patch;
 };
+
+// URL 또는 객체 형태의 image 를 Firestore image 객체로 정규화.
+// Storage URL 에서 storagePath / repoPath 를 역추출해 publishToGitHub 가 git 에 커밋 가능하도록.
+function normalizeImageForFs(img, fallback) {
+  if (img && typeof img === "object") return img;
+  if (typeof img === "string" && img) {
+    // 1) Firebase Storage URL (.../o/{encoded-path}?alt=media&token=...)
+    const m = img.match(/\/o\/([^?]+)\?/);
+    if (m) {
+      const storagePath = decodeURIComponent(m[1]);
+      const parts = storagePath.split("/");
+      // sites/{siteId}/products/{productId}/{filename}
+      const filename = parts[parts.length - 1];
+      const siteId = parts[1] || "";
+      const repoPath = siteId ? `${siteId}/img/${filename}` : "";
+      return {
+        storagePath,
+        originalUrl: img,
+        thumb: null,
+        large: null,
+        repoPath,
+      };
+    }
+    // 2) 임의 외부 URL — storagePath/repoPath 없이 url 만 보존
+    return { storagePath: "", originalUrl: img, thumb: null, large: null, repoPath: "" };
+  }
+  // 3) null/undefined — 기존 값 유지
+  return fallback || { storagePath: "", thumb: null, large: null, originalUrl: null, repoPath: "" };
+}
 
 const fsToDesignSection = (fs) => ({
   id: fs.sectionId,

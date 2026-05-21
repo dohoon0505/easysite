@@ -42,6 +42,15 @@ export interface RenderTypeCInput {
     learns?: string;
     sortOrder: number;
   }>;
+  homeSections?: Array<{
+    sectionId: string;
+    type: string;
+    title?: string;
+    icon?: string;
+    enabled?: boolean;
+    sortOrder: number;
+    data?: Record<string, unknown>;
+  }>;
 }
 
 export function renderTypeC(input: RenderTypeCInput): string {
@@ -104,6 +113,8 @@ export function renderTypeC(input: RenderTypeCInput): string {
     })
     .join(",\n");
 
+  const homeBlock = renderHomeBlockC(input.homeSections);
+
   return [
     "/* eslint-disable */",
     `// ${input.siteName} — 교육과정 카탈로그 (자동 생성: publishToGitHub)`,
@@ -121,9 +132,30 @@ export function renderTypeC(input: RenderTypeCInput): string {
     techBlock,
     "];",
     "",
-    "Object.assign(window, { COURSE_CATEGORIES, COURSES, TECH_CATEGORIES });",
+    homeBlock.declaration,
+    homeBlock.assign,
     "",
-  ].join("\n");
+  ].filter((s) => s !== "").join("\n");
+}
+
+function renderHomeBlockC(homeSections?: RenderTypeCInput["homeSections"]) {
+  const enabled = (homeSections ?? [])
+    .filter((s) => s.enabled !== false)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((s) => ({
+      id: s.sectionId,
+      type: s.type,
+      title: s.title ?? "",
+      icon: s.icon ?? null,
+      data: s.data ?? {},
+    }));
+  const arrayBody = enabled.map((s) => "  " + formatValue(s)).join(",\n");
+  const declaration =
+    enabled.length === 0
+      ? "const HOME_SECTIONS = [];"
+      : `const HOME_SECTIONS = [\n${arrayBody}\n];`;
+  const assign = "Object.assign(window, { COURSE_CATEGORIES, COURSES, TECH_CATEGORIES, HOME_SECTIONS });";
+  return { declaration, assign };
 }
 
 const SIMPLE_KEY = /^[A-Za-z_][A-Za-z0-9_]*$/;

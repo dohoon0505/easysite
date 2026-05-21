@@ -6,6 +6,38 @@ const KAKAO_HREF = "https://pf.kakao.com/_txnxncb";
 // ─── Utilities ──────────────────────────────────────────────
 const fmt = (n) => n.toLocaleString("ko-KR");
 
+function useInView(options = {}) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setInView(true); obs.disconnect(); }
+    }, { threshold: 0.1, ...options });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return [ref, inView];
+}
+
+function FadeIn({ children, delay = 0, className = "" }) {
+  const [ref, inView] = useInView();
+  return (
+    <div
+      ref={ref}
+      className={"fade-in-section " + (inView ? "visible" : "") + " " + className}
+      style={{ transitionDelay: delay + "ms" }}
+    >
+      {children}
+    </div>
+  );
+}
+
+document.addEventListener("load", (e) => {
+  if (e.target.tagName === "IMG") e.target.classList.add("loaded");
+}, true);
+
 function useScrolled() {
   const [scrolled, set] = useState(false);
   useEffect(() => {
@@ -118,7 +150,7 @@ function HomeFaqItem({ item }) {
           </svg>
         </span>
       </button>
-      {open && <div className="home-faq-a">{item.a}</div>}
+      {open && <div className="home-faq-a acc-panel">{item.a}</div>}
     </li>
   );
 }
@@ -242,43 +274,47 @@ function HomeScreen({ go, openStyle, openDesigner }) {
         </ul>
       </section>
 
-      <div className="info-banner">
-        <span className="info-banner-icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="9" />
-            <path d="M12 8h.01M11 12h1v5h1" />
-          </svg>
-        </span>
-        <p className="info-banner-text">예약요청 탭을 통해 간편히 예약을 요청해보세요!</p>
-      </div>
-
-      <FeaturedSlider title="귀여운 도시락케이크" list={FEATURED_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="이달의 베스트 케이크" list={BUSINESS_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="여심저격 베스트 디자인" list={MZ_STYLES} openStyle={openStyle} />
-      <FeaturedSlider title="부모님 베스트픽 디자인" list={STARTER_STYLES} openStyle={openStyle} />
-
-      <section className="section home-faq-section">
-        <div className="section-head">
-          <h3>주문 전 자주하는 질문</h3>
+      <FadeIn>
+        <div className="info-banner">
+          <span className="info-banner-icon" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 8h.01M11 12h1v5h1" />
+            </svg>
+          </span>
+          <p className="info-banner-text">예약요청 탭을 통해 간편히 예약을 요청해보세요!</p>
         </div>
-        <ul className="home-faq-list">
-          {FAQ_ITEMS.slice(0, 6).map((it, i) => (
-            <HomeFaqItem key={i} item={it} />
-          ))}
-        </ul>
-        <button className="home-faq-more" type="button" onClick={() => go("faq")}>
-          전체 질문 보기 <I.Arrow size={14} />
-        </button>
-      </section>
+      </FadeIn>
 
-      <div className="footer footer-cta">
+      <FadeIn><FeaturedSlider title="귀여운 도시락케이크" list={FEATURED_STYLES} openStyle={openStyle} /></FadeIn>
+      <FadeIn delay={60}><FeaturedSlider title="이달의 베스트 케이크" list={BUSINESS_STYLES} openStyle={openStyle} /></FadeIn>
+      <FadeIn delay={120}><FeaturedSlider title="여심저격 베스트 디자인" list={MZ_STYLES} openStyle={openStyle} /></FadeIn>
+      <FadeIn delay={180}><FeaturedSlider title="부모님 베스트픽 디자인" list={STARTER_STYLES} openStyle={openStyle} /></FadeIn>
+
+      <FadeIn>
+        <section className="section home-faq-section">
+          <div className="section-head">
+            <h3>주문 전 자주하는 질문</h3>
+          </div>
+          <ul className="home-faq-list">
+            {FAQ_ITEMS.slice(0, 6).map((it, i) => (
+              <HomeFaqItem key={i} item={it} />
+            ))}
+          </ul>
+          <button className="home-faq-more" type="button" onClick={() => go("faq")}>
+            전체 질문 보기 <I.Arrow size={14} />
+          </button>
+        </section>
+      </FadeIn>
+
+      <FadeIn><div className="footer footer-cta">
         <a href="https://www.instagram.com/parkhaddd/" target="_blank" rel="noreferrer" className="btn-secondary">
           <I.Insta size={18} /> 인스타그램 둘러보기
         </a>
         <a href={KAKAO_HREF} target="_blank" rel="noreferrer" className="btn btn-kakao">
           카톡 문의 <I.Send size={18} />
         </a>
-      </div>
+      </div></FadeIn>
     </div>
   );
 }
@@ -313,7 +349,7 @@ function StylesScreen({ activeCat, setActiveCat, onPick }) {
 
       <div className="styles-grid">
         {list.map((s, i) => (
-          <button className="style-card" key={i} onClick={() => onPick({ ...s, category: cat.name, categoryId: cat.id })}>
+          <button className="style-card anim-stagger" key={i} style={{ animationDelay: (i * 60) + "ms" }} onClick={() => onPick({ ...s, category: cat.name, categoryId: cat.id })}>
             <div className="style-thumb" data-cat={cat.id}>
               {s.img ? (
                 <img src={s.img} alt={s.name} loading="lazy" />
@@ -953,7 +989,7 @@ function FaqScreen() {
                   </svg>
                 </span>
               </button>
-              {isOpen && <div className="home-faq-a">{it.a}</div>}
+              {isOpen && <div className="home-faq-a acc-panel">{it.a}</div>}
             </li>
           );
         })}

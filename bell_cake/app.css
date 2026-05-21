@@ -902,7 +902,10 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   width: 100%; height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 0;
+  transition: opacity 320ms ease;
 }
+.feat-thumb img.loaded { opacity: 1; }
 .feat-tag {
   position: absolute;
   top: 12px; left: 12px;
@@ -1260,8 +1263,10 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1), opacity 320ms ease;
 }
+.style-thumb img.loaded { opacity: 1; }
 .style-card:hover .style-thumb img { transform: scale(1.04); }
 .style-thumb-no {
   position: relative; z-index: 1;
@@ -2293,4 +2298,54 @@ ul, ol { list-style: none; padding: 0; margin: 0; }
 [data-theme="dark"] .faq-foot {
   background: var(--sm-surface-raised);
   border: 1px solid var(--sm-border-subtle);
+}
+
+/* ────── Scroll-in reveal ────── */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 520ms var(--ease-emphasized), transform 520ms var(--ease-emphasized);
+  will-change: opacity, transform;
+}
+.fade-in-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ────── Card stagger ────── */
+@keyframes animStagger {
+  from { opacity: 0; transform: translateY(18px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.anim-stagger {
+  animation: animStagger 400ms var(--ease-emphasized) both;
+}
+
+/* ────── Active press feedback ────── */
+.style-card:active,
+.feat-card:active {
+  transform: scale(0.97);
+  transition: transform 80ms ease;
+}
+
+/* ────── Accordion expand ────── */
+@keyframes accExpand {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.acc-panel {
+  animation: accExpand 280ms var(--ease-emphasized);
+}
+
+/* ────── AppBar blur on scroll ────── */
+.appbar.shadow {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ────── Reduced motion ────── */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-section { opacity: 1; transform: none; transition: none; }
+  .anim-stagger, .acc-panel { animation: none; }
+  .style-thumb img, .feat-thumb img { opacity: 1 !important; transition: none !important; }
 }

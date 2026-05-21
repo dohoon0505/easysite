@@ -45,6 +45,11 @@ service cloud.firestore {
         allow read, write:       if memberOf(siteId);
       }
 
+      // 디자이너 어드민이 홈 섹션(hero/greeting/featured/info/notice) 을 저장.
+      match /homeSections/{sectionId} {
+        allow read, write:       if memberOf(siteId);
+      }
+
       // publishes는 발행 이력 — 읽기는 멤버, 쓰기는 Functions 전용
       match /publishes/{publishId} {
         allow read:              if memberOf(siteId);

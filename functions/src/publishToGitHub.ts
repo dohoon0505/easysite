@@ -111,6 +111,16 @@ export const publishToGitHub = onCall<PublishRequest>(
         tech = techSnap.docs.map((d) => d.data() as Record<string, unknown>);
       }
 
+      // 홈 섹션 (hero / greeting / featured / info / notice) — 모든 사이트 타입 공통.
+      // 디자이너 어드민이 sites/{siteId}/homeSections 서브컬렉션에 저장.
+      const homeSnap = await db
+        .collection(`sites/${siteId}/homeSections`)
+        .orderBy("sortOrder", "asc")
+        .get();
+      const homeSections = homeSnap.docs
+        .map((d) => d.data() as Record<string, unknown>)
+        .filter((s) => s.enabled !== false);
+
       logger.info("publishToGitHub: data loaded", {
         siteId,
         siteType: site.siteType,
@@ -118,6 +128,7 @@ export const publishToGitHub = onCall<PublishRequest>(
         products: products.length,
         sections: sections?.length,
         tech: tech?.length,
+        homeSections: homeSections.length,
       });
 
       // ─── 5. data.jsx 생성 ───────────────────────────
@@ -128,6 +139,7 @@ export const publishToGitHub = onCall<PublishRequest>(
         products,
         sections,
         tech,
+        homeSections,
       } as unknown as Parameters<typeof renderDataJsx>[1]);
 
       const dataJsxPath = `${site.github.sitePath}/data.jsx`;
@@ -192,6 +204,7 @@ export const publishToGitHub = onCall<PublishRequest>(
           products: products.length,
           sections: sections?.length ?? 0,
           tech: tech?.length ?? 0,
+          homeSections: homeSections.length,
         },
         note: note ?? null,
         noop: commitResult.noop,

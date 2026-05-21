@@ -58,6 +58,74 @@ const callSetSiteClaim = async ({ uid, siteId, role }) => {
   return res.data;
 };
 
+// ── Storage: 상품 이미지 업로드 ───────────────────────────
+// productId 없는 경우(신규 등록 중) "draft-" + 랜덤 ID 로 임시 업로드.
+// 저장 시 productId 가 확정되면 그 폴더로 이동/복사 — 또는 신규 상품은
+// 임시 productId 그대로 사용 가능.
+const sanitizeFilename = (name) => {
+  const dot = name.lastIndexOf(".");
+  const base = dot >= 0 ? name.slice(0, dot) : name;
+  const ext = dot >= 0 ? name.slice(dot + 1).toLowerCase() : "";
+  const safe = base
+    .normalize("NFKD")
+    .replace(/[^\w.-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80) || "image";
+  const stamp = Date.now().toString(36);
+  return ext ? `${safe}-${stamp}.${ext}` : `${safe}-${stamp}`;
+};
+
+const uploadProductImage = (siteId, productId, file, onProgress) => {
+  return new Promise((resolve, reject) => {
+    if (!window.fbStorage) {
+      reject(new Error("Firebase Storage 가 준비되지 않았습니다"));
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      reject(new Error("10MB 이하 이미지만 업로드 가능합니다"));
+      return;
+    }
+    const filename = sanitizeFilename(file.name);
+    const path = `sites/${siteId}/products/${productId}/${filename}`;
+    const ref = window.fbStorage.ref(path);
+    // 다운로드 토큰을 포함시키기 위해 customMetadata 사용
+    const token = window.crypto && window.crypto.randomUUID
+      ? window.crypto.randomUUID()
+      : Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+
+    const task = ref.put(file, {
+      contentType: file.type,
+      customMetadata: {
+        firebaseStorageDownloadTokens: token,
+      },
+    });
+
+    task.on(
+      "state_changed",
+      (snap) => {
+        const pct = snap.totalBytes > 0
+          ? Math.round((snap.bytesTransferred / snap.totalBytes) * 100)
+          : 0;
+        onProgress && onProgress(pct);
+      },
+      (err) => reject(err),
+      async () => {
+        try {
+          // 즉시 사용 가능한 URL — 토큰 포함된 firebasestorage.googleapis.com URL
+          const bucket = window.fbStorage.app.options.storageBucket;
+          const url = `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(path)}?alt=media&token=${token}`;
+          resolve({ storagePath: path, downloadUrl: url, filename });
+        } catch (e) {
+          reject(e);
+        }
+      }
+    );
+  });
+};
+
+Object.assign(window, { uploadProductImage, sanitizeFilename });
+
 Object.assign(window, {
   useAuthSession,
   signInWithEmail,

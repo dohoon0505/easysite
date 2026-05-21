@@ -43,6 +43,15 @@ export interface RenderTypeBInput {
     sortOrder: number;
     image?: { repoPath?: string };
   }>;
+  homeSections?: Array<{
+    sectionId: string;
+    type: string;
+    title?: string;
+    icon?: string;
+    enabled?: boolean;
+    sortOrder: number;
+    data?: Record<string, unknown>;
+  }>;
 }
 
 export function renderTypeB(input: RenderTypeBInput): string {
@@ -106,6 +115,8 @@ export function renderTypeB(input: RenderTypeBInput): string {
     })
     .join(",\n");
 
+  const homeBlock = renderHomeBlockB(input.homeSections);
+
   return [
     "/* eslint-disable */",
     `// ${input.siteName} — 상품 카탈로그 (자동 생성: publishToGitHub)`,
@@ -119,9 +130,30 @@ export function renderTypeB(input: RenderTypeBInput): string {
     ",",
     "};",
     "",
-    "Object.assign(window, { CATEGORIES, SECTIONS });",
+    homeBlock.declaration,
+    homeBlock.assign,
     "",
-  ].join("\n");
+  ].filter((s) => s !== "").join("\n");
+}
+
+function renderHomeBlockB(homeSections?: RenderTypeBInput["homeSections"]) {
+  const enabled = (homeSections ?? [])
+    .filter((s) => s.enabled !== false)
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((s) => ({
+      id: s.sectionId,
+      type: s.type,
+      title: s.title ?? "",
+      icon: s.icon ?? null,
+      data: s.data ?? {},
+    }));
+  const arrayBody = enabled.map((s) => "  " + formatValue(s)).join(",\n");
+  const declaration =
+    enabled.length === 0
+      ? "const HOME_SECTIONS = [];"
+      : `const HOME_SECTIONS = [\n${arrayBody}\n];`;
+  const assign = "Object.assign(window, { CATEGORIES, SECTIONS, HOME_SECTIONS });";
+  return { declaration, assign };
 }
 
 const SIMPLE_KEY = /^[A-Za-z_][A-Za-z0-9_]*$/;

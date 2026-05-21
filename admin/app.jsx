@@ -174,6 +174,7 @@ const App = () => {
             products={products}
             setProducts={setProducts}
             onBack={backToProducts}
+            siteId={siteId}
           />
         )}
         {route === "categories" && <CategoriesRealPage />}
