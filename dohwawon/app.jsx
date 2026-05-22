@@ -1,7 +1,8 @@
 /* eslint-disable */
 const { useState, useEffect, useRef, useMemo } = React;
 
-const KAKAO_HREF = "https://pf.kakao.com/_xleKLxj";
+// admin/기본 정보 입력(SITE_INFO.kakaoChannel) 우선, 없으면 기존 정적 값.
+const KAKAO_HREF = (typeof window !== "undefined" && window.SITE_INFO && window.SITE_INFO.kakaoChannel) || "https://pf.kakao.com/_xleKLxj";
 
 // ─── Utilities ──────────────────────────────────────────────
 const fmt = (n) => n.toLocaleString("ko-KR");

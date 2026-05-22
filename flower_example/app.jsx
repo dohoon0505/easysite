@@ -1,8 +1,9 @@
 /* eslint-disable */
 const { useState, useEffect, useRef, useMemo } = React;
 
-const PHONE = "010-0000-0000";
-const PHONE_HREF = "tel:01000000000";
+// admin/기본 정보 입력(SITE_INFO.phone) 우선, 없으면 기존 정적 값.
+const PHONE = (typeof window !== "undefined" && window.SITE_INFO && window.SITE_INFO.phone) || "010-0000-0000";
+const PHONE_HREF = "tel:" + PHONE.replace(/[^\d]/g, "");
 const SMS_HREF = "sms:01000000000";
 
 // ---------- Utilities ----------
