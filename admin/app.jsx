@@ -276,6 +276,8 @@ const App = () => {
           sections={sections}
           setSections={setSections}
           categories={categories}
+          pendingCounts={pendingCounts}
+          siteId={siteId}
           site={site}
           onSwitchSite={() => setShowSwitcher(true)}
           onLogout={() => setLoggedIn(false)}

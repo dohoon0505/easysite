@@ -1,10 +1,10 @@
 /* eslint-disable */
 // Mobile publish (PB01 mobile) + Bulk price adjust sheet + More page
 
-const MobilePublishPage = ({ products, sections, setProducts, setSections, onBack, site }) => {
+const MobilePublishPage = ({ products, sections, setProducts, setSections, pendingCounts, siteId, onBack, site }) => {
   const draftP = products.filter((p) => p.draft);
   const draftS = sections.filter((s) => s.draft);
-  const total = draftP.length + draftS.length;
+  const total = (pendingCounts && pendingCounts.total) || (draftP.length + draftS.length);
 
   const [note, setNote] = React.useState("");
   const [running, setRunning] = React.useState(false);
@@ -30,25 +30,47 @@ const MobilePublishPage = ({ products, sections, setProducts, setSections, onBac
     setRunning(true);
     setLogs([]);
     setDone(false);
-    log("► 발행 시작 — " + site.name);
+    log("► 발행 시작 — " + ((site && site.name) || siteId));
     log(`변경: 상품 ${draftP.length}건, 섹션 ${draftS.length}건`);
-    for (let i = 0; i < PUBLISH_STAGES.length; i++) {
-      setStageIdx(i);
-      const stage = PUBLISH_STAGES[i];
-      const lines = STAGE_LOG_LINES[stage.id] || [];
-      const interval = stage.duration / Math.max(lines.length, 1);
-      for (const line of lines) {
-        await new Promise((r) => setTimeout(r, interval));
-        log(line.text, line.tone);
+
+    try {
+      // draft → live 승격 (조용히)
+      setStageIdx(0);
+      setProducts((ps) => ps.map((p) => (p.draft ? { ...p, draft: false, status: "live" } : p)));
+      setSections((ss) => ss.map((s) => (s.draft ? { ...s, draft: false } : s)));
+      await new Promise((r) => setTimeout(r, 600));
+
+      // 실제 publishToGitHub 호출
+      setStageIdx(1);
+      log("사이트에 발행 중...");
+      const result = await window.callPublishToGitHub({
+        siteId,
+        note: note || undefined,
+      });
+
+      setStageIdx(3);
+      if (result.noop) {
+        log("ℹ 변경된 파일이 없어 새 발행을 생략했습니다", "warning");
+      } else {
+        log("✓ 사이트 업데이트 완료");
       }
+
+      setStageIdx(4);
+      log("1~3분 안에 사이트에 반영됩니다");
+
+      setStageIdx(PUBLISH_STAGES.length);
+      setRunning(false);
+      setDone(true);
+      log("✓ 발행 완료", "success");
+      toast({ tone: "success", message: result.noop ? "변경사항 없음 — 새 발행 생략" : "발행 완료" });
+      if (navigator.vibrate) navigator.vibrate(50);
+    } catch (err) {
+      setRunning(false);
+      setDone(false);
+      const msg = (err && err.message) || "알 수 없는 오류";
+      log("✗ 발행 실패 — " + msg, "error");
+      toast({ tone: "error", message: "발행 실패: " + msg });
     }
-    setStageIdx(PUBLISH_STAGES.length);
-    setRunning(false);
-    setDone(true);
-    log("✓ 발행 완료", "success");
-    setProducts((ps) => ps.map((p) => (p.draft ? { ...p, draft: false, status: "live" } : p)));
-    setSections((ss) => ss.map((s) => (s.draft ? { ...s, draft: false } : s)));
-    if (navigator.vibrate) navigator.vibrate(50);
   };
 
   if (running || done) {

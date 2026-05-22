@@ -1,12 +1,12 @@
 /* eslint-disable */
 // Mobile app router — handles its own page state inside the phone frame
 
-const MobileApp = ({ products, setProducts, sections, setSections, categories, site, onSwitchSite, onLogout, offline }) => {
+const MobileApp = ({ products, setProducts, sections, setSections, categories, pendingCounts, siteId, site, onSwitchSite, onLogout, offline }) => {
   const [route, setRoute] = React.useState("m-home");
   const [editingId, setEditingId] = React.useState(null);
   const [bulkOpen, setBulkOpen] = React.useState(false);
 
-  const draftCount = products.filter((p) => p.draft).length + sections.filter((s) => s.draft).length;
+  const draftCount = (pendingCounts && pendingCounts.total) || (products.filter((p) => p.draft).length + sections.filter((s) => s.draft).length);
 
   const nav = (r, arg) => {
     if (r === "m-editor") {
@@ -71,6 +71,8 @@ const MobileApp = ({ products, setProducts, sections, setSections, categories, s
           sections={sections}
           setProducts={setProducts}
           setSections={setSections}
+          pendingCounts={pendingCounts}
+          siteId={siteId}
           onBack={back}
           site={site}
         />
