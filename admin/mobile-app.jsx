@@ -43,6 +43,7 @@ const MobileApp = ({ products, setProducts, sections, setSections, categories, s
           sections={sections}
           setSections={setSections}
           products={products}
+          site={site}
           onBack={() => setRoute("m-more")}
         />
       )}

@@ -20,6 +20,16 @@ interface PublishRequest {
   note?: string;
 }
 
+// 사이트 ID → 정식 siteType 매핑. Firestore 도큐먼트의 siteType 이 잘못
+// 저장된 경우에도 이 값으로 override 하여 안전한 codegen 을 보장한다.
+const SITE_TYPE_BY_ID: Record<string, SiteType> = {
+  dohwawon: "typeA",
+  PARKHAD: "typeA",
+  bell_cake: "typeC",
+  flower_example: "typeB",
+  greenlight_art: "typeC",
+};
+
 interface PublishResult {
   commitSha: string;
   snapshotId: string;
@@ -59,6 +69,20 @@ export const publishToGitHub = onCall<PublishRequest>(
     };
     if (!site.github?.owner) {
       throw new HttpsError("failed-precondition", "site.github 설정 누락");
+    }
+    // siteId 기반 정식 siteType 으로 강제 override (잘못 저장된 값 보정)
+    const canonicalType = SITE_TYPE_BY_ID[siteId];
+    if (canonicalType && site.siteType !== canonicalType) {
+      logger.warn("publishToGitHub: siteType override", {
+        siteId,
+        storedSiteType: site.siteType,
+        canonicalSiteType: canonicalType,
+      });
+      site.siteType = canonicalType;
+      // Firestore 의 잘못된 값도 자동 보정 (다음 발행부터 정확한 값 사용)
+      await db.doc(`sites/${siteId}`).update({ siteType: canonicalType }).catch((e) => {
+        logger.warn("publishToGitHub: siteType auto-fix failed", { siteId, error: String(e) });
+      });
     }
 
     // ─── 3. 발행 락 ────────────────────────────────────

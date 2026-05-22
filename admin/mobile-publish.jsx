@@ -267,7 +267,15 @@ const MobilePublishPage = ({ products, sections, setProducts, setSections, onBac
 };
 
 // ── More page ────────────────────────────────────────────────────────────
-const MobileMorePage = ({ site, onSwitchSite, onSheet, onHomeSections, onLogout }) => (
+const MobileMorePage = ({ site, onSwitchSite, onSheet, onHomeSections, onLogout }) => {
+  const session = typeof useAuthSession === "function" ? useAuthSession() : null;
+  const user = session && session.user;
+  const claims = session && session.claims;
+  const displayName = (user && (user.displayName || (user.email ? user.email.split("@")[0] : ""))) || "운영자";
+  const roleLabel = claims && claims.role === "super" ? "슈퍼"
+    : claims && claims.role === "owner" ? "오너" : "에디터";
+  const siteLabel = (site && site.name) || (claims && claims.siteId) || "사이트";
+  return (
   <>
     <MobileAppBar title="더보기" />
     <div className="m-scroll">
@@ -286,11 +294,11 @@ const MobileMorePage = ({ site, onSwitchSite, onSheet, onHomeSections, onLogout 
             textAlign: "left",
           }}
         >
-          <div className="site-thumb" style={{ background: site.gradient, width: 48, height: 48 }} />
+          <div className="site-thumb" style={{ background: site && site.gradient, width: 48, height: 48 }} />
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 600, fontSize: 16 }}>{site.name}</div>
+            <div style={{ fontWeight: 600, fontSize: 16 }}>{site && site.name}</div>
             <div style={{ fontSize: 13, color: "var(--sm-content-tertiary)" }}>
-              {site.domain} · 다른 사이트로 전환
+              {site && site.domain} · 다른 사이트로 전환
             </div>
           </div>
           <Icon name="chevronRight" size={16} style={{ color: "var(--sm-content-tertiary)" }} />
@@ -307,7 +315,7 @@ const MobileMorePage = ({ site, onSwitchSite, onSheet, onHomeSections, onLogout 
 
       <div className="m-section-title">내 계정</div>
       <div style={{ background: "var(--sm-background-default)" }}>
-        <MoreRow icon="user" label="박소연" desc="오너 · 도화원플라워" />
+        <MoreRow icon="user" label={displayName} desc={`${roleLabel} · ${siteLabel}`} />
         <MoreRow icon="settings" label="계정 설정" />
         <MoreRow icon="book" label="운영자 매뉴얼" />
       </div>
@@ -320,7 +328,8 @@ const MobileMorePage = ({ site, onSwitchSite, onSheet, onHomeSections, onLogout 
       </div>
     </div>
   </>
-);
+  );
+};
 
 const MoreRow = ({ icon, label, desc, onClick }) => (
   <button

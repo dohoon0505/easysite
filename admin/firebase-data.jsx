@@ -142,6 +142,7 @@ const useLiveCategories = (siteId) => {
               visible: fs.visible !== false,
               sortOrder: fs.sortOrder || 0,
               count: 0, // 페이지에서 products 로 계산
+              updatedAt: fs.updatedAt || null,
             };
           });
           setCatsLocal(list);
@@ -438,7 +439,9 @@ async function diffWriteSections(siteId, prev, next) {
       }
     });
     if (Object.keys(patch).length > 0) {
-      patch.dirty = true;
+      // dirty 가 명시적으로 patch 에 있으면 그 값 유지 (발행 후 false 처리).
+      // 명시 안 됐으면 사용자 편집으로 간주하여 dirty=true.
+      if (!("dirty" in patch)) patch.dirty = true;
       patch.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
       patch.updatedBy = uid;
       batch.update(col.doc(s.id), patch);
@@ -556,6 +559,43 @@ const useLiveSites = (claims) => {
 const liveSiteUrl = (siteId) =>
   siteId ? `https://easysite.kr/${siteId}/` : "https://easysite.kr/";
 
+// sites/{siteId} 도큐먼트 메타 구독 — lastPublishedAt 기준으로 발행 대기 판단.
+const useLiveSiteMeta = (siteId) => {
+  const [meta, setMeta] = React.useState({ lastPublishedAt: null });
+
+  React.useEffect(() => {
+    if (!siteId || !window.fbDb) return;
+    const unsub = window.fbDb
+      .collection("sites").doc(siteId)
+      .onSnapshot(
+        (snap) => {
+          if (!snap.exists) {
+            setMeta({ lastPublishedAt: null });
+            return;
+          }
+          const d = snap.data();
+          const lp = d.lastPublishedAt && d.lastPublishedAt.toMillis
+            ? d.lastPublishedAt.toMillis()
+            : (typeof d.lastPublishedAt === "number" ? d.lastPublishedAt : null);
+          setMeta({ lastPublishedAt: lp });
+        },
+        (err) => console.error("useLiveSiteMeta", err)
+      );
+    return unsub;
+  }, [siteId]);
+
+  return meta;
+};
+
+// updatedAt timestamp 비교 헬퍼 — 도큐먼트가 lastPublishedAt 이후 변경됐는지.
+const isPendingSince = (updatedAt, lastPublishedAt) => {
+  if (!updatedAt) return false;
+  if (!lastPublishedAt) return true; // 발행 이력 없으면 모두 pending
+  const u = updatedAt && updatedAt.toMillis ? updatedAt.toMillis()
+    : (typeof updatedAt === "number" ? updatedAt : 0);
+  return u > lastPublishedAt;
+};
+
 // ── FAQ ──────────────────────────────────────────────────
 // sites/{siteId}/faqs/{faqId} = { faqId, question, answer, sortOrder, visible }
 const useLiveFaqs = (siteId) => {
@@ -581,6 +621,7 @@ const useLiveFaqs = (siteId) => {
                 answer: fs.answer || "",
                 sortOrder: fs.sortOrder || 0,
                 visible: fs.visible !== false,
+                updatedAt: fs.updatedAt || null,
               };
             })
           );
@@ -846,6 +887,7 @@ const useLiveSiteInfo = (siteId) => {
             ogDescription: d.ogDescription || "",
             ogImage: d.ogImage || "",
             ogImageStoragePath: d.ogImageStoragePath || "",
+            updatedAt: d.updatedAt || null,
           });
           setLoading(false);
         },
@@ -961,9 +1003,11 @@ Object.assign(window, {
   useLiveFaqs,
   useLiveGalleryWorks,
   useLiveSiteInfo,
+  useLiveSiteMeta,
   seedGalleryWorks,
   seedSiteInfo,
   seedAllSiteInfo,
   SITE_INFO_DEFAULTS,
+  isPendingSince,
   liveSiteUrl,
 });

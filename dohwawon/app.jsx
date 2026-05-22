@@ -407,7 +407,7 @@ function HomeScreen({ go, openStyle, openDesigner }) {
       </FadeIn>
 
       {resolvedSliders.map((s, i) => (
-        <FadeIn key={i}><FeaturedSlider title={s.title} list={s.list} openStyle={openStyle} /></FadeIn>
+        <FadeIn key={i}><FeaturedSlider title={s.title} meta={s.subtitle || s.meta} list={s.list} openStyle={openStyle} /></FadeIn>
       ))}
 
       <FadeIn>

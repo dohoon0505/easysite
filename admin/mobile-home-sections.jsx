@@ -1,7 +1,7 @@
 /* eslint-disable */
 // Mobile home sections page — list with toggle + tap-to-edit (bottom sheet)
 
-const MobileHomeSectionsPage = ({ sections, setSections, products, onBack }) => {
+const MobileHomeSectionsPage = ({ sections, setSections, products, site, onBack }) => {
   const [editing, setEditing] = React.useState(null);
   const toast = useToast();
 
@@ -27,7 +27,7 @@ const MobileHomeSectionsPage = ({ sections, setSections, products, onBack }) => 
       <div className="m-scroll">
         <div style={{ padding: "var(--size-400) var(--size-400) var(--size-300)" }}>
           <div style={{ fontSize: 13, color: "var(--sm-content-tertiary)", lineHeight: 1.6, textWrap: "pretty" }}>
-            도화원플라워 홈페이지 첫 화면. 섹션을 켜고/끄거나 위/아래로 옮기고, 탭하면 편집할 수 있어요.
+            {(site && site.name) || "사이트"} 홈페이지 첫 화면. 섹션을 켜고/끄거나 위/아래로 옮기고, 탭하면 편집할 수 있어요.
           </div>
         </div>
 

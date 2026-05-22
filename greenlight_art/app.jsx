@@ -201,13 +201,19 @@ function HomeScreen({ go, openWork }) {
   const hours = hero.hours || "월~토 13:00 - 19:00 · 일 휴무";
   const bannerText = hero.bannerText || "1회 무료 체험 수업이 가능합니다!!";
 
-  const slider = sliderSections[0] || {};
   const allGalleryWorks = (window.GALLERY_WORKS && window.GALLERY_WORKS.length > 0)
     ? window.GALLERY_WORKS
     : (window.GALLERY_BEST || []);
-  const sliderList = (slider.pickedIds && slider.pickedIds.length > 0)
-    ? slider.pickedIds.map((id) => allGalleryWorks.find((w) => w.id === id)).filter(Boolean)
-    : allGalleryWorks;
+  // 다중 슬라이더 지원 — admin 이 슬라이더 N 개 정의하면 모두 렌더
+  const sliders = sliderSections.length > 0
+    ? sliderSections.map((s) => ({
+        title: s.title || "아이들 작품 둘러보기",
+        subtitle: s.subtitle || "아이들이 완성한 작품들을 소개해요.",
+        list: (s.pickedIds && s.pickedIds.length > 0)
+          ? s.pickedIds.map((id) => allGalleryWorks.find((w) => w.id === id)).filter(Boolean)
+          : allGalleryWorks,
+      }))
+    : [{ title: "아이들 작품 둘러보기", subtitle: "아이들이 완성한 작품들을 소개해요.", list: allGalleryWorks }];
 
   // 어드민 신규 섹션들 — dev / mosaic / award / philosophy
   const devSec = (HS.find((s) => s && s.type === "dev") || {}).data || null;
@@ -271,7 +277,9 @@ function HomeScreen({ go, openWork }) {
         <p className="info-banner-text">{bannerText}</p>
       </div>
 
-      <FeaturedSlider title={slider.title || "아이들 작품 둘러보기"} sub={slider.subtitle || "아이들이 완성한 작품들을 소개해요."} list={sliderList} openWork={openWork} />
+      {sliders.map((s, i) => (
+        <FeaturedSlider key={"slider-" + i} title={s.title} sub={s.subtitle} list={s.list} openWork={openWork} />
+      ))}
 
       <section className="section dev-section">
         <div className="section-head dev-head">

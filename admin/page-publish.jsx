@@ -9,11 +9,16 @@ const PUBLISH_STAGES = [
   { id: "deploy", label: "사이트 재빌드", duration: 4500 },
 ];
 
-const PublishCenterPage = ({ products, sections, setProducts, setSections, onGoto, siteId }) => {
+const PublishCenterPage = ({ products, sections, setProducts, setSections, categories, faqs, siteInfo, siteMeta, pendingCounts, onGoto, siteId, site }) => {
   const toast = useToast();
   const draftProducts = products.filter((p) => p.draft);
   const draftSections = sections.filter((s) => s.draft);
-  const totalDrafts = draftProducts.length + draftSections.length;
+  const lp = (siteMeta && siteMeta.lastPublishedAt) || null;
+  const isPending = window.isPendingSince || (() => false);
+  const draftCategories = (categories || []).filter((c) => isPending(c.updatedAt, lp));
+  const draftFaqs = (faqs || []).filter((f) => isPending(f.updatedAt, lp));
+  const draftSettings = isPending(siteInfo && siteInfo.updatedAt, lp);
+  const totalDrafts = (pendingCounts && pendingCounts.total) || (draftProducts.length + draftSections.length + draftCategories.length + draftFaqs.length + (draftSettings ? 1 : 0));
 
   const [note, setNote] = React.useState("");
   const [running, setRunning] = React.useState(false);
@@ -49,24 +54,23 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
     setDone(false);
     setLogs([]);
     setStageIdx(0);
-    log(`► 발행 시작 — ${siteId}`);
+    log(`► 발행 시작 — ${(site && site.name) || siteId}`);
     log(`변경사항: 상품 ${draftProducts.length}건, 섹션 ${draftSections.length}건`);
 
     try {
-      // 1) Stage: validate — draft 를 live 로 승격 (Firestore write)
+      // 1) Stage: validate — draft 를 live 로 승격 (Firestore write, 조용히)
       setStageIdx(0);
-      log("변경사항을 'live' 로 승격하는 중...");
+      log("변경사항 확인 중...");
       setProducts((ps) =>
         ps.map((p) => (p.draft ? { ...p, draft: false, status: "live" } : p))
       );
       setSections((ss) => ss.map((s) => (s.draft ? { ...s, draft: false } : s)));
       // Firestore batch write 가 완료될 시간을 약간 줌
       await new Promise((r) => setTimeout(r, 600));
-      log("✓ Firestore 상태 갱신 완료", "success");
 
       // 2) Stage: build / images / push — publishToGitHub callable 호출
       setStageIdx(1);
-      log("코드 생성 + 이미지 동기화 + 사이트 배포 호출 중...");
+      log("사이트에 발행 중...");
       const result = await window.callPublishToGitHub({
         siteId,
         note: note || undefined,
@@ -74,12 +78,9 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
 
       setStageIdx(3);
       if (result.noop) {
-        log("ℹ 변경된 파일이 없어 새 배포가 생성되지 않았습니다", "warning");
+        log("ℹ 변경된 파일이 없어 새 발행을 생략했습니다", "warning");
       } else {
-        log(
-          `✓ 배포 #${result.commitSha.slice(0, 7)} 전송 완료 — ${result.filesChanged}개 파일 변경`,
-          "info"
-        );
+        log("✓ 사이트 업데이트 완료", "info");
       }
 
       // 3) Stage: deploy — 사이트 재빌드 (대기만)
@@ -94,9 +95,7 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
       setNote("");
       toast({
         tone: "success",
-        message: result.noop
-          ? "변경사항 없음 — 새 배포 생략"
-          : `발행 완료 — #${result.commitSha.slice(0, 7)}`,
+        message: result.noop ? "변경사항 없음 — 새 발행 생략" : "발행 완료",
       });
     } catch (err) {
       setRunning(false);
@@ -113,7 +112,7 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
         <div>
           <h1 className="page-title">발행 센터</h1>
           <div className="page-subtitle">
-            드래프트 변경사항을 도화원플라워(dohwawon.kr)에 한번에 반영합니다
+            드래프트 변경사항을 {(site && site.name) || siteId}({(site && site.domain) || "—"})에 한번에 반영합니다
           </div>
         </div>
       </div>
@@ -161,6 +160,36 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
                     badgeTone="brand"
                   />
                 ))}
+                {draftCategories.map((c) => (
+                  <DraftRow
+                    key={`cat-${c.id}`}
+                    icon="tag"
+                    title={`카테고리 — ${c.name || c.id}`}
+                    subtitle={c.visible ? "노출" : "숨김"}
+                    badge="카테고리"
+                    badgeTone="brand"
+                  />
+                ))}
+                {draftFaqs.map((f) => (
+                  <DraftRow
+                    key={`faq-${f.id}`}
+                    icon="help"
+                    title={`FAQ — ${f.question || f.id}`}
+                    subtitle={f.visible ? "노출" : "숨김"}
+                    badge="질문/답변"
+                    badgeTone="brand"
+                  />
+                ))}
+                {draftSettings && (
+                  <DraftRow
+                    key="settings-info"
+                    icon="settings"
+                    title="기본 정보 (OG · 전화 · 카카오)"
+                    subtitle="발행 시 사이트 메타 태그에 반영됩니다"
+                    badge="기본 정보"
+                    badgeTone="brand"
+                  />
+                )}
               </div>
             )}
           </Card>
@@ -316,23 +345,37 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
                     alignItems: "center",
                   }}
                 >
-                  <div
-                    style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: "50%",
-                      background:
-                        h.status === "success"
-                          ? "var(--sm-status-success-subtle)"
-                          : "var(--sm-status-error-subtle)",
-                      color: h.status === "success" ? "var(--sm-status-success)" : "var(--sm-status-error)",
-                      display: "grid",
-                      placeItems: "center",
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Icon name={h.status === "success" ? "rocket" : "alert"} size={16} />
-                  </div>
+                  {(() => {
+                    const tone = h.status === "success" ? "success"
+                      : h.status === "noop" ? "neutral"
+                      : "error";
+                    const bg = tone === "success" ? "var(--sm-status-success-subtle)"
+                      : tone === "neutral" ? "var(--sm-background-muted)"
+                      : "var(--sm-status-error-subtle)";
+                    const fg = tone === "success" ? "var(--sm-status-success)"
+                      : tone === "neutral" ? "var(--sm-content-tertiary)"
+                      : "var(--sm-status-error)";
+                    const icon = tone === "success" ? "rocket"
+                      : tone === "neutral" ? "info"
+                      : "alert";
+                    return (
+                      <div
+                        style={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: "50%",
+                          background: bg,
+                          color: fg,
+                          display: "grid",
+                          placeItems: "center",
+                          flexShrink: 0,
+                        }}
+                        title={tone === "neutral" ? "변경사항 없음 — 새 배포 생략됨" : undefined}
+                      >
+                        <Icon name={icon} size={16} />
+                      </div>
+                    );
+                  })()}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: "var(--text-body-md)", fontWeight: 600, marginBottom: 2, textWrap: "pretty" }}>
                       {h.note}
@@ -387,12 +430,16 @@ const PublishCenterPage = ({ products, sections, setProducts, setSections, onGot
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <div
                     className="site-thumb"
-                    style={{ background: "linear-gradient(135deg, #f4c8d0 0%, #d36a8a 100%)", width: 36, height: 36 }}
+                    style={{
+                      background: (site && site.gradient) || "linear-gradient(135deg, #c4cae0 0%, #8a93c4 100%)",
+                      width: 36,
+                      height: 36,
+                    }}
                   />
                   <div>
-                    <div style={{ fontWeight: 600 }}>도화원플라워</div>
+                    <div style={{ fontWeight: 600 }}>{(site && site.name) || siteId || "사이트 미지정"}</div>
                     <div style={{ fontSize: "var(--text-caption)", color: "var(--sm-content-tertiary)" }}>
-                      dohwawon.kr
+                      {(site && site.domain) || "—"}
                     </div>
                   </div>
                 </div>

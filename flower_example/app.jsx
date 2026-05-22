@@ -137,8 +137,14 @@ function HomeScreen({ go, openCat, onPick }) {
   }, []);
 
   const HS = draftHS || window.HOME_SECTIONS || [];
+  const hero = (HS.find((s) => s && s.type === "hero") || {}).data || {};
   const sliderSections = HS.filter((s) => s && s.type === "slider").map((s) => s.data || {});
   const faqHome = (HS.find((s) => s && s.type === "faq") || {}).data || {};
+
+  // admin hero 입력 → flower_example 의 hero 영역에 매핑
+  const heroHeadline = hero.storeName || hero.title || "대한민국 어디든";
+  const heroSubhead = hero.storeDesc || hero.body || "아름다운 마음을 대한민국 전국 어디든지 보내드립니다\n10년 경력의 노하우를 그대로";
+  const heroBanner = hero.bannerText || "온라인 주문이 어렵다면";
 
   const productById = {};
   Object.values(SECTIONS).forEach((groups) => {
@@ -167,12 +173,14 @@ function HomeScreen({ go, openCat, onPick }) {
   return (
     <div>
       <section className="hero">
-        <h2>대한민국 어디든<br /><em>3시간 당일배송</em></h2>
-        <p>아름다운 마음을 대한민국 전국 어디든지 보내드립니다<br />10년 경력의 노하우를 그대로</p>
+        <h2>{heroHeadline}{!hero.storeName && !hero.title && <><br /><em>3시간 당일배송</em></>}</h2>
+        <p>{heroSubhead.split(/\r?\n/).map((line, i, arr) => (
+          <React.Fragment key={i}>{line}{i < arr.length - 1 && <br />}</React.Fragment>
+        ))}</p>
         <a href={PHONE_HREF} className="hero-cta">
           <span className="ring"><I.Phone size={20} strokeWidth={2} /></span>
           <span className="grow">
-            <div className="label">온라인 주문이 어렵다면</div>
+            <div className="label">{heroBanner}</div>
             <div className="num">{PHONE}</div>
           </span>
           <span className="pill">바로 전화</span>

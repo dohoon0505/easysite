@@ -76,6 +76,9 @@ const App = () => {
   const [liveSections, setSections, sectionsLoading] = window.useLiveSections(siteId);
   const [liveCategories] = window.useLiveCategories(siteId);
   const [liveGalleryWorks] = window.useLiveGalleryWorks(siteId);
+  const [liveFaqs] = window.useLiveFaqs ? window.useLiveFaqs(siteId) : [[]];
+  const [liveSiteInfo] = window.useLiveSiteInfo ? window.useLiveSiteInfo(siteId) : [{}];
+  const siteMeta = window.useLiveSiteMeta ? window.useLiveSiteMeta(siteId) : { lastPublishedAt: null };
 
   // 미인증/loading 상태에선 mock 으로 fallback → 디자인이 항상 렌더링 가능.
   const products = loggedIn ? liveProducts : PRODUCTS;
@@ -83,6 +86,26 @@ const App = () => {
   const categories = loggedIn && liveCategories.length > 0
     ? [{ id: "all", name: "전체" }, ...liveCategories]
     : CATEGORIES;
+
+  // 발행 대기 카운트 — products.draft + sections.draft + lastPublishedAt 이후 변경된 컬렉션
+  const pendingCounts = React.useMemo(() => {
+    if (!loggedIn) return { products: 0, sections: 0, categories: 0, faqs: 0, settings: 0, total: 0 };
+    const lp = siteMeta.lastPublishedAt;
+    const isPending = window.isPendingSince || (() => false);
+    const pProd = products.filter((p) => p.draft).length;
+    const pSec = sections.filter((s) => s.draft).length;
+    const pCat = (liveCategories || []).filter((c) => isPending(c.updatedAt, lp)).length;
+    const pFaq = (liveFaqs || []).filter((f) => isPending(f.updatedAt, lp)).length;
+    const pSet = isPending(liveSiteInfo && liveSiteInfo.updatedAt, lp) ? 1 : 0;
+    return {
+      products: pProd,
+      sections: pSec,
+      categories: pCat,
+      faqs: pFaq,
+      settings: pSet,
+      total: pProd + pSec + pCat + pFaq + pSet,
+    };
+  }, [loggedIn, products, sections, liveCategories, liveFaqs, liveSiteInfo, siteMeta.lastPublishedAt]);
   const [bulkOpen, setBulkOpen] = React.useState(false);
   const [cmdkOpen, setCmdkOpen] = React.useState(false);
   const [csvOpen, setCsvOpen] = React.useState(false);
@@ -114,7 +137,7 @@ const App = () => {
     document.documentElement.setAttribute("data-density", t.density);
   }, [t.theme, t.accent, t.density]);
 
-  const draftCount = products.filter((p) => p.draft).length + sections.filter((s) => s.draft).length;
+  const draftCount = pendingCounts.total;
 
   const openEditor = (id) => {
     setEditingId(id);
@@ -224,8 +247,14 @@ const App = () => {
             sections={sections}
             setProducts={setProducts}
             setSections={setSections}
+            categories={liveCategories}
+            faqs={liveFaqs}
+            siteInfo={liveSiteInfo}
+            siteMeta={siteMeta}
+            pendingCounts={pendingCounts}
             onGoto={setRoute}
             siteId={siteId}
+            site={site}
           />
         )}
         {route === "account" && <AccountPage />}
