@@ -1,6 +1,6 @@
 /* eslint-disable */
-// 벨케이크 — 상품 카탈로그 (자동 생성: publishToGitHub)
-const HAIR_CATEGORIES = [
+// 벨케이크 — 교육과정 카탈로그 (자동 생성: publishToGitHub)
+const COURSE_CATEGORIES = [
   { id: "best", name: "베스트", blurb: "인기 많은 베스트 케이크", sub: "Best Pick" },
   { id: "signature", name: "시그니처", blurb: "벨케이크만의 특별한 디자인", sub: "SIGNATURE" },
   { id: "dosirak", name: "도시락", blurb: "귀여운 미니 도시락케이크", sub: "LUNCHBOX" },
@@ -9,47 +9,49 @@ const HAIR_CATEGORIES = [
   { id: "size-3", name: "3호", blurb: "3호 케이크 (21cm, 7~10인)", sub: "SIZE 3" },
   { id: "double", name: "2단", blurb: "특별한 날을 위한 2단 케이크", sub: "Double Size" }
 ];
-const HAIR_STYLES = {
+const COURSES = {
   best: [
-    { productId: "best-1", id: "best-1", name: "장미케이크", price: 43000, desc: "1호 · 바닐라 쌀시트 + 블루베리잼", img: "img/장미케이크.jpeg", sizeId: "type-1", flavorId: "vanilla-blueberry", categoryName: "베스트" },
-    { productId: "best-2", id: "best-2", name: "기본 레터링", price: 20000, desc: "도시락 · 초코 쌀시트 + 초코크림", img: "img/기본 레터링.jpg", sizeId: "type-dosirak", flavorId: "choco-choco", categoryName: "베스트" },
-    { productId: "best-3", id: "best-3", name: "카네이션케이크", price: 66000, desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/카네이션케이크.jpg", sizeId: "type-3", flavorId: "vanilla-lemon", categoryName: "베스트" },
-    { productId: "best-4", id: "best-4", name: "생신케이크", price: 35000, desc: "1호 · 바닐라 쌀시트 + 우유크림", img: "img/생신케이크.jpg", sizeId: "type-1", flavorId: "vanilla-milk", categoryName: "베스트" },
-    { productId: "best-5", id: "best-5", name: "로또케이크", price: 56000, desc: "2호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/로또케이크.jpg", sizeId: "type-2", flavorId: "vanilla-lemon", categoryName: "베스트" }
+    { productId: "best-1", id: "best-1", name: "장미케이크", desc: "1호 · 바닐라 쌀시트 + 블루베리잼", img: "img/장미케이크.jpeg" },
+    { productId: "best-2", id: "best-2", name: "기본 레터링", desc: "도시락 · 초코 쌀시트 + 초코크림", img: "img/기본 레터링.jpg" },
+    { productId: "best-3", id: "best-3", name: "카네이션케이크", desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/카네이션케이크.jpg" },
+    { productId: "best-4", id: "best-4", name: "생신케이크", desc: "1호 · 바닐라 쌀시트 + 우유크림", img: "img/생신케이크.jpg" },
+    { productId: "best-5", id: "best-5", name: "로또케이크", desc: "2호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/로또케이크.jpg" }
   ],
   signature: [
-    { productId: "signature-1", id: "signature-1", name: "골드바 케이크", price: 70000, desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/골드바 케이크.jpeg", sizeId: "type-3", flavorId: "vanilla-lemon", categoryName: "시그니처" },
-    { productId: "signature-2", id: "signature-2", name: "대형사각케이크", price: 65000, desc: "3호 · 바닐라 쌀시트 + 블루베리잼", img: "img/대형사각케이크.jpeg", sizeId: "type-3", flavorId: "vanilla-blueberry", categoryName: "시그니처" },
-    { productId: "signature-3", id: "signature-3", name: "티아라케이크", price: 50000, desc: "1호 · 초코 쌀시트 + 오레오쿠키 + 오레오크림", img: "img/티아라케이크.jpeg", sizeId: "type-1", flavorId: "choco-oreo", categoryName: "시그니처" },
-    { productId: "signature-4", id: "signature-4", name: "수국케이크", price: 40000, desc: "1호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/수국케이크.jpeg", sizeId: "type-1", flavorId: "vanilla-lemon", categoryName: "시그니처" },
-    { productId: "signature-5", id: "signature-5", name: "꽃잎케이크", price: 40000, desc: "1호 · 바닐라 쌀시트 + 우유크림", img: "img/꽃잎케이크.jpg", sizeId: "type-1", flavorId: "vanilla-milk", categoryName: "시그니처" }
+    { productId: "signature-1", id: "signature-1", name: "골드바 케이크", desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/골드바 케이크.jpeg" },
+    { productId: "signature-2", id: "signature-2", name: "대형사각케이크", desc: "3호 · 바닐라 쌀시트 + 블루베리잼", img: "img/대형사각케이크.jpeg" },
+    { productId: "signature-3", id: "signature-3", name: "티아라케이크", desc: "1호 · 초코 쌀시트 + 오레오쿠키 + 오레오크림", img: "img/티아라케이크.jpeg" },
+    { productId: "signature-4", id: "signature-4", name: "수국케이크", desc: "1호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/수국케이크.jpeg" },
+    { productId: "signature-5", id: "signature-5", name: "꽃잎케이크", desc: "1호 · 바닐라 쌀시트 + 우유크림", img: "img/꽃잎케이크.jpg" }
   ],
   dosirak: [
-    { productId: "dosirak-1", id: "dosirak-1", name: "삼성라이온즈", price: 17000, desc: "도시락 · 바닐라 쌀시트 + 레몬커스터드", img: "img/삼성라이온즈.jpg", sizeId: "type-dosirak", flavorId: "vanilla-lemon", categoryName: "도시락" },
-    { productId: "dosirak-2", id: "dosirak-2", name: "기본 레터링", price: 20000, desc: "도시락 · 초코 쌀시트 + 초코크림", img: "img/기본 레터링.jpg", sizeId: "type-dosirak", flavorId: "choco-choco", categoryName: "도시락" },
-    { productId: "dosirak-3", id: "dosirak-3", name: "핑크 레터링", price: 17000, desc: "도시락 · 바닐라 쌀시트 + 우유크림", img: "img/핑크 레터링.jpg", sizeId: "type-dosirak", flavorId: "vanilla-milk", categoryName: "도시락" }
+    { productId: "dosirak-1", id: "dosirak-1", name: "삼성라이온즈", desc: "도시락 · 바닐라 쌀시트 + 레몬커스터드", img: "img/삼성라이온즈.jpg" },
+    { productId: "dosirak-2", id: "dosirak-2", name: "기본 레터링", desc: "도시락 · 초코 쌀시트 + 초코크림", img: "img/기본 레터링.jpg" },
+    { productId: "dosirak-3", id: "dosirak-3", name: "핑크 레터링", desc: "도시락 · 바닐라 쌀시트 + 우유크림", img: "img/핑크 레터링.jpg" }
   ],
   "size-1": [
-    { productId: "size-1-1", id: "size-1-1", name: "꽃잎케이크", price: 40000, desc: "1호 · 바닐라 쌀시트 + 우유크림", img: "img/꽃잎케이크.jpg", sizeId: "type-1", flavorId: "vanilla-milk", categoryName: "1호" },
-    { productId: "size-1-2", id: "size-1-2", name: "장미케이크", price: 43000, desc: "1호 · 바닐라 쌀시트 + 블루베리잼", img: "img/장미케이크.jpeg", sizeId: "type-1", flavorId: "vanilla-blueberry", categoryName: "1호" },
-    { productId: "size-1-3", id: "size-1-3", name: "수국케이크", price: 40000, desc: "1호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/수국케이크.jpeg", sizeId: "type-1", flavorId: "vanilla-lemon", categoryName: "1호" },
-    { productId: "size-1-4", id: "size-1-4", name: "티아라케이크", price: 50000, desc: "1호 · 초코 쌀시트 + 오레오쿠키 + 오레오크림", img: "img/티아라케이크.jpeg", sizeId: "type-1", flavorId: "choco-oreo", categoryName: "1호" },
-    { productId: "size-1-5", id: "size-1-5", name: "생신케이크", price: 35000, desc: "1호 · 바닐라 쌀시트 + 우유크림", img: "img/생신케이크.jpg", sizeId: "type-1", flavorId: "vanilla-milk", categoryName: "1호" }
+    { productId: "size-1-1", id: "size-1-1", name: "꽃잎케이크", desc: "1호 · 바닐라 쌀시트 + 우유크림", img: "img/꽃잎케이크.jpg" },
+    { productId: "size-1-2", id: "size-1-2", name: "장미케이크", desc: "1호 · 바닐라 쌀시트 + 블루베리잼", img: "img/장미케이크.jpeg" },
+    { productId: "size-1-3", id: "size-1-3", name: "수국케이크", desc: "1호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/수국케이크.jpeg" },
+    { productId: "size-1-4", id: "size-1-4", name: "티아라케이크", desc: "1호 · 초코 쌀시트 + 오레오쿠키 + 오레오크림", img: "img/티아라케이크.jpeg" },
+    { productId: "size-1-5", id: "size-1-5", name: "생신케이크", desc: "1호 · 바닐라 쌀시트 + 우유크림", img: "img/생신케이크.jpg" }
   ],
   "size-2": [
-    { productId: "size-2-1", id: "size-2-1", name: "퇴직케이크", price: 53000, desc: "2호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/퇴직케이크.jpg", sizeId: "type-2", flavorId: "vanilla-lemon", categoryName: "2호" },
-    { productId: "size-2-2", id: "size-2-2", name: "로또케이크", price: 56000, desc: "2호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/로또케이크.jpg", sizeId: "type-2", flavorId: "vanilla-lemon", categoryName: "2호" }
+    { productId: "size-2-1", id: "size-2-1", name: "퇴직케이크", desc: "2호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/퇴직케이크.jpg" },
+    { productId: "size-2-2", id: "size-2-2", name: "로또케이크", desc: "2호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/로또케이크.jpg" }
   ],
   "size-3": [
-    { productId: "size-3-1", id: "size-3-1", name: "카네이션케이크", price: 66000, desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/카네이션케이크.jpg", sizeId: "type-3", flavorId: "vanilla-lemon", categoryName: "3호" },
-    { productId: "size-3-2", id: "size-3-2", name: "대형사각케이크", price: 65000, desc: "3호 · 바닐라 쌀시트 + 블루베리잼", img: "img/대형사각케이크.jpeg", sizeId: "type-3", flavorId: "vanilla-blueberry", categoryName: "3호" },
-    { productId: "size-3-3", id: "size-3-3", name: "골드바 케이크", price: 70000, desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/골드바 케이크.jpeg", sizeId: "type-3", flavorId: "vanilla-lemon", categoryName: "3호" }
+    { productId: "size-3-1", id: "size-3-1", name: "카네이션케이크", desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/카네이션케이크.jpg" },
+    { productId: "size-3-2", id: "size-3-2", name: "대형사각케이크", desc: "3호 · 바닐라 쌀시트 + 블루베리잼", img: "img/대형사각케이크.jpeg" },
+    { productId: "size-3-3", id: "size-3-3", name: "골드바 케이크", desc: "3호 · 바닐라 쌀시트 + 레몬커스터드", img: "img/골드바 케이크.jpeg" }
   ],
   double: [
 
   ]
 ,
 };
+const TECH_CATEGORIES = [
+];
 const HOME_SECTIONS = [
   { id: "hero", type: "hero", title: "히어로", icon: "image", data: { bannerText: "예약요청 탭을 통해 간편히 예약을 요청해보세요!", image: "img/hero.jpg", region: "대구광역시 | 수성구", body: "No 밀가루, No 식물성크림. 100% 국내산 쌀가루로 만든 쌀케이크, 동물성 생크림케이크 전문점 벨케이크입니다:)\n\n1인운영매장이라, 전화를 못받을 수 있으니 부재시 카카오톡채널로 연락주세요^^", storeName: "벨케이크", mapAddress: "대구 수성구 범어로20길 68", mapImage: "img/map.png", address: "대구 수성구 범어로20길 68 1층 왼쪽상가", storeDesc: "No 밀가루, No 식물성크림. 100% 국내산 쌀가루로 만든 쌀케이크, 동물성 생크림케이크 전문점 벨케이크입니다:)\n\n1인운영매장이라, 전화를 못받을 수 있으니 부재시 카카오톡채널로 연락주세요^^", hours: "11:00 ~ 19:00 · 매주 일요일 휴무" } },
   { id: "slider_1", type: "slider", title: "상품 슬라이더 (1)", icon: "star", data: { subtitle: "", title: "귀여운 도시락케이크", pickedIds: ["dosirak-1", "dosirak-2", "dosirak-3"] } },
@@ -76,6 +78,7 @@ const FAQS = [
   { id: "faq-payment-3", cat: "payment", q: "환불 정책이 어떻게 되나요?", a: "수령일 2일 전까지 취소 시 전액 환불됩니다. 전일 취소는 50% 환불, 당일 취소 및 노쇼는 환불이 어렵습니다. 제품 하자 시에는 수령 당일 사진과 함께 연락주시면 재제작 또는 전액 환불 처리해 드려요." }
 ];
 const FAQ_CATEGORIES = [];
-Object.assign(window, { HAIR_CATEGORIES, HAIR_STYLES, HOME_SECTIONS, FAQS, FAQ_CATEGORIES });
+const GALLERY_WORKS = [];
+Object.assign(window, { COURSE_CATEGORIES, COURSES, TECH_CATEGORIES, HOME_SECTIONS, FAQS, FAQ_CATEGORIES, GALLERY_WORKS });
 const SITE_INFO = { phone: "", kakaoChannel: "https://pf.kakao.com/_txnxncb", ogTitle: "쌀케이크 전문점 벨케이크", ogDescription: "No 밀가루, No 식물성크림. 100% 국내산 쌀가루로 만든 쌀케이크, 동물성 생크림케이크 전문점 벨케이크입니다:) 1인운영매장이라, 전화를 못받을 수 있으니 부재시 카카오톡채널로 연락주세요^^", ogImage: "https://easysite.kr/bell_cake/img/hero.jpg" };
 Object.assign(window, { SITE_INFO });
